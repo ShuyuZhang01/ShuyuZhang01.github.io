@@ -1,8 +1,80 @@
 <!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><title>My Portfolio</title></head>
-<body>
-  <h1>Hello, world!  🎉</h1>
-  <p>This is my first GitHub Pages site.</p>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shuyu Zhang · Portfolio</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body{font-family:'Poppins',sans-serif;}
+    /* 流式排版 */
+    .fluid-h1  {font-size:clamp(2.75rem,8vw,6rem);}
+    .fluid-quote{font-size:clamp(1.125rem,3.2vw,2rem);}
+  </style>
+</head>
+
+<body class="bg-black text-white selection:bg-indigo-400/60">
+
+<!-- ===== HERO Start ===== -->
+<section class="relative h-screen w-full overflow-hidden">
+  <!-- 背景视频 -->
+  <video autoplay loop muted playsinline
+         class="absolute inset-0 w-full h-full object-cover">
+    <source src="assets/video/hero-bg.mp4" type="video/mp4">
+  </video>
+
+  <!-- 内容层 -->
+  <div class="relative z-10 h-full flex flex-col justify-center">
+    <div class="container mx-auto px-6 sm:px-12">
+
+      <!-- 左侧大标题 -->
+      <h1 class="fluid-h1 font-semibold leading-[0.9] tracking-tight max-w-xl">
+        Shuyu<br/>Zhang
+      </h1>
+
+      <!-- 右上引用 -->
+      <blockquote
+        class="absolute top-10 right-6 sm:right-12 max-w-sm text-right">
+        <p class="fluid-quote font-semibold">
+          “among the most<br/>exciting interactive creators”
+        </p>
+        <cite class="italic text-sm sm:text-base opacity-80">— Creative Review</cite>
+      </blockquote>
+
+      <!-- 按钮组 -->
+      <div class="mt-12 flex gap-4">
+        <a href="#projects"
+           class="px-6 py-3 border border-white/80 hover:bg-white/10 transition">
+          EXPLORE THE SITE
+        </a>
+        <a href="#about"
+           class="px-6 py-3 border border-white/80 hover:bg-white/10 transition">
+          ABOUT
+        </a>
+      </div>
+    </div>
+
+    <!-- 底部渐变遮罩 -->
+    <div class="absolute inset-x-0 bottom-0 h-40
+                bg-gradient-to-t from-black/70 to-transparent"></div>
+  </div>
+</section>
+<!-- ===== HERO End ===== -->
+
+<!-- 占位示例区块，后续可替换为真正内容 -->
+<section id="projects" class="min-h-screen bg-slate-50 text-slate-900 flex items-center justify-center">
+  <h2 class="text-3xl">Projects Coming Soon…</h2>
+</section>
+
+<section id="about" class="min-h-screen bg-white text-slate-800 flex items-center justify-center">
+  <h2 class="text-3xl">About Section</h2>
+</section>
+
 </body>
 </html>
