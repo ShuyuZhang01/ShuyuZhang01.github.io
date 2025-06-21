@@ -1,0 +1,154 @@
+/* ---------- 全局基础 ---------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:"Poppins",sans-serif;
+  background:#000;
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- 容器 & 工具 ---------- */
+.container{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 1.5rem;           /* 24px */
+}
+@media (min-width:640px){     /* 640px≈Tailwind sm */
+  .container{padding:0 3rem;} /* 48px */
+}
+
+/* ---------- 导航栏 ---------- */
+.nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  z-index:20;
+  padding:1rem 0;             /* 16px */
+  background:rgba(0,0,0,.3);
+  backdrop-filter:blur(6px);
+}
+.nav-list{
+  display:flex;
+  gap:1.5rem;                 /* 24px */
+  list-style:none;
+  justify-content:center;
+}
+.nav a{
+  color:#fff;
+  text-decoration:none;
+  font-size:.9rem;
+  transition:.3s;
+}
+.nav a:hover{color:#7dd3fc;}  /* 靛青浅色 */
+
+/* ---------- HERO 区 ---------- */
+.hero{
+  position:relative;
+  height:100%;
+  overflow:hidden;
+  padding-top:4rem;           /* 给导航让位 */
+}
+.hero video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.hero-content{
+  position:relative;
+  z-index:10;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.hero-title{
+  font-family:"Savate",serif;
+  font-weight:700;
+  font-size:clamp(5rem,12vw,11rem);
+  line-height:.9;
+  max-width:36rem;            /* 与原 max-w-xl≈36rem 对齐 */
+}
+.hero-sub{
+  font-family:"Savate",serif;
+  font-weight:400;
+  font-size:clamp(1.875rem,4vw,2.5rem);
+  margin-top:1rem;
+  max-width:36rem;
+}
+.hero-mask{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:10rem;
+  background:linear-gradient(to top,rgba(0,0,0,.7),transparent);
+}
+
+/* ---------- 选中文本高亮 ---------- */
+::selection{background:rgba(99,102,241,.6);} /* indigo-400/60 */
+
+
+/* 让 Works 页保持亮色背景、深色文字 */
+.page-light{
+  background:#f8fafc;   /* slate-50 */
+  color:#0f172a;        /* slate-900 */
+  min-height:100%;
+  padding-top:6rem;     /* 给导航让位 */
+}
+
+/* Works 标题 */
+.page-light .page-title{
+  font-family:"Savate",serif;
+  font-weight:700;
+  font-size:2.25rem;    /* ≈ Tailwind text-4xl */
+  margin-bottom:2rem;
+}
+
+/* 自适应卡片网格 */
+.work-grid{
+  display:grid;
+  gap:2rem;                                 /* 32px */
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+}
+
+.work-card{
+  background:#fff;
+  padding:1.5rem;                           /* 24px */
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  border-radius:.5rem;
+}
+
+.work-card h2{
+  font-size:1.25rem;    /* ≈ text-xl */
+  margin-bottom:.5rem;
+}
+
+.work-card p{
+  color:#475569;        /* slate-600 */
+  font-size:.95rem;
+}
+/* ---------- Contact 表单 ---------- */
+.contact-form{
+  max-width:560px;
+  margin-bottom:4rem;
+}
+.contact-field{
+  width:100%;
+  padding:.75rem 1rem;
+  margin-bottom:1.25rem;
+  border:1px solid #cbd5e1;      /* slate-300 */
+  border-radius:.375rem;
+  font-size:1rem;
+}
+.contact-btn{
+  display:inline-block;
+  padding:.75rem 2rem;
+  background:#6366f1;            /* indigo-500 */
+  color:#fff;
+  border:none;
+  border-radius:.375rem;
+  font-size:1rem;
+  cursor:pointer;
+  transition:.3s;
+}
+.contact-btn:hover{background:#4f46e5;}  /* indigo-600 */

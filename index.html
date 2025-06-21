@@ -1,59 +1,46 @@
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Shuyu Zhang</title>
-  <!-- poppins Google Font -->
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">-->
 
-  <!-- Savate Google Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Savate:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <!-- 字体 -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body{font-family:'Poppins',sans-serif;}
-    .fluid-h1{font-size:clamp(5rem,12vw,11rem);}
-    .fluid-sub { font-size: clamp(1.875rem, 4vw, 2.5rem); }
-  </style>
+  <!-- 你的外部样式 -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-black text-white selection:bg-indigo-400/60">
+<body>
 
-  <!-- 导航栏 -->
-<nav class="fixed top-0 inset-x-0 z-20 backdrop-blur bg-black/30 text-white">
-  <div class="container mx-auto flex items-center justify-between px-6 sm:px-12 py-4">
-    <a href="index.html" class="text-lg font-semibold tracking-wide"><!-- <a …>SHUYU&nbsp;ZHANG</a> -->
-    <ul class="flex gap-6 text-sm sm:text-base">
-      <li><a href="about.html"    class="hover:text-indigo-300">About</a></li>
-      <li><a href="works.html"    class="hover:text-indigo-300">Works</a></li>
-      <li><a href="practice.html" class="hover:text-indigo-300">Self&nbsp;Practice</a></li>
-      <li><a href="cv.html"       class="hover:text-indigo-300">CV</a></li>
-      <li><a href="contact.html"  class="hover:text-indigo-300">Contact</a></li>
+  <!-- ========== NAVBAR ========== -->
+  <nav class="nav">
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="works.html">Works</a></li>
+      <li><a href="practice.html">Self&nbsp;Practice</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
-  </div>
-</nav>
+  </nav>
 
-  <!--ME-->
-  <section class="relative h-screen w-full overflow-hidden pt-16">
-    <video muted playsinline autoplay loop
-           class="absolute inset-0 w-full h-full object-cover">
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <video autoplay muted loop playsinline>
       <source src="assets/video/me-bg.mp4" type="video/mp4">
     </video>
 
-    <div class="relative z-10 h-full flex flex-col justify-center">
-      <div class="container mx-auto px-6 sm:px-12">
-        <h1 class="fluid-h1 font-semibold leading-[0.9] tracking-tight max-w-xl">
-          Shuyu<br/>Zhang
-        </h1>
-        <p class="mt-4 fluid-sub max-w-xl">
-          A cat&nbsp;mom who is exploring the interaction between the real&nbsp;and&nbsp;virtual.
-        </p>
-      </div>
-      <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/70 to-transparent"></div>
+    <div class="hero-content container">
+      <h1 class="hero-title">Shuyu<br>Zhang</h1>
+      <p  class="hero-sub">
+        A cat&nbsp;mom who is exploring the interaction between the real&nbsp;and&nbsp;virtual.
+      </p>
     </div>
+
+    <div class="hero-mask"></div>
   </section>
+
 </body>
 </html>

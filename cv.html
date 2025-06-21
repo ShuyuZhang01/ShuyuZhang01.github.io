@@ -1,38 +1,51 @@
-
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>About · Shuyu Zhang</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CV · Shuyu Zhang</title>
+
+  <!-- 字体 -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>body{font-family:'Poppins',sans-serif;}</style>
+  <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- 站点统一样式 -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-white text-slate-800">
+<body class="page-light">
 
-  <!-- 导航栏 -->
-   <!-- ===== NAVBAR ===== -->
-<nav class="fixed top-0 inset-x-0 z-20 backdrop-blur bg-black/30 text-white">
-  <div class="container mx-auto flex items-center justify-between px-6 sm:px-12 py-4">
-    <a href="index.html" class="text-lg font-semibold tracking-wide">SHUYU&nbsp;ZHANG</a>
-    <ul class="flex gap-6 text-sm sm:text-base">
-      <li><a href="about.html"    class="hover:text-indigo-300">About</a></li>
-      <li><a href="works.html"    class="hover:text-indigo-300">Works</a></li>
-      <li><a href="practice.html" class="hover:text-indigo-300">Self&nbsp;Practice</a></li>
-      <li><a href="cv.html"       class="hover:text-indigo-300">CV</a></li>
-      <li><a href="contact.html"  class="hover:text-indigo-300">Contact</a></li>
+  <!-- ===== NAVBAR ===== -->
+  <nav class="nav">
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="works.html">Works</a></li>
+      <li><a href="practice.html">Self&nbsp;Practice</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
-  </div>
-</nav>
-<!-- ===== /NAVBAR ===== -->
+  </nav>
 
-  <main class="pt-32 min-h-screen container mx-auto px-6 sm:px-12">
-    <h1 class="text-4xl font-semibold mb-6">About Me</h1>
-    <p class="leading-7 text-lg">
-      这里写你的自我介绍……  
+  <!-- ===== 页面正文 ===== -->
+  <main class="container">
+    <h1 class="page-title">Curriculum&nbsp;Vitae</h1>
+
+    <!-- 可选：下载 PDF 按钮 -->
+    <p class="lead-text" style="margin-bottom:2rem;">
+      <a href="assets/cv.pdf" download class="contact-btn">Download&nbsp;PDF</a>
     </p>
+
+    <!-- 下面列举你的经历 / 教育 / 技能 -->
+    <section class="lead-text">
+      <h2 style="font-weight:600;margin-top:1.5rem;">Education</h2>
+      <p>B.A. in Interaction Design — XYZ University, 2021</p>
+
+      <h2 style="font-weight:600;margin-top:1.5rem;">Experience</h2>
+      <p>2022–Now · Junior Designer at ABC Studio</p>
+
+      <h2 style="font-weight:600;margin-top:1.5rem;">Skills</h2>
+      <p>Figma / HTML&nbsp;&amp;&nbsp;CSS / JavaScript / Three.js</p>
+    </section>
   </main>
 </body>
 </html>

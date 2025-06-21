@@ -1,37 +1,37 @@
-
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>About · Shuyu Zhang</title>
+
+  <!-- 字体 -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>body{font-family:'Poppins',sans-serif;}</style>
+  <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- 统一样式 -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="bg-white text-slate-800">
+<body class="page-light">
 
-  <!-- 导航栏 -->
-   <!-- ===== NAVBAR ===== -->
-<nav class="fixed top-0 inset-x-0 z-20 backdrop-blur bg-black/30 text-white">
-  <div class="container mx-auto flex items-center justify-between px-6 sm:px-12 py-4">
-    <a href="index.html" class="text-lg font-semibold tracking-wide">SHUYU&nbsp;ZHANG</a>
-    <ul class="flex gap-6 text-sm sm:text-base">
-      <li><a href="about.html"    class="hover:text-indigo-300">About</a></li>
-      <li><a href="works.html"    class="hover:text-indigo-300">Works</a></li>
-      <li><a href="practice.html" class="hover:text-indigo-300">Self&nbsp;Practice</a></li>
-      <li><a href="cv.html"       class="hover:text-indigo-300">CV</a></li>
-      <li><a href="contact.html"  class="hover:text-indigo-300">Contact</a></li>
+  <!-- ===== NAVBAR（复用同一套类） ===== -->
+  <nav class="nav">
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="works.html">Works</a></li>
+      <li><a href="practice.html">Self&nbsp;Practice</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
-  </div>
-</nav>
-<!-- ===== /NAVBAR ===== -->
+  </nav>
 
-  <main class="pt-32 min-h-screen container mx-auto px-6 sm:px-12">
-    <h1 class="text-4xl font-semibold mb-6">About Me</h1>
-    <p class="leading-7 text-lg">
-      这里写你的自我介绍……  
+  <!-- ===== 页面正文 ===== -->
+  <main class="container">
+    <h1 class="page-title">About&nbsp;Me</h1>
+
+    <p class="lead-text">
+      这里写你的自我介绍……
     </p>
   </main>
 </body>
