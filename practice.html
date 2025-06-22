@@ -9,13 +9,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Site styles (确保 style.css 已含你给出的全部规则) -->
+  <!-- 公共样式（保持原样，不做任何改动） -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- 仅本页生效的尺寸微调 -->
+  <style>
+    /* ========= Self-Practice 独占样式 ========== */
+    .practice-page{padding-top:7rem;}                 /* 顶部留白 */
+
+    .practice-page .work-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+      gap:3rem 2rem;                                 /* 更紧凑的行/列间距 */
+    }
+
+    /* 不需要交错位移，若保留可调小一点 */
+    @media(min-width:1101px){
+      .practice-page .work-grid article:nth-child(2n){
+        transform:none;
+      }
+    }
+
+    /* 缩短封面高度、减弱阴影 */
+    .practice-page .work-cover{aspect-ratio:4/3;}
+    .practice-page .work-card{box-shadow:0 12px 32px rgba(0,0,0,.38);}
+
+    /* 弹窗尺寸同步缩小 */
+    .practice-page .work-card.expanded{
+      width:85vw;
+      height:85vh;
+    }
+  </style>
 </head>
 
-<body class="page-dark works-page"><!-- 加 works-page 让交错位移生效 -->
+<body class="page-dark practice-page">
 
-  <!-- ===== 导航 ===== -->
+  <!-- ===== Navbar ===== -->
   <nav class="nav">
     <div class="nav-inner container">
       <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
@@ -29,12 +58,12 @@
     </div>
   </nav>
 
-  <!-- ===== 主内容 ===== -->
+  <!-- ===== Main ===== -->
   <main class="container">
     <h1 class="page-title">Self&nbsp;Practice</h1>
 
     <div class="work-grid">
-      <!-- ====== Practice Card 1 ====== -->
+      <!-- ▶ Practice 1 -->
       <article class="work-card">
         <img class="work-cover" src="assets/img/practice1.jpg" alt="3D Typography Study">
         <div class="overlay">
@@ -45,7 +74,7 @@
         </div>
       </article>
 
-      <!-- ====== Practice Card 2 ====== -->
+      <!-- ▶ Practice 2 -->
       <article class="work-card">
         <img class="work-cover" src="assets/img/practice2.jpg" alt="Generative Line Art">
         <div class="overlay">
@@ -56,77 +85,74 @@
         </div>
       </article>
 
-      <!-- ===== 再添加更多卡片时直接复制上面结构 ===== -->
+      <!-- 继续复制上面结构添加更多卡片 -->
     </div>
   </main>
 
-  <!-- ===== 交互脚本 ===== -->
+  <!-- ===== Interaction Script ===== -->
   <script>
   /* =========================================================================
      Self-Practice big-card interactions
      ========================================================================= */
   (function () {
-    const cards  = document.querySelectorAll('.work-card');
-    const body   = document.body;
+    const cards = document.querySelectorAll('.work-card');
+    const body  = document.body;
 
-    /* ---------- 1. 滚动出现动画 ---------- */
+    /* --- 1. 滚动淡入 --- */
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('in-view');
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);                // 进场一次后就不再观察
+        }
       });
     }, { threshold: 0.2 });
+    cards.forEach(c => io.observe(c));
 
-    cards.forEach(card => io.observe(card));
+    /* --- 2. 展开 / 关闭 --- */
+    cards.forEach(card => card.addEventListener('click', () => expand(card)));
 
-    /* ---------- 2. 点击展开 / 关闭 ---------- */
-    cards.forEach(card => card.addEventListener('click', () => expandCard(card)));
-
-    function expandCard(card) {
-      // 已经展开就不处理
+    function expand(card){
       if (card.classList.contains('expanded')) return;
 
-      // 创建关闭按钮
       const closeBtn = document.createElement('button');
       closeBtn.className = 'close-btn';
       closeBtn.innerHTML = '&times;';
-      closeBtn.addEventListener('click', e => {
+      closeBtn.addEventListener('click', e=>{
         e.stopPropagation();
-        collapseCard(card, closeBtn);
+        collapse(card, closeBtn);
       });
       card.appendChild(closeBtn);
 
-      // 展开
       card.classList.add('expanded');
       body.style.overflow = 'hidden';
 
-      // Esc 键关闭
-      const onKey = (e) => (e.key === 'Escape') && collapseCard(card, closeBtn, onKey);
+      const onKey = e => e.key === 'Escape' && collapse(card, closeBtn, onKey);
       document.addEventListener('keydown', onKey);
 
-      // 点击空白处（卡片外）也关闭
-      setTimeout(() => {
-        document.addEventListener('click', outsideClick, { once: true });
-        function outsideClick(ev) {
-          if (!card.contains(ev.target)) collapseCard(card, closeBtn, onKey);
+      setTimeout(()=>{
+        document.addEventListener('click', outside, { once:true });
+        function outside(ev){
+          if(!card.contains(ev.target)) collapse(card, closeBtn, onKey);
         }
       });
     }
 
-    function collapseCard(card, btn, keyHandler) {
+    function collapse(card, btn, keyHandler){
       card.classList.remove('expanded');
       body.style.overflow = '';
       btn.remove();
-      if (keyHandler) document.removeEventListener('keydown', keyHandler);
+      if(keyHandler) document.removeEventListener('keydown', keyHandler);
     }
 
-    /* ---------- 3. 轻微滚动视差 ---------- */
+    /* --- 3. 轻微滚动视差 --- */
     window.addEventListener('scroll', () => {
       cards.forEach(card => {
         const rect = card.getBoundingClientRect();
-        const dist = rect.top - window.innerHeight * 0.9; // 进入视口上方时差值趋零
-        card.style.setProperty('--parallax', `${Math.max(dist, 0)}px`);
+        const d = rect.top - innerHeight * 0.9;
+        card.style.setProperty('--parallax', `${Math.max(d,0)}px`);
       });
-    }, { passive: true });
+    }, { passive:true });
   })();
   </script>
 </body>
