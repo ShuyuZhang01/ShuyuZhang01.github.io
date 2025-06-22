@@ -3,80 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Contact · Shuyu Zhang</title>
+  <title>Works · Shuyu Zhang</title>
 
-  <!-- Google Fonts -->
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- 全站样式 -->
+  <!-- Site styles -->
   <link rel="stylesheet" href="style.css">
-  
-  <!-- 联系页面特定样式 -->
-  <style>
-    /* 联系页面特定样式 */
-    .contact-page .container {
-      padding-left: clamp(1.5rem, 6vw, 5rem);
-    }
-    
-    .contact-page .page-title {
-      font-family: "Open Sans", sans-serif;
-      font-weight: 600;
-      text-align: left;
-      margin-bottom: 2.5rem;
-    }
-    
-    .contact-form {
-      max-width: 600px;
-      font-family: "Open Sans", sans-serif;
-    }
-    
-    .contact-field {
-      width: 100%;
-      padding: 0.8rem;
-      margin: 0.5rem 0 1.5rem;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
-      font-family: "Open Sans", sans-serif;
-    }
-    
-    .contact-btn {
-      padding: 0.8rem 2rem;
-      background: #fff;
-      color: #000;
-      border: none;
-      font-family: "Open Sans", sans-serif;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .contact-btn:hover {
-      background: #7dd3fc;
-    }
-    
-    .email-alt {
-      margin-top: 3rem;
-      font-family: "Open Sans", sans-serif;
-      color: #9ca3af;
-    }
-    
-    .email-alt a {
-      color: #7dd3fc;
-      text-decoration: none;
-    }
-    
-    .email-alt a:hover {
-      text-decoration: underline;
-    }
-  </style>
 </head>
 
-<body class="page-dark contact-page">
+<body class="page-dark">
 
-  <!-- ===== NAVBAR ===== -->
+  <!-- ===== Navbar（保持原样） ===== -->
   <nav class="nav">
     <div class="nav-inner container">
       <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
@@ -89,39 +29,109 @@
       </ul>
     </div>
   </nav>
-  <!-- ===== /NAVBAR ===== -->
 
-  <!-- ===== 主内容 ===== -->
-  <main class="container">
-    <h1 class="page-title">Contact</h1>
+  <!-- ===== Works ===== -->
+  <main class="container works-page">
+    <h1 class="page-title">Works</h1>
 
-    <form action="https://formspree.io/f/mrbkavao" method="POST" class="contact-form">
+    <div class="work-grid">
 
-      <label style="display: block; margin-bottom: 0.5rem; font-family: 'Open Sans', sans-serif;">
-        Your&nbsp;email:
-        <input name="email" type="email" class="contact-field" required>
-      </label>
+      <!-- 1 -->
+      <article class="work-card" data-full="Echoes of Ice – 一个结合冰块融化声音采样与摄影打印的沉浸装置" data-sign="1">
+        <img class="work-cover" src="assets/img/works/ice.jpg" alt="Echoes of Ice">
+        <div class="overlay">Echoes of Ice<br><small>摄影 + 声音互动装置 · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
 
-      <label style="display: block; margin-bottom: 0.5rem; font-family: 'Open Sans', sans-serif;">
-        Your&nbsp;message:
-        <textarea name="message" rows="4" class="contact-field" required></textarea>
-      </label>
+      <!-- 2 -->
+      <article class="work-card" data-full="RGB Mycelium – 利用霓虹光生长菌丝的可视化实验" data-sign="-1">
+        <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="RGB Mycelium">
+        <div class="overlay">RGB Mycelium<br><small>3D 打印与生物材质 · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
 
-      <!-- 右对齐按钮 -->
-      <div class="btn-wrap" style="text-align:right;">
-        <button type="submit" class="contact-btn">Send</button>
-      </div>
-    </form>
+      <!-- 3 -->
+      <article class="work-card" data-full="Synthetic Horizons – 基于卫星数据与 AI 推断的地形雕塑" data-sign="1">
+        <img class="work-cover" src="assets/img/works/horizons.jpg" alt="Synthetic Horizons">
+        <div class="overlay">Synthetic Horizons<br><small>AI 生成地形 · 2023</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
 
-    <!-- 额外联系方式 -->
-    <p class="email-alt">
-      Or email me directly at
-      <a href="mailto:zayaismyname@163.com">zayaismyname@163.com</a><br>
-      Instagram:
-      <a href="https://www.instagram.com/dancingparentheses/" target="_blank">@dancingparentheses</a> &nbsp;|&nbsp;
-      WeChat: <span style="font-weight:600;">mh2584617059</span>
-    </p>
+      <!-- 4 -->
+      <article class="work-card" data-full="Sea of Glyphs – 交互投影让书法笔触化为波浪" data-sign="-1">
+        <img class="work-cover" src="assets/img/works/glyphs.jpg" alt="Sea of Glyphs">
+        <div class="overlay">Sea of Glyphs<br><small>交互海浪投影 · 2023</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 5 -->
+      <article class="work-card" data-full="Ink Constellation – 触控墙面将墨迹映射为星座" data-sign="1">
+        <img class="work-cover" src="assets/img/works/ink.jpg" alt="Ink Constellation">
+        <div class="overlay">Ink Constellation<br><small>水墨触控墙面 · 2022</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 6 -->
+      <article class="work-card" data-full="Nebula Synth – 星云数据驱动音序器" data-sign="-1">
+        <img class="work-cover" src="assets/img/works/nebula.jpg" alt="Nebula Synth">
+        <div class="overlay">Nebula Synth<br><small>数据可视音序器 · 2021</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+    </div>
   </main>
 
+  <!-- ===== Works 交互脚本 ===== -->
+  <script>
+    /* ---------- Intersection 淡入 ---------- */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold: .3});
+    document.querySelectorAll('.work-card').forEach(c => io.observe(c));
+
+    /* ---------- 滚动 Parallax 上下位移 ---------- */
+function updateParallax() {
+  const vh = innerHeight;
+  document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const progress = (rect.top + rect.height * 0.5) / vh;
+    const sign = parseInt(card.dataset.sign) || 1;
+    
+    // 改进后的公式：确保所有卡片都有明显且平滑的位移
+    const translate = (progress - 0.5) * 80 * sign; 
+    card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
+  });
+}
+    addEventListener('scroll', updateParallax, {passive: true});
+    addEventListener('load', updateParallax);
+    addEventListener('resize', updateParallax);
+
+    /* ---------- 点击展开 / 关闭 ---------- */
+    document.querySelectorAll('.work-card').forEach(card => {
+      const overlay = card.querySelector('.overlay');
+      const close   = card.querySelector('.close-btn');
+      const fullTxt = card.dataset.full;
+      const short   = overlay.innerHTML;
+
+      card.addEventListener('click', () => {
+        if (card.classList.contains('expanded')) return;
+        card.classList.add('expanded');
+        overlay.innerHTML = fullTxt;
+        document.body.style.overflow = 'hidden';
+      });
+
+      close.addEventListener('click', e => {
+        e.stopPropagation();
+        card.classList.remove('expanded');
+        overlay.innerHTML = short;
+        document.body.style.overflow = 'auto';
+      });
+    });
+  </script>
 </body>
 </html>
