@@ -114,11 +114,6 @@ body {
   gap: 5rem 4rem;
 }
 
-@media (min-width: 1101px) {
-  .works-page .work-grid article:nth-child(2n) {
-    transform: none;
-  }
-}
 
 .works-page .work-card {
   position: relative;

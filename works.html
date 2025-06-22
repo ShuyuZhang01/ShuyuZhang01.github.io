@@ -4,17 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Works · Shuyu Zhang</title>
-
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
-
   <style>
-    
     .works-page .container {
       padding-left: clamp(1.5rem, 6vw, 5rem);
     }
@@ -51,7 +47,6 @@
       </ul>
     </div>
   </nav>
-
   <!-- ===== Works Section ===== -->
   <main class="container">
     <h1 class="page-title">Works</h1>
@@ -62,35 +57,30 @@
         <div class="overlay">Echoes of Ice<br><small>摄影 + 声音互动装置 · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
       <!-- 卡片 2 -->
       <article class="work-card" data-sign="-1" data-full="RGB Mycelium – 利用霓虹光生长菌丝的可视化实验">
         <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="RGB Mycelium">
         <div class="overlay">RGB Mycelium<br><small>3D 打印与生物材质 · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
       <!-- 卡片 3 -->
       <article class="work-card" data-sign="1" data-full="Digital Bloom – 一个结合算法动画与植物视觉语言的影像作品">
         <img class="work-cover" src="assets/img/works/digitalbloom.jpg" alt="Digital Bloom">
         <div class="overlay">Digital Bloom<br><small>生成艺术 · 2023</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
       <!-- 卡片 4 -->
       <article class="work-card" data-sign="-1" data-full="Liquid Memory – 用水墨溶解效果表达记忆碎片的实验短片">
         <img class="work-cover" src="assets/img/works/liquidmemory.jpg" alt="Liquid Memory">
         <div class="overlay">Liquid Memory<br><small>影像装置 · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
       <!-- 卡片 5 -->
       <article class="work-card" data-sign="1" data-full="Mechanical Garden – 一个由小型机械臂驱动的互动花园">
         <img class="work-cover" src="assets/img/works/mechanicalgarden.jpg" alt="Mechanical Garden">
         <div class="overlay">Mechanical Garden<br><small>机械交互 · 2023</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
       <!-- 卡片 6 -->
       <article class="work-card" data-sign="-1" data-full="Whispers of Code – 利用编程语言生成诗意文字与图形的项目">
         <img class="work-cover" src="assets/img/works/whispers.jpg" alt="Whispers of Code">
@@ -99,7 +89,6 @@
       </article>
     </div>
   </main>
-
   <!-- ===== Works Interaction Script ===== -->
   <script>
     // Intersection Observer for scroll animations
@@ -138,14 +127,12 @@
 
       card.addEventListener('click', () => {
         if (card.classList.contains('expanded')) return;
-        
         // Store original position for animation
         const rect = card.getBoundingClientRect();
         card.style.setProperty('--original-top', `${rect.top}px`);
         card.style.setProperty('--original-left', `${rect.left}px`);
         card.style.setProperty('--original-width', `${rect.width}px`);
         card.style.setProperty('--original-height', `${rect.height}px`);
-        
         card.classList.add('expanded');
         if (sign === 1) {
           card.classList.add('expanded-left');
