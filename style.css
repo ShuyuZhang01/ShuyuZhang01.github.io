@@ -23,20 +23,17 @@ body{
   position:fixed;
   top:0;left:0;right:0;
   z-index:20;
-  padding:1rem 0;             /* 16px */
+  padding:1rem 0;
   background:rgba(0,0,0,.3);
   backdrop-filter:blur(6px);
 }
-.nav-inner{
-  display:flex;
-  align-items:center;
-}
+.nav-inner{display:flex;align-items:center;}
 .nav-list{
   display:flex;
-  gap:1.5rem;                 /* 24px */
+  gap:1.5rem;
   list-style:none;
   justify-content:center;
-  margin-left:auto;           /* 推到最右 */
+  margin-left:auto;
 }
 .nav a{
   color:#fff;
@@ -44,7 +41,7 @@ body{
   font-size:.9rem;
   transition:.3s;
 }
-.nav a:hover{color:#7dd3fc;}  /* 靛青浅色 */
+.nav a:hover{color:#7dd3fc;}      /* 靛青浅色 */
 .brand{
   font-family:"Savate",serif;
   font-weight:700;
@@ -54,56 +51,43 @@ body{
   text-decoration:none;
 }
 .brand:hover{color:#9ca3af;}
-/* 首页隐藏品牌 */
-.home .brand{display:none;}
+.home .brand{display:none;}        /* 首页隐藏品牌 */
 
 /* ---------- HERO 区 ---------- */
 .hero{
   position:relative;
   height:100%;
   overflow:hidden;
-  padding-top:4rem;           /* 给导航让位 */
+  padding-top:4rem;               /* 给导航让位 */
 }
 .hero video{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
+  position:absolute;inset:0;
+  width:100%;height:100%;object-fit:cover;
 }
 .hero-content{
-  position:relative;
-  z-index:10;
+  position:relative;z-index:10;
   height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:flex-start;           /* 左对齐文字 */
-  padding-left:clamp(1.5rem,6vw,5rem); /* 自适应左内边距 */
+  display:flex;flex-direction:column;justify-content:center;
+  align-items:flex-start;
+  padding-left:clamp(1.5rem,6vw,5rem);
 }
-.hero .container{
-  margin-left:clamp(1.5rem,4vw,3rem);  /* 电脑端再靠左 */
+.hero .container{                 /* 桌面再靠左 */
+  margin-left:clamp(1.5rem,4vw,3rem);
   margin-right:auto;
 }
 .hero-title{
-  font-family:"Savate",serif;
-  font-weight:700;
+  font-family:"Savate",serif;font-weight:700;
   font-size:clamp(5rem,12vw,11rem);
-  line-height:.9;
-  max-width:36rem;
+  line-height:.9;max-width:36rem;
 }
 .hero-sub{
-  font-family:"Savate",serif;
-  font-weight:400;
+  font-family:"Savate",serif;font-weight:400;
   font-size:clamp(1.875rem,4vw,2.5rem);
-  margin-top:1rem;
-  max-width:36rem;
+  margin-top:1rem;max-width:36rem;
 }
 .hero-mask{
-  position:absolute;
-  left:0;right:0;bottom:0;
-  height:10rem;
-  background:linear-gradient(to top,rgba(0,0,0,.7),transparent);
+  position:absolute;left:0;right:0;bottom:0;
+  height:10rem;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);
 }
 
 /* ---------- 选中文本高亮 ---------- */
@@ -111,146 +95,85 @@ body{
 
 /* ---------- Works 页面 ---------- */
 .page-light{
-  background:#f8fafc;   /* slate-50 */
-  color:#0f172a;        /* slate-900 */
-  min-height:100%;
-  padding-top:6rem;     /* 给导航让位 */
+  background:#f8fafc;color:#0f172a;
+  min-height:100%;padding-top:6rem;
 }
 .page-light .page-title{
-  font-family:"Savate",serif;
-  font-weight:700;
-  font-size:2.25rem;    /* ≈ Tailwind text-4xl */
-  margin-bottom:2rem;
+  font-family:"Savate",serif;font-weight:700;
+  font-size:2.25rem;margin-bottom:2rem;
 }
 .work-grid{
-  display:grid;
-  gap:2rem;
+  display:grid;gap:2rem;
   grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 }
 .work-card{
-  background:#fff;
-  padding:1.5rem;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-  border-radius:.5rem;
+  background:#fff;padding:1.5rem;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);border-radius:.5rem;
 }
-.work-card h2{
-  font-size:1.25rem;
-  margin-bottom:.5rem;
-}
-.work-card p{
-  color:#475569;
-  font-size:.95rem;
-}
+.work-card h2{font-size:1.25rem;margin-bottom:.5rem;}
+.work-card p{color:#475569;font-size:.95rem;}
 
-/* ---------- Contact 表单 ---------- */
-.contact-form{
-  max-width:560px;
-  margin-bottom:4rem;
+/* ---------- Contact 页面 ---------- */
+.page-dark.contact-page .contact-form{
+  margin:0 auto;text-align:center;
+  max-width:700px;               /* 输入框最大宽 */
 }
-.contact-field{
-  width:100%;
-  padding:.75rem 1rem;
-  margin-bottom:1.25rem;
-  border:1px solid #cbd5e1;
-  border-radius:.375rem;
-  font-size:1rem;
+.contact-page .contact-field{
+  width:100%;padding:.75rem 1rem;
+  margin-bottom:1.25rem;border:1px solid #cbd5e1;
+  border-radius:.375rem;font-size:1rem;
 }
-.contact-btn{
-  display:inline-block;
-  padding:.75rem 2rem;
-  background:#6366f1;
-  color:#fff;
-  border:none;
-  border-radius:.375rem;
-  font-size:1rem;
-  cursor:pointer;
-  transition:.3s;
+.contact-page .contact-btn{
+  display:inline-block;padding:.75rem 2rem;
+  background:#6b7280;color:#fff;     /* 灰色按钮 */
+  border:none;border-radius:.375rem;font-size:1rem;
+  cursor:pointer;transition:.3s;
 }
-.contact-btn:hover{background:#4f46e5;}
+.contact-page .contact-btn:hover{background:#4b5563;}
 
-/* ---------- 深色通用页面 (About / CV 等) ---------- */
+/* ---------- 深色通用页面 (About / CV / Contact) ---------- */
 .page-dark{
-  background:#000;
-  color:#fff;
-  min-height:100%;
-  padding-top:6rem;
+  background:#000;color:#fff;
+  min-height:100%;padding-top:6rem;
 }
-/* 深色页导航保持白字 + 悬停灰色 */
 .page-dark .nav a{color:#fff;}
 .page-dark .nav a:hover{color:#9ca3af;}
 
 /* ---------- CV 页面 专属 ---------- */
 .cv-page{
   font-family:Cambria,Georgia,'Times New Roman',serif;
-  overflow:auto;         /* 解除全局 overflow:hidden */
-  height:auto;
-  min-height:100%;
+  overflow:auto;height:auto;min-height:100%;
 }
-
-/* 个人信息块居中 */
 .cv-page .cv-center-block{
-  text-align:center;
-  line-height:1.4;
-  margin-bottom:2rem;
+  text-align:center;line-height:1.4;margin-bottom:2rem;
 }
 .cv-page .cv-center-block h1{
-  font-family:"Savate",serif;
-  font-size:2.25rem;
-  font-weight:700;
-  margin-bottom:.25rem;
+  font-family:"Savate",serif;font-size:2.25rem;
+  font-weight:700;margin-bottom:.25rem;
 }
-.cv-page .cv-center-block p{
-  font-weight:600;
-  margin:.15rem 0;
-}
-
-/* CV 二级标题与列表排版 */
+.cv-page .cv-center-block p{font-weight:600;margin:.15rem 0;}
 .cv-page .cv-section-title{
-  font-size:1.25rem;
-  font-weight:700;
-  margin:1.2rem 0 .45rem;
+  font-size:1.25rem;font-weight:700;margin:1.2rem 0 .45rem;
 }
 .cv-page ul{
-  list-style:disc;
-  margin-left:1.4rem;
-  margin-bottom:.8rem;
-  line-height:1.55;
+  list-style:disc;margin-left:1.4rem;margin-bottom:.8rem;line-height:1.55;
 }
-.cv-page ul ul{
-  list-style:circle;
-  margin-left:1.25rem;
-}
-
-/* --- CV 页导航：无圆点，右对齐 --- */
-.cv-page .nav-list{
-  list-style:none !important;
-  margin-left:auto !important;
-  padding-left:0;
-}
+.cv-page ul ul{list-style:circle;margin-left:1.25rem;}
+.cv-page .nav-list{list-style:none;margin-left:auto;padding-left:0;}
 .cv-page .nav a:hover{color:#9ca3af;}
 
-/* ---------- 响应式：电脑端 Hero 更靠左 ---------- */
+/* ---------- 响应式 ---------- */
+/* 桌面：Hero 更靠左 */
 @media (min-width:1024px){
-  .hero .container{margin-left:0.5rem;}    /* 你可以改成 0 */
+  .hero .container{margin-left:0.5rem;}  /* 若想更贴边改成 0 */
 }
-
-/* ---------- 手机端 Hero 贴底 & 导航换行 ---------- */
+/* 手机：Hero 贴底 & 导航可换行 */
 @media (max-width:640px){
-  .hero-content{
-    justify-content:flex-end;
-    padding-bottom:3rem;
-    padding-top:0;
-  }
+  .hero-content{justify-content:flex-end;padding-bottom:3rem;padding-top:0;}
   .nav-inner{flex-wrap:wrap;}
-  .brand{
-    flex:1 1 100%;
-    margin-bottom:0.5rem;
-  }
+  .brand{flex:1 1 100%;margin-bottom:0.5rem;}
   .nav-list{
-    margin-left:0;
-    justify-content:center;
-    gap:0.75rem;
-    font-size:0.8rem;
-    flex-wrap:wrap;
+    margin-left:0;justify-content:center;
+    gap:0.75rem;font-size:0.8rem;flex-wrap:wrap;
   }
 }
