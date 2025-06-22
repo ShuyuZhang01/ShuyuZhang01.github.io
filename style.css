@@ -204,17 +204,41 @@ body{
 
 /* === 首页 Hero：桌面再靠左，手机往上 === */
 
-/* (1) ≥1024 px —— 再贴左一点 */
+/* 电脑端*/
 @media (min-width:1024px){
   .hero .container{
     margin-left:0.5rem;      /* 8 px；你觉得还想贴左就写 0 或 0.25rem */
   }
 }
 
-/* (2) ≤640 px —— 不居中，向上挪 */
+/* 手机端 */
 @media (max-width:640px){
+
+  /* ① Hero 文字贴左下 */
   .hero-content{
-    justify-content:flex-start;  /* 垂直对齐顶部 */
-    padding-top:3rem;            /* 距离导航 48 px；想再靠顶写 2rem/1rem */
+    justify-content:flex-end;     /* 底部 */
+    padding-bottom:3rem;          /* 离底 48 px，可调 */
+    padding-top:0;                /* 不再向下挤 */
+  }
+
+  /* ② 导航允许换行 */
+  .nav-inner{
+    flex-wrap:wrap;
+  }
+
+  /* 品牌独占一行 */
+  .brand{
+    flex:1 1 100%;
+    margin-bottom:0.5rem;         /* 行距，可调 */
+  }
+
+  /* 菜单行居中、字距/字号缩小 */
+  .nav-list{
+    margin-left:0;                /* 取消 auto 推右 */
+    justify-content:center;
+    gap:0.75rem;                  /* 12 px */
+    font-size:0.8rem;             /* ≈13 px */
+    flex-wrap:wrap;
   }
 }
+
