@@ -108,6 +108,12 @@ body{
 /* ---------- 深色通用页面 (About / CV / Contact 等) ---------- */
 .page-dark{
   background:#000;color:#fff;min-height:100%;padding-top:6rem;
+  .page-dark::after {
+  content:'';
+  display:block;
+  height:4rem;       /* 底部缓冲区，可自行调大/调小 */
+}
+  
 }
 .page-dark .nav a{color:#fff;}
 .page-dark .nav a:hover{color:#9ca3af;}
