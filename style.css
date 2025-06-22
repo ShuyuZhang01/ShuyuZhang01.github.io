@@ -194,9 +194,13 @@ body{
   padding-top:6rem;  /* 给固定导航让位 */
 }
 
-/* 如果想让普通链接也改成更亮一些： */
-.page-dark a{color:#7dd3fc;}          /* 靛青浅色，自己可换 */
-.page-dark a:hover{color:#38bdf8;}    /* hover 更亮 */
+/* --- 让深色页面里的导航链接保持白色 --- */
+.page-dark .nav a{
+  color:#fff;              /* 纯白 */
+}
+.page-dark .nav a:hover{
+  color:#9ca3af;            /* 悬停时爱改什么颜色都行；也可继续用白色 */
+}
 
 /* === 首页 Hero：桌面再靠左，手机往上 === */
 
