@@ -1,23 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CV · Shuyu Zhang</title>
 
   <!-- 字体 -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- 站点统一样式 -->
-  <link rel="stylesheet" href="style.css">
+  <!-- 公共样式 -->
+  <link rel="stylesheet" href="/style.css"><!-- 如果 style.css 在 css 目录则写 /css/style.css -->
 </head>
 
-<body class="page-dark">
+<body class="page-light">
 
+  <!-- ===== NAVBAR ===== -->
   <nav class="nav">
     <div class="nav-inner container">
-      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a><!-- ← 点击回首页 -->
+      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
       <ul class="nav-list">
         <li><a href="about.html">About</a></li>
         <li><a href="works.html">Works</a></li>
@@ -27,27 +28,108 @@
       </ul>
     </div>
   </nav>
+  <!-- ===== /NAVBAR ===== -->
 
-  <!-- ===== 页面正文 ===== -->
-  <main class="container">
-    <h1 class="page-title">Curriculum&nbsp;Vitae</h1>
+  <!-- ===== CV 正文 ===== -->
+  <main class="container" style="padding-top:6rem; max-width:800px;">
 
-    <!-- 可选：下载 PDF 按钮 -->
-    <p class="lead-text" style="margin-bottom:2rem;">
-      <a href="assets/cv.pdf" download class="contact-btn">Download&nbsp;PDF</a>
+    <!-- PDF 下载按钮 -->
+    <p style="text-align:right; margin-bottom:1.5rem;">
+      <a href="Shuyu_Zhang_CV.pdf" download
+         style="padding:.5rem 1rem; background:#1e293b; color:#fff; text-decoration:none; border-radius:.375rem;">
+        Download&nbsp;PDF
+      </a>
     </p>
 
-    <!-- 下面列举你的经历 / 教育 / 技能 -->
-    <section class="lead-text">
-      <h2 style="font-weight:600;margin-top:1.5rem;">Education</h2>
-      <p>B.A. in Interaction Design — XYZ University, 2021</p>
+    <h1 class="page-title" style="margin-bottom:0;">SHUYU&nbsp;ZHANG</h1>
+    <p style="font-weight:600; margin-top:.25rem;">Interactive &amp; Spatial Experience Designer&nbsp;|&nbsp;Digital Artist</p>
+    <p style="margin-top:.5rem; line-height:1.6;">
+      London, UK&nbsp;|&nbsp;+44&nbsp;(0)7468&nbsp;438&nbsp;097&nbsp;|&nbsp;zayaismyname@163.com&nbsp;|&nbsp;
+      Portfolio:&nbsp;<a href="https://www.dropbox.com/scl/fi/adgu1e32vuzxkky6ve23z/Portfolio.pdf?rlkey=shepwspkiwx4dgvk9zdqrt6fn&st=qumqt09f&dl=0"
+        target="_blank">Dropbox&nbsp;link</a>
+    </p>
 
-      <h2 style="font-weight:600;margin-top:1.5rem;">Experience</h2>
-      <p>2022–Now · Junior Designer at ABC Studio</p>
+    <hr style="margin:1.5rem 0; border:none; border-top:1px solid #cbd5e1;">
 
-      <h2 style="font-weight:600;margin-top:1.5rem;">Skills</h2>
-      <p>Figma / HTML&nbsp;&amp;&nbsp;CSS / JavaScript / Three.js</p>
-    </section>
+    <!-- EDUCATION -->
+    <h2 style="font-weight:700; font-size:1.25rem;">EDUCATION</h2>
+    <ul style="margin:.5rem 0 1rem 1rem; line-height:1.6;">
+      <li><strong>MA Computational Arts (in progress)</strong> — Goldsmiths, University of London, UK | Sep&nbsp;2024&nbsp;–&nbsp;Sep&nbsp;2026</li>
+      <li><strong>BA Arts, Technology &amp; Entertainment (First Class Honours)</strong> — Xi’an Jiaotong-Liverpool University, CN | Sep&nbsp;2019&nbsp;–&nbsp;Jun&nbsp;2024</li>
+    </ul>
+
+    <!-- CORE SKILLS & IMPACT -->
+    <h2 style="font-weight:700; font-size:1.25rem;">CORE SKILLS&nbsp;&amp;&nbsp;IMPACT</h2>
+    <ul style="margin:.5rem 0 1rem 1rem; line-height:1.6;">
+      <li><strong>Interactive &amp; Spatial Experience Design</strong></li>
+      <ul style="margin-left:1rem;">
+        <li>Unity (C#, VFX Graph, VR) | Unreal Engine | OptiTrack</li>
+        <li>Led a live VR-dance show: captured dancer motion in OptiTrack, drove avatar &amp; particle VFX in Unity; premiered at pop-up festival (2025).</li>
+      </ul>
+
+      <li style="margin-top:.5rem;"><strong>Creative Coding &amp; Generative Art</strong></li>
+      <ul style="margin-left:1rem;">
+        <li>JavaScript | TouchDesigner | Processing</li>
+        <li>"Piano Piece of Day and Night" (2024): animated sun &amp; blooming flowers entirely in code; viewers credited the work with inspiring them to learn creative coding.</li>
+      </ul>
+
+      <li style="margin-top:.5rem;"><strong>Physical Computing</strong></li>
+      <ul style="margin-left:1rem;">
+        <li>Arduino C/C++ | Soldering</li>
+        <li>"Can I Have Some Water" (2024): plant installation that pleads for water when dry; built electronics, programmed logic, and exhibited at university show.</li>
+      </ul>
+
+      <li style="margin-top:.5rem;"><strong>Game Mods</strong></li>
+      <ul style="margin-left:1rem;">
+        <li>Lua | Rigging | Spriter | Storytelling</li>
+        <li>Designed hip-hop dancer character mod for <em>Don't&nbsp;Starve&nbsp;Together</em>: painted sprites, scripted Lua combat logic, and mixed original audio—capstone project graded First.</li>
+      </ul>
+    </ul>
+
+    <!-- PROFESSIONAL EXPERIENCE -->
+    <h2 style="font-weight:700; font-size:1.25rem;">PROFESSIONAL EXPERIENCE</h2>
+    <ul style="margin:.5rem 0 1rem 1rem; line-height:1.6;">
+      <li><strong>Design Assistant</strong> | Suzhou Ruishen Education Tech (Group) Co. Ltd. — Jan – Sep 2024<br>
+          Translated survey data into design briefs; also doubled as student mentor &amp; translator in lean team, earning “satisfactory” appraisal.</li>
+
+      <li style="margin-top:.5rem;"><strong>Design Assistant</strong> | Jiangsu Jingtiancheng Cultural Tourism Dev. Co., Ltd. — Jun – Jul 2023<br>
+          Synthesised visitor feedback into illustrated deck; proposed new tour adopted for pilot; commended for VIP hosting.</li>
+    </ul>
+
+    <!-- SELECTED PROJECTS -->
+    <h2 style="font-weight:700; font-size:1.25rem;">SELECTED PROJECTS</h2>
+    <ul style="margin:.5rem 0 1rem 1rem; line-height:1.6;">
+      <li>2025  Live VR-Dance Performance – Mo-cap Tech Lead / VFX Designer</li>
+      <li>2024  "Piano Piece of Day and Night" Code Artwork – Solo Creator</li>
+      <li>2024  "Can I Have Some Water" Interactive Plant – Hardware Integrator</li>
+      <li>2024  "The Hiphop Dancer Yu" Game Mod &amp; Installation – Solo Dev</li>
+      <li>2023  "Caged Bird" Short Film – Art Director / Prod. Assistant</li>
+    </ul>
+
+    <!-- TOOLKIT -->
+    <h2 style="font-weight:700; font-size:1.25rem;">TECHNICAL TOOLKIT</h2>
+    <p style="margin:.5rem 0 1rem 0; line-height:1.6;">
+      Unity (Adv.) • TouchDesigner (Int.) • JavaScript • Lua • Arduino C/C++ • Python • OptiTrack Mo-Cap |
+      Procreate • Photoshop • Figma • Maya | Git • Notion • Miro
+    </p>
+
+    <!-- LANGUAGES & INTERESTS -->
+    <h2 style="font-weight:700; font-size:1.25rem;">LANGUAGES&nbsp;&amp;&nbsp;INTERESTS</h2>
+    <p style="margin:.5rem 0 1rem 0; line-height:1.6;">
+      English (IELTS 6.5) • Mandarin (native)&nbsp;|&nbsp;Street dance (popping/hip-hop) • Art museums • Music
+    </p>
+
+    <!-- REFEREES -->
+    <h2 style="font-weight:700; font-size:1.25rem;">REFEREES</h2>
+    <p style="margin:.5rem 0 1rem 0;">
+      Jessica Wolpert – Senior Lecturer &amp; Programme Leader, Goldsmiths, University of London<br>
+      <em>Email:</em> J.Wolpert@gold.ac.uk • <em>Phone:</em> +44 7813 035 494
+    </p>
+    <p style="margin:.5rem 0 2rem 0;">
+      Kim Lau – Associate Professor, Xi’an Jiaotong-Liverpool University<br>
+      <em>Email:</em> kim.lau02@xjtlu.edu.cn • <em>Phone:</em> +86 188 6269 1160
+    </p>
+
   </main>
 </body>
 </html>
