@@ -35,7 +35,7 @@ body {
 /* ========== 全站统一标题 ========== */
 .page-title {
   font-family: "Open Sans", sans-serif;
-  font-weight: 600;    /* 或 bold，视觉和works.html更统一 */
+  font-weight: 600;
   font-size: 3rem;
   margin-bottom: 4rem;
   text-align: left;
@@ -169,7 +169,7 @@ body {
   top: 50%;
   left: 50%;
   z-index: 120;
-  transform: translate(-50%,-50%) scale(1) !important;
+  transform: translate(-50%, -50%) scale(1) !important;
   width: 92vw;
   height: 92vh;
   border-radius: 1.5rem;
@@ -178,15 +178,19 @@ body {
   flex-direction: column;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  /* 左右弹窗动画，根据 expanded-left 和 expanded-right */
+}
+
+/* 左侧弹窗样式 */
 .works-page .work-card.expanded-left {
   left: 0;
   top: 50%;
   transform: translate(0, -50%) scale(1) !important;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  animation: slideInFromLeft 0.5s ease-out forwards;
 }
 
+/* 右侧弹窗样式 */
 .works-page .work-card.expanded-right {
   right: 0;
   left: auto;
@@ -194,7 +198,30 @@ body {
   transform: translate(0, -50%) scale(1) !important;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  animation: slideInFromRight 0.5s ease-out forwards;
 }
+
+/* 动画效果 */
+@keyframes slideInFromLeft {
+  from {
+    transform: translate(-100%, -50%) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translate(100%, -50%) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0, -50%) scale(1);
+    opacity: 1;
+  }
 }
 
 .works-page .work-card.expanded .work-cover {
@@ -276,19 +303,18 @@ body {
   z-index: 2;
 }
 .hero-content {
-  /* 原来可能有 left: 50% + transform 居中，全部改掉 */
   position: absolute;
   z-index: 3;
-  left: 3vw; /* 距离左边，自己调整2vw-5vw看好不好看 */
+  left: 3vw;
   top: 50%;
   transform: translateY(-50%);
   color: #fff;
-  text-align: left;    /* 保证内容靠左 */
+  text-align: left;
   max-width: 600px;
-  padding-left: 0;     /* 不要和 container 的 padding 冲突 */
+  padding-left: 0;
 }
 .hero-title {
-   font-size: 7rem;     /* 更大一点 */
+  font-size: 7rem;
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
@@ -296,7 +322,7 @@ body {
   text-align: left;
 }
 .hero-sub {
-  font-size: 2rem;    /* 更大一点 */
+  font-size: 2rem;
   color: #e5e7eb;
   text-align: left;
 }
