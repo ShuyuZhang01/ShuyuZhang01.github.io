@@ -9,21 +9,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- 你的外部样式 -->
-  <link rel="stylesheet" href="style.css">
+  <!-- 统一样式（路径要指向 css 目录） -->
+  <link rel="stylesheet" href="/css/style.css"><!-- 或 "css/style.css" -->
 </head>
 
-<body>
+<!-- 只有一个 body，带 home 类 -->
+<body class="home">
 
   <!-- ========== NAVBAR ========== -->
   <nav class="nav">
-    <ul class="nav-list">
-      <li><a href="about.html">About</a></li>
-      <li><a href="works.html">Works</a></li>
-      <li><a href="practice.html">Self&nbsp;Practice</a></li>
-      <li><a href="cv.html">CV</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
+    <div class="nav-inner container">
+      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a><!-- 首页会被 .home 隐藏 -->
+      <ul class="nav-list">
+        <li><a href="about.html">About</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="practice.html">Self&nbsp;Practice</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
   </nav>
 
   <!-- ========== HERO ========== -->
@@ -32,9 +36,10 @@
       <source src="assets/video/me-bg.mp4" type="video/mp4">
     </video>
 
+    <!-- hero-content + container 保留，CSS 已把 container 左移 -->
     <div class="hero-content container">
       <h1 class="hero-title">Shuyu<br>Zhang</h1>
-      <p  class="hero-sub">
+      <p class="hero-sub">
         A cat&nbsp;mom who is exploring the interaction between the real&nbsp;and&nbsp;virtual.
       </p>
     </div>

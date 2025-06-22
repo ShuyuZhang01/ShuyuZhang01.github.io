@@ -63,6 +63,10 @@ body{
   flex-direction:column;
   justify-content:center;
 }
+.hero .container{
+  margin-left:clamp(1.5rem,4vw,3rem);  /* ← 这里数字决定离左边多远 */
+  margin-right:auto;                   /* 右侧自适应 */
+}
 .hero-title{
   font-family:"Savate",serif;
   font-weight:700;
@@ -152,3 +156,45 @@ body{
   transition:.3s;
 }
 .contact-btn:hover{background:#4f46e5;}  /* indigo-600 */
+
+/* ===== NAV 改版 ===== */
+.nav-inner{
+  display:flex;
+  align-items:center;
+}
+.nav-list{
+  display:flex;
+  gap:1.5rem;
+  list-style:none;
+  margin-left:auto;                 /* ⇢ 把菜单推到最右 */
+}
+.brand{
+  font-family:"Savate",serif;
+  font-weight:700;
+  font-size:1rem;
+  letter-spacing:.05em;
+  color:#fff;
+  text-decoration:none;
+}
+.brand:hover{color:#7dd3fc;}
+/* 首页隐藏品牌 */
+.home .brand{display:none;}
+
+/* ===== Hero 左侧偏移 ===== */
+.hero-content{
+  align-items:flex-start;           /* 左对齐文字 */
+  padding-left:clamp(1.5rem,6vw,5rem); /* 自适应左内边距，可按需改大小 */
+}
+
+/* ---------- 深色页面（About 想用黑底白字就套这个） ---------- */
+.page-dark{
+  background:#000;   /* 全黑背景 */
+  color:#fff;        /* 全站默认文字变白 */
+  min-height:100%;
+  padding-top:6rem;  /* 给固定导航让位 */
+}
+
+/* 如果想让普通链接也改成更亮一些： */
+.page-dark a{color:#7dd3fc;}          /* 靛青浅色，自己可换 */
+.page-dark a:hover{color:#38bdf8;}    /* hover 更亮 */
+
