@@ -94,20 +94,19 @@
     document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
     /* ---------- 滚动 Parallax 上下位移 ---------- */
-  function updateParallax() {
+function updateParallax() {
   const vh = innerHeight;
   document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
     const rect = card.getBoundingClientRect();
-    const progress = (rect.top + rect.height * .5) / vh;
+    const progress = (rect.top + rect.height * 0.5) / vh;
     const sign = parseInt(card.dataset.sign) || 1;
-    
-    // 只在桌面大屏幕上应用视差效果
+
+    // 仅在大屏幕启用视差
     if (window.innerWidth > 1100) {
-      const translate = (progress - .5) * 120 * sign;
+      const translate = (progress - 0.5) * 60 * sign; // 减少位移幅度（原120→60）
       card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
     } else {
-      // 在小屏幕上移除任何视差效果
-      card.style.setProperty('--parallax', '0px');
+      card.style.setProperty('--parallax', '0px'); // 小屏幕归零
     }
   });
 }
