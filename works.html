@@ -94,16 +94,23 @@
     document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
     /* ---------- 滚动 Parallax 上下位移 ---------- */
-    function updateParallax() {
-      const vh = innerHeight;
-      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const progress = (rect.top + rect.height * .5) / vh;     // 0 = 顶端, 1 = 底端
-        const sign = parseInt(card.dataset.sign) || 1;           // 左右列方向
-        const translate = (progress - .5) * 120 * sign;          // ±60 px
-        card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
-      });
+  function updateParallax() {
+  const vh = innerHeight;
+  document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const progress = (rect.top + rect.height * .5) / vh;
+    const sign = parseInt(card.dataset.sign) || 1;
+    
+    // 只在桌面大屏幕上应用视差效果
+    if (window.innerWidth > 1100) {
+      const translate = (progress - .5) * 120 * sign;
+      card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
+    } else {
+      // 在小屏幕上移除任何视差效果
+      card.style.setProperty('--parallax', '0px');
     }
+  });
+}
     addEventListener('scroll', updateParallax, {passive: true});
     addEventListener('load', updateParallax);
     addEventListener('resize', updateParallax);
