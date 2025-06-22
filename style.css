@@ -200,13 +200,16 @@ body{
 }
 .page-dark .nav a:hover{
   color:#9ca3af;            /* 悬停时爱改什么颜色都行；也可继续用白色 */
-  overflow:auto;          /* 覆盖 body 上的 overflow:hidden */
-  min-height:100%;
-  padding-top:6rem;       /* 给固定导航让位 */
 }
 
 .cv-page{
   font-family: Cambria, Georgia, 'Times New Roman', serif;
+}
+
+.cv-page{
+  overflow:auto;     /* 解除 body 上的 overflow:hidden */
+  height:auto;       /* 允许内容自然撑高 */
+  min-height:100%;   /* 仍保证最小一屏高度 */
 }
 /* === 首页 Hero：桌面再靠左，手机往上 === */
 

@@ -10,21 +10,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- 公共样式 -->
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- 仅本页解锁滚动 -->
   <style>
-    /* 仅本页细节微调 */
-    .cv-container{max-width:800px;margin:0 auto;padding:0 1.5rem 6rem;}
-    .cv-center-block{ text-align:center; line-height:1.6; margin-bottom:2rem;}
-    .cv-center-block h1{ font-family:"Savate",serif; font-weight:700; font-size:2.25rem; margin-bottom:.25rem;}
-    .cv-center-block p{ font-weight:600; margin-bottom:.25rem;}
-    .cv-center-block a{ color:#38bdf8; text-decoration:none; word-break:break-all;}
-    .cv-section-title{ font-weight:700; font-size:1.25rem; margin:.5rem 0 .25rem;}
-    .cv-list{ margin:0 0 1rem 1rem; line-height:1.6;}
-    .cv-list ul{ margin:.25rem 0 .5rem 1rem; list-style:disc;}
+    /* 覆盖全站 html,body{overflow:hidden;} 的设置 */
+    html, body.cv-page{
+      height:auto;      /* 允许内容决定高度 */
+      overflow:auto;    /* 出现滚动条 */
+    }
   </style>
 </head>
 
-<body class="page-dark cv-page"><!-- 黑底白字 -->
+<body class="page-dark cv-page"><!-- 黑底白字 & 专属类 cv-page -->
 
   <!-- ===== NAVBAR ===== -->
   <nav class="nav">
@@ -41,12 +39,13 @@
   </nav>
   <!-- ===== /NAVBAR ===== -->
 
-  <main class="cv-container">
+  <!-- ===== CV 正文 ===== -->
+  <main class="container" style="max-width:800px; padding-bottom:6rem;">
 
     <!-- ===== 个人信息居中块 ===== -->
     <div class="cv-center-block">
       <h1>SHUYU ZHANG</h1>
-      <p>Interactive &amp; Spatial Experience Designer | Digital Artist</p>
+      <p></em>Interactive &amp; Spatial Experience Designer | Digital Artist</em></p>
       <p>London, UK&nbsp;| +44 (0)7468 438 097&nbsp;| zayaismyname@163.com</p>
       <p>Portfolio:&nbsp;<a href="https://www.dropbox.com/scl/fi/adgu1e32vuzxkky6ve23z/Portfolio.pdf?rlkey=shepwspkiwx4dgvk9zdqrt6fn&st=qumqt09f&dl=0" target="_blank">Dropbox link</a></p>
     </div>
