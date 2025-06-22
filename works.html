@@ -102,6 +102,7 @@
 
   <!-- ===== Works Interaction Script ===== -->
   <script>
+    // Intersection Observer for scroll animations
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -112,6 +113,7 @@
     }, { threshold: 0.3 });
     document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
+    // Parallax effect on scroll
     function updateParallax() {
       const vh = innerHeight;
       document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
@@ -126,59 +128,53 @@
     addEventListener('load', updateParallax);
     addEventListener('resize', updateParallax);
 
-      /*document.querySelectorAll('.work-card').forEach(card => {
+    // Card expansion functionality
+    document.querySelectorAll('.work-card').forEach(card => {
       const overlay = card.querySelector('.overlay');
       const close = card.querySelector('.close-btn');
       const fullTxt = card.dataset.full;
       const short = overlay.innerHTML;
+      const sign = parseInt(card.dataset.sign) || 1;
 
       card.addEventListener('click', () => {
         if (card.classList.contains('expanded')) return;
+        
+        // Store original position for animation
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--original-top', `${rect.top}px`);
+        card.style.setProperty('--original-left', `${rect.left}px`);
+        card.style.setProperty('--original-width', `${rect.width}px`);
+        card.style.setProperty('--original-height', `${rect.height}px`);
+        
         card.classList.add('expanded');
+        if (sign === 1) {
+          card.classList.add('expanded-left');
+        } else {
+          card.classList.add('expanded-right');
+        }
         overlay.innerHTML = fullTxt;
         document.body.style.overflow = 'hidden';
       });
 
       close.addEventListener('click', e => {
         e.stopPropagation();
-        card.classList.remove('expanded');
+        card.classList.remove('expanded', 'expanded-left', 'expanded-right');
         overlay.innerHTML = short;
         document.body.style.overflow = 'auto';
-        */
-        
-
-
-
-
-        
-     document.querySelectorAll('.work-card').forEach(card => {
-     const overlay = card.querySelector('.overlay');
-     const close = card.querySelector('.close-btn');
-     const fullTxt = card.dataset.full;
-     const short = overlay.innerHTML;
-     const sign = parseInt(card.dataset.sign) || 1; // 这里是新增的
-
-      card.addEventListener('click', () => {
-      if (card.classList.contains('expanded')) return;
-      card.classList.add('expanded');
-    // 新增下面这两行
-      card.classList.remove('expanded-left', 'expanded-right');
-      if (sign === 1) {
-      card.classList.add('expanded-left');
-      } else {
-      card.classList.add('expanded-right');
-      }
-      overlay.innerHTML = fullTxt;
-      document.body.style.overflow = 'hidden';
       });
+    });
 
-      close.addEventListener('click', e => {
-    e.stopPropagation();
-      card.classList.remove('expanded', 'expanded-left', 'expanded-right'); // 一起移除
-      overlay.innerHTML = short;
-      document.body.style.overflow = 'auto';
-  });
-});
+    // Close expanded card when clicking outside
+    document.addEventListener('click', function(e) {
+      const expandedCard = document.querySelector('.work-card.expanded');
+      if (expandedCard && !expandedCard.contains(e.target)) {
+        const overlay = expandedCard.querySelector('.overlay');
+        const short = expandedCard.dataset.short || '';
+        expandedCard.classList.remove('expanded', 'expanded-left', 'expanded-right');
+        overlay.innerHTML = short;
+        document.body.style.overflow = 'auto';
+      }
+    });
   </script>
 </body>
 </html>
