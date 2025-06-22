@@ -135,54 +135,51 @@
     <div class="popup-content" id="popupContent"></div>
   </div>
   <script>
-  // 弹窗显示/隐藏
-  const popupBg = document.getElementById('popupBg');
-  const popupPanel = document.getElementById('popupPanel');
-  const popupTitle = document.getElementById('popupTitle');
-  const popupContent = document.getElementById('popupContent');
-  const popupClose = document.getElementById('popupClose');
+    // 工具：弹窗显示/隐藏
+    const popupBg = document.getElementById('popupBg');
+    const popupPanel = document.getElementById('popupPanel');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupContent = document.getElementById('popupContent');
+    const popupClose = document.getElementById('popupClose');
 
-  // 打开弹窗
-  function openPopup(side, title, content) {
-    popupTitle.textContent = title;
-    popupContent.textContent = content;
-    popupBg.classList.add('active');
+    // 打开弹窗（方向：left/right）
+    function openPopup(side, title, content) {
+      popupTitle.textContent = title;
+      popupContent.textContent = content;
+      popupBg.classList.add('active');
+      popupPanel.className = 'popup-panel ' + side; // 先带side
+      setTimeout(() => popupPanel.classList.add('active'), 10); // 动画
+      document.body.style.overflow = 'hidden';
+    }
 
-    // 先移除所有方向class
-    popupPanel.className = 'popup-panel';
-    void popupPanel.offsetWidth; // 强制reflow
-    popupPanel.classList.add(side); // left or right
-    setTimeout(() => popupPanel.classList.add('active'), 10);
+    // 关闭弹窗
+    function closePopup() {
+      popupBg.classList.remove('active');
+      popupPanel.classList.remove('active');
+      document.body.style.overflow = 'auto';
+      setTimeout(() => { popupPanel.className = 'popup-panel'; }, 480);
+    }
+    popupBg.addEventListener('click', closePopup);
+    popupClose.addEventListener('click', closePopup);
 
-    document.body.style.overflow = 'hidden';
-  }
-
-  // 关闭弹窗
-  function closePopup() {
-    popupBg.classList.remove('active');
-    popupPanel.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    setTimeout(() => { popupPanel.className = 'popup-panel'; }, 480);
-  }
-  popupBg.addEventListener('click', closePopup);
-  popupClose.addEventListener('click', closePopup);
-
-  // 卡片点击事件
-  document.querySelectorAll('.work-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-      if (popupPanel.classList.contains('active')) return;
-      const side = card.getAttribute('data-side') === 'right' ? 'right' : 'left';
-      const title = card.getAttribute('data-title');
-      const content = card.getAttribute('data-content');
-      openPopup(side, title, content);
-      e.stopPropagation();
+    // 给所有 work-card 添加点击事件
+    document.querySelectorAll('.work-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        // 如果弹窗正在打开，忽略
+        if (popupPanel.classList.contains('active')) return;
+        // 判断左右
+        const side = card.getAttribute('data-side') === 'right' ? 'right' : 'left';
+        const title = card.getAttribute('data-title');
+        const content = card.getAttribute('data-content');
+        openPopup(side, title, content);
+        e.stopPropagation();
+      });
     });
-  });
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closePopup();
-  });
-</script>
-
+    // esc键关闭
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closePopup();
+    });
+  </script>
 </body>
 </html>
