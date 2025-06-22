@@ -1,185 +1,184 @@
-<!doctype html>
+<!doctype html> 
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Works · Shuyu Zhang</title>
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+
   <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: #000;
-      color: #fff;
-      margin: 0;
+    
+    .works-page .container {
+      padding-left: clamp(1.5rem, 6vw, 5rem);
     }
-    .nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
-      padding: 1rem 0; background: rgba(0,0,0,.3); backdrop-filter: blur(6px);
-    }
-    .nav-inner { display: flex; align-items: center; }
-    .nav-list { display: flex; gap: 1.5rem; list-style: none; margin-left: auto; }
-    .nav a { color: #fff; text-decoration: none; font-size: .9rem; }
-    .nav a:hover { color: #7dd3fc; }
-    .brand { font-family: "Savate", serif; font-weight: 700; font-size: 1rem; color: #fff; text-decoration: none; }
-    .container { max-width: 1200px; margin: 0 auto; padding-left: clamp(1.5rem, 6vw, 5rem); padding-right: 1.5rem;}
-    .works-page { padding-top: 7rem; }
-    .page-title { font-family: "Open Sans", sans-serif; font-weight: 600; font-size: 3rem; margin-bottom: 2.5rem; text-align: left;}
-    .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 5rem 4rem; }
-    .work-card {
-      position: relative; overflow: hidden; cursor: pointer;
-      border-radius: 1.25rem; box-shadow: 0 16px 40px rgba(0,0,0,.4);
-      background: #18181b;
-      min-height: 230px;
-    }
-    .work-cover { display: block; width: 100%; aspect-ratio: 3/2; object-fit: cover; }
-    .overlay {
-      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
-      padding: 2rem; line-height: 1.45; font-size: 1.25rem; background: rgba(0,0,0,.55); color: #fff; opacity: 0;
-      transition: opacity .35s;
-    }
-    .work-card:hover .overlay { opacity: 1; }
-    /* 弹窗 */
-    .popup-bg {
-      display: none;
-      position: fixed; inset: 0; z-index: 999;
-      background: rgba(0,0,0,.40);
-    }
-    .popup-bg.active { display: block; }
-    .popup-panel {
-      position: fixed; top: 50%; z-index: 1000;
-      width: 400px; max-width: 95vw; height: 80vh;
-      background: #111;
-      color: #fff;
-      border-radius: 1.5rem;
-      box-shadow: 0 28px 64px rgba(0,0,0,.65);
-      transform: translateY(-50%) translateX(-120%);
-      opacity: 0;
-      transition: transform .5s cubic-bezier(.7,.2,.3,1), opacity .45s;
-      display: flex; flex-direction: column; overflow: hidden;
-    }
-    .popup-panel.active { opacity: 1; }
-    .popup-panel.left { left: 0; transform: translateY(-50%) translateX(-120%); }
-    .popup-panel.left.active { transform: translateY(-50%) translateX(0); }
-    .popup-panel.right { right: 0; transform: translateY(-50%) translateX(120%); }
-    .popup-panel.right.active { transform: translateY(-50%) translateX(0); }
-    .popup-header {
-      padding: 1.2rem 1.7rem 1rem 1.7rem;
-      font-size: 1.2rem;
+    .works-page .page-title {
+      font-family: "Open Sans", sans-serif;
       font-weight: 600;
-      border-bottom: 1px solid #222;
-      display: flex; align-items: center; justify-content: space-between;
+      text-align: left;
+      margin-bottom: 2.5rem;
     }
-    .popup-close {
-      border: none; background: none; color: #fff; font-size: 2rem; cursor: pointer; line-height: 1;
-      padding: 0 0.4em; border-radius: 50%; transition: background .2s;
+    .works-page .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 5rem 4rem;
     }
-    .popup-close:hover { background: #222; }
-    .popup-content {
-      flex: 1 1 auto;
-      padding: 1.2rem 1.7rem 1.7rem 1.7rem;
-      overflow-y: auto;
-      /* 隐藏滚动条 */
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE/Edge */
-    }
-    .popup-content::-webkit-scrollbar { display: none; width: 0; background: transparent; }
-    /* 响应式 */
-    @media (max-width: 600px) {
-      .popup-panel { width: 97vw; border-radius: 1.2rem;}
-      .popup-header, .popup-content { padding-left: 1rem; padding-right: 1rem;}
+    @media (min-width: 1101px) {
+      .works-page .work-grid article:nth-child(2n) {
+        transform: translateY(160px);
+      }
     }
   </style>
 </head>
-<body class="works-page">
+
+<body class="page-dark works-page">
+  <!-- ===== Navbar ===== -->
   <nav class="nav">
     <div class="nav-inner container">
-      <a href="#" class="brand">SHUYU&nbsp;ZHANG</a>
+      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
       <ul class="nav-list">
-        <li><a href="#">About</a></li>
-        <li><a href="#">Works</a></li>
-        <li><a href="#">Self&nbsp;Practice</a></li>
-        <li><a href="#">CV</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="practice.html">Self&nbsp;Practice</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
   </nav>
+
+  <!-- ===== Works Section ===== -->
   <main class="container">
     <h1 class="page-title">Works</h1>
     <div class="work-grid">
-      <!-- 靠左的小方片 -->
-      <article class="work-card" data-side="left" data-title="Echoes of Ice" data-content="一个结合冰块融化声音采样与摄影打印的沉浸装置，带来冷冽与温暖的交互体验。">
-        <img class="work-cover" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Echoes of Ice">
+      <!-- 卡片 1 -->
+      <article class="work-card" data-sign="1" data-full="Echoes of Ice – 一个结合冰块融化声音采样与摄影打印的沉浸装置">
+        <img class="work-cover" src="assets/img/works/ice.jpg" alt="Echoes of Ice">
         <div class="overlay">Echoes of Ice<br><small>摄影 + 声音互动装置 · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-      <!-- 靠右的小卡片 -->
-      <article class="work-card" data-side="right" data-title="RGB Mycelium" data-content="利用霓虹光生长菌丝的可视化实验，将科技与自然结合。">
-        <img class="work-cover" src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80" alt="RGB Mycelium">
+
+      <!-- 卡片 2 -->
+      <article class="work-card" data-sign="-1" data-full="RGB Mycelium – 利用霓虹光生长菌丝的可视化实验">
+        <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="RGB Mycelium">
         <div class="overlay">RGB Mycelium<br><small>3D 打印与生物材质 · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-      <!-- 你可以加更多卡片，记得加 data-side="left" 或 "right" -->
-      <article class="work-card" data-side="left" data-title="Digital Bloom" data-content="结合算法动画与植物视觉语言的影像作品，展现数字世界的生命力。">
-        <img class="work-cover" src="https://images.unsplash.com/photo-1465101162946-4377e57745c3?auto=format&fit=crop&w=800&q=80" alt="Digital Bloom">
+
+      <!-- 卡片 3 -->
+      <article class="work-card" data-sign="1" data-full="Digital Bloom – 一个结合算法动画与植物视觉语言的影像作品">
+        <img class="work-cover" src="assets/img/works/digitalbloom.jpg" alt="Digital Bloom">
         <div class="overlay">Digital Bloom<br><small>生成艺术 · 2023</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 卡片 4 -->
+      <article class="work-card" data-sign="-1" data-full="Liquid Memory – 用水墨溶解效果表达记忆碎片的实验短片">
+        <img class="work-cover" src="assets/img/works/liquidmemory.jpg" alt="Liquid Memory">
+        <div class="overlay">Liquid Memory<br><small>影像装置 · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 卡片 5 -->
+      <article class="work-card" data-sign="1" data-full="Mechanical Garden – 一个由小型机械臂驱动的互动花园">
+        <img class="work-cover" src="assets/img/works/mechanicalgarden.jpg" alt="Mechanical Garden">
+        <div class="overlay">Mechanical Garden<br><small>机械交互 · 2023</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 卡片 6 -->
+      <article class="work-card" data-sign="-1" data-full="Whispers of Code – 利用编程语言生成诗意文字与图形的项目">
+        <img class="work-cover" src="assets/img/works/whispers.jpg" alt="Whispers of Code">
+        <div class="overlay">Whispers of Code<br><small>代码诗学 · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
       </article>
     </div>
   </main>
-  <!-- 弹窗 -->
-  <div class="popup-bg" id="popupBg"></div>
-  <div class="popup-panel" id="popupPanel">
-    <div class="popup-header">
-      <span id="popupTitle"></span>
-      <button class="popup-close" id="popupClose" title="Close">&times;</button>
-    </div>
-    <div class="popup-content" id="popupContent"></div>
-  </div>
+
+  <!-- ===== Works Interaction Script ===== -->
   <script>
-    // 工具：弹窗显示/隐藏
-    const popupBg = document.getElementById('popupBg');
-    const popupPanel = document.getElementById('popupPanel');
-    const popupTitle = document.getElementById('popupTitle');
-    const popupContent = document.getElementById('popupContent');
-    const popupClose = document.getElementById('popupClose');
-
-    // 打开弹窗（方向：left/right）
-    function openPopup(side, title, content) {
-      popupTitle.textContent = title;
-      popupContent.textContent = content;
-      popupBg.classList.add('active');
-      popupPanel.className = 'popup-panel ' + side; // 先带side
-      setTimeout(() => popupPanel.classList.add('active'), 10); // 动画
-      document.body.style.overflow = 'hidden';
-    }
-
-    // 关闭弹窗
-    function closePopup() {
-      popupBg.classList.remove('active');
-      popupPanel.classList.remove('active');
-      document.body.style.overflow = 'auto';
-      setTimeout(() => { popupPanel.className = 'popup-panel'; }, 480);
-    }
-    popupBg.addEventListener('click', closePopup);
-    popupClose.addEventListener('click', closePopup);
-
-    // 给所有 work-card 添加点击事件
-    document.querySelectorAll('.work-card').forEach(card => {
-      card.addEventListener('click', function(e) {
-        // 如果弹窗正在打开，忽略
-        if (popupPanel.classList.contains('active')) return;
-        // 判断左右
-        const side = card.getAttribute('data-side') === 'right' ? 'right' : 'left';
-        const title = card.getAttribute('data-title');
-        const content = card.getAttribute('data-content');
-        openPopup(side, title, content);
-        e.stopPropagation();
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
+        }
       });
-    });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
-    // esc键关闭
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closePopup();
-    });
+    function updateParallax() {
+      const vh = innerHeight;
+      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const p = (rect.top + rect.height * 0.5) / vh;
+        const sign = parseInt(card.dataset.sign) || 1;
+        const t = (p - 0.5) * 80 * sign;
+        card.style.setProperty('--parallax', t.toFixed(1) + 'px');
+      });
+    }
+    addEventListener('scroll', updateParallax, { passive: true });
+    addEventListener('load', updateParallax);
+    addEventListener('resize', updateParallax);
+
+      /*document.querySelectorAll('.work-card').forEach(card => {
+      const overlay = card.querySelector('.overlay');
+      const close = card.querySelector('.close-btn');
+      const fullTxt = card.dataset.full;
+      const short = overlay.innerHTML;
+
+      card.addEventListener('click', () => {
+        if (card.classList.contains('expanded')) return;
+        card.classList.add('expanded');
+        overlay.innerHTML = fullTxt;
+        document.body.style.overflow = 'hidden';
+      });
+
+      close.addEventListener('click', e => {
+        e.stopPropagation();
+        card.classList.remove('expanded');
+        overlay.innerHTML = short;
+        document.body.style.overflow = 'auto';
+        */
+        
+
+
+
+
+        
+     document.querySelectorAll('.work-card').forEach(card => {
+     const overlay = card.querySelector('.overlay');
+     const close = card.querySelector('.close-btn');
+     const fullTxt = card.dataset.full;
+     const short = overlay.innerHTML;
+     const sign = parseInt(card.dataset.sign) || 1; // 这里是新增的
+
+      card.addEventListener('click', () => {
+      if (card.classList.contains('expanded')) return;
+      card.classList.add('expanded');
+    // 新增下面这两行
+      card.classList.remove('expanded-left', 'expanded-right');
+      if (sign === 1) {
+      card.classList.add('expanded-left');
+      } else {
+      card.classList.add('expanded-right');
+      }
+      overlay.innerHTML = fullTxt;
+      document.body.style.overflow = 'hidden';
+      });
+
+      close.addEventListener('click', e => {
+    e.stopPropagation();
+      card.classList.remove('expanded', 'expanded-left', 'expanded-right'); // 一起移除
+      overlay.innerHTML = short;
+      document.body.style.overflow = 'auto';
+  });
+});
   </script>
 </body>
 </html>
