@@ -1,4 +1,4 @@
-/* ---------- Global Base ---------- */
+/* ---------- 全局基础 ---------- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -6,9 +6,9 @@
 }
 
 html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  overflow: -moz-scrollbars-none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+  overflow: -moz-scrollbars-none; /* 旧版 Firefox */
 }
 
 body {
@@ -16,22 +16,23 @@ body {
   background: #000;
   color: #fff;
   -webkit-font-smoothing: antialiased;
-  -ms-overflow-style: none;
+  -ms-overflow-style: none; /* 确保 IE/Edge 生效 */
   height: 100%;
 }
 
 ::-webkit-scrollbar {
-  display: none;
+  display: none; /* Chrome/Safari/Opera */
   width: 0 !important;
   height: 0 !important;
   background: transparent !important;
 }
 
+/* ---------- 选中文本高亮 ---------- */
 ::selection {
   background: rgba(99,102,241,.6);
 }
 
-/* ========== Global Typography ========== */
+/* ========== 全站统一标题 ========== */
 .page-title {
   font-family: "Open Sans", sans-serif;
   font-weight: 600;
@@ -40,21 +41,20 @@ body {
   text-align: left;
 }
 
-/* ---------- Layout & Utilities ---------- */
+/* ---------- 容器 & 工具 ---------- */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding-left: clamp(1.5rem, 6vw, 5rem);
   padding-right: 1.5rem;
 }
-
 @media (min-width: 640px) {
   .container {
     padding-right: 3rem;
   }
 }
 
-/* ---------- Navigation ---------- */
+/* ---------- 导航栏 ---------- */
 .nav {
   position: fixed;
   top: 0;
@@ -103,20 +103,20 @@ body {
   color: #9ca3af;
 }
 
-/* ---------- Works Page ---------- */
+/* ---------- Works 页面 ---------- */
 .works-page {
   padding-top: 7rem;
 }
 
 .works-page .work-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
   gap: 5rem 4rem;
 }
 
-@media (max-width: 600px) {
-  .works-page .work-grid {
-    grid-template-columns: 1fr;
+@media (min-width: 1101px) {
+  .works-page .work-grid article:nth-child(2n) {
+    transform: none;
   }
 }
 
@@ -164,13 +164,12 @@ body {
   opacity: 1;
 }
 
-/* Expanded Card Styles */
 .works-page .work-card.expanded {
   position: fixed;
   top: 50%;
   left: 50%;
   z-index: 120;
-  transform: translate(-50%,-50%) scale(1) !important;
+  transform: translate(-50%, -50%) scale(1) !important;
   width: 92vw;
   height: 92vh;
   border-radius: 1.5rem;
@@ -181,6 +180,7 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* 左侧弹窗样式 */
 .works-page .work-card.expanded-left {
   left: 0;
   top: 50%;
@@ -190,6 +190,7 @@ body {
   animation: slideInFromLeft 0.5s ease-out forwards;
 }
 
+/* 右侧弹窗样式 */
 .works-page .work-card.expanded-right {
   right: 0;
   left: auto;
@@ -200,6 +201,7 @@ body {
   animation: slideInFromRight 0.5s ease-out forwards;
 }
 
+/* 动画效果 */
 @keyframes slideInFromLeft {
   from {
     transform: translate(-100%, -50%) scale(0.9);
@@ -234,6 +236,17 @@ body {
   opacity: 1 !important;
 }
 
+.works-page .work-card.expanded .detail {
+  display: block;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 2rem;
+  line-height: 1.7;
+  max-width: 60ch;
+  margin: auto;
+  color: #fff;
+}
+
 .works-page .close-btn {
   position: absolute;
   top: 1.4rem;
@@ -261,7 +274,69 @@ body {
   top: 1.2rem;
 }
 
-/* ---------- Dark Theme Pages ---------- */
+/* ---------- 首页 Hero 样式 ---------- */
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.hero-mask {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg,rgba(0,0,0,0.4) 60%,#000 100%);
+  z-index: 2;
+}
+.hero-content {
+  position: absolute;
+  z-index: 3;
+  left: 3vw;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  text-align: left;
+  max-width: 600px;
+  padding-left: 0;
+}
+.hero-title {
+  font-size: 7rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+.hero-sub {
+  font-size: 2rem;
+  color: #e5e7eb;
+  text-align: left;
+}
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-content {
+    max-width: 95vw;
+    padding: 0 1rem;
+  }
+}
+
+/* ---------- 深色通用页面 (About / CV / Contact 等) ---------- */
 .page-dark {
   background: #000;
   color: #fff;
@@ -281,11 +356,4 @@ body {
 
 .page-dark .nav a:hover {
   color: #9ca3af;
-}
-
-/* Desktop Layout Adjustments */
-@media (min-width: 1101px) {
-  .works-page .work-grid article:nth-child(2n) {
-    transform: translateY(160px);
-  }
 }
