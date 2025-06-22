@@ -22,15 +22,22 @@
         align-items: flex-start;
       }
       .about-flex .portrait-wrapper {
-        flex: 0 0 220 px; /* slightly narrower column */
+        flex: 0 0 240px; /* wider column to fit larger photo */
       }
       .about-flex .about-text {
         flex: 1 1 0;
       }
-      /* smaller portrait image */
+      /* portrait photo – larger, true head‑shot size */
       .portrait-photo {
-        width: 9rem;  /* 144px */
-        height: 11rem;
+        width: 14rem;  /* 224px */
+        height: 14rem;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        transition: transform 0.3s ease;
+      }
+      .portrait-photo:hover {
+        transform: scale(1.03);
       }
       /* headline */
       .about-main-title {
@@ -42,6 +49,10 @@
         .about-flex {
           flex-direction: column;
           align-items: center;
+        }
+        .portrait-photo {
+          width: 11rem; /* scale down on mobile */
+          height: 11rem;
         }
         .about-main-title {
           font-size: 2.25rem;
