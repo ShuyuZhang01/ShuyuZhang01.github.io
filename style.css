@@ -276,26 +276,29 @@ body {
   z-index: 2;
 }
 .hero-content {
+  /* 原来可能有 left: 50% + transform 居中，全部改掉 */
   position: absolute;
   z-index: 3;
-  left: 50%;
+  left: 3vw; /* 距离左边，自己调整2vw-5vw看好不好看 */
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
   color: #fff;
-  text-align: left;
+  text-align: left;    /* 保证内容靠左 */
   max-width: 600px;
+  padding-left: 0;     /* 不要和 container 的 padding 冲突 */
 }
 .hero-title {
-  font-size: 5rem;
-  font-weight: 700;
+   font-size: 7rem;     /* 更大一点 */
+  font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
+  text-align: left;
 }
 .hero-sub {
-  font-size: 1.5rem;
-  line-height: 1.6;
+  font-size: 2rem;    /* 更大一点 */
   color: #e5e7eb;
+  text-align: left;
 }
 @media (max-width: 600px) {
   .hero-title {
