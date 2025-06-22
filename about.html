@@ -51,16 +51,24 @@
   }
       @media (max-width: 640px) {
         .about-flex {
-          flex-direction: column;
-          align-items: center;
-        }
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        align-items: center;
+        flex-direction: column; /* 增加此项确保布局与contact一致 */
+}
         .portrait-photo {
           width: 11rem; /* scale down on mobile */
           height: 11rem;
         }
         .about-main-title {
-          font-size: 2.25rem;
-        }
+            text-align: left;
+            font-family: "Open Sans", sans-serif;
+            font-weight: 700; /* 加粗与contact一致 */
+            font-size: 3rem;
+            margin-bottom: 3.5rem; /* 与contact一致 */
+            align-self: flex-start; /* 保证单独左对齐，居中不会干扰 */
+}
       }
     </style>
   </head>
