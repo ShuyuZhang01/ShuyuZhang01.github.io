@@ -10,6 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* 覆盖原有列宽，方便你测试动画 */
+    .works-page .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 5rem 4rem;
+    }
+  </style>
 </head>
 
 <body class="page-dark works-page">
