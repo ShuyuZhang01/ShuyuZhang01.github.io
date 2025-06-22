@@ -11,6 +11,24 @@
 
   <!-- Site styles -->
   <link rel="stylesheet" href="style.css">
+  <style>
+    .page-title {
+      text-align: left;
+      font-family: 'Poppins', sans-serif;
+      font-weight: normal;
+      font-size: 3rem;
+      margin: 0 0 2rem 0; /* top right bottom left */
+      align-self: flex-start;
+      width: 100%;
+    }
+
+    @media (max-width: 640px) {
+      .page-title {
+        font-size: 2.25rem;
+        text-align: left; /* maintain left alignment on mobile */
+      }
+    }
+  </style>
 </head>
 
 <body class="page-dark">
@@ -100,14 +118,10 @@ function updateParallax() {
     const rect = card.getBoundingClientRect();
     const progress = (rect.top + rect.height * 0.5) / vh;
     const sign = parseInt(card.dataset.sign) || 1;
-
-    // 仅在大屏幕启用视差
-    if (window.innerWidth > 1100) {
-      const translate = (progress - 0.5) * 60 * sign; // 减少位移幅度（原120→60）
-      card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
-    } else {
-      card.style.setProperty('--parallax', '0px'); // 小屏幕归零
-    }
+    
+    // 新公式：确保所有卡片都有明显位移
+    const translate = Math.abs(progress - 0.5) * 100 * sign; 
+    card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
   });
 }
     addEventListener('scroll', updateParallax, {passive: true});

@@ -332,7 +332,7 @@ body.home .brand {
   }
   
   .works-page .work-grid article:nth-child(2n) {
-    transform: none !important;
+    transform: none;
   }
 }
 
