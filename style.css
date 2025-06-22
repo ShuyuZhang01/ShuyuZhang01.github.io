@@ -135,7 +135,7 @@ body{
 /* ---------- Contact 页面 置中 / 下移 ---------- */
 .contact-page main{
   display:flex;flex-direction:column;align-items:center;
-  margin-top:4rem;                       /* 往下移 4rem≈64px */
+  margin-top:6rem;                       /* 往下移 4rem≈64px */
 }
 .contact-page .contact-form{margin:0 auto;}
 .contact-page h1,
