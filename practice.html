@@ -13,17 +13,15 @@
   <!-- Global styles -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Page-specific styles -->
   <style>
-    /* ========= Self-Practice exclusive styles ========== */
     .practice-page {
-      padding-top: 7rem;                 /* Top spacing */
+      padding-top: 7rem;
     }
 
     .practice-page .container {
       padding-left: clamp(1.5rem, 6vw, 5rem);
     }
-    
+
     .practice-page .page-title {
       font-family: "Open Sans", sans-serif;
       font-weight: 600;
@@ -34,31 +32,71 @@
     .practice-page .work-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 3rem 2rem;                   /* Tighter row/column spacing */
+      gap: 3rem 2rem;
     }
 
-    /* No staggered displacement, if kept can be adjusted smaller */
-    @media (min-width: 1101px) {
-      .practice-page .work-grid article:nth-child(2n) {
-        transform: none;
-      }
+    .practice-page .work-cover {
+      aspect-ratio: 4/3;
+      transition: transform 0.4s ease;
     }
 
-    /* Reduced cover height, softened shadow */
-    .practice-page .work-cover { aspect-ratio: 4/3; }
-    .practice-page .work-card { box-shadow: 0 12px 32px rgba(0,0,0,.38); }
+    .practice-page .work-card {
+      box-shadow: 0 12px 32px rgba(0,0,0,.38);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
 
-    /* Reduced popup size */
+    .practice-page .work-card:hover .work-cover {
+      transform: scale(1.05);
+    }
+
     .practice-page .work-card.expanded {
+      position: fixed;
+      z-index: 999;
+      top: 50%;
+      left: 50%;
       width: 85vw;
       height: 85vh;
+      transform: translate(-50%, -50%);
+      background: #111;
+      box-shadow: 0 0 80px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: #fff;
+      padding: 2rem;
+    }
+
+    .practice-page .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      color: #fff;
+      font-size: 2rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .typing-text {
+      border-right: 2px solid #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 3s steps(30, end) forwards;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
     }
   </style>
 </head>
 
 <body class="page-dark practice-page">
-
-  <!-- ===== Navbar ===== -->
   <nav class="nav">
     <div class="nav-inner container">
       <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
@@ -72,13 +110,12 @@
     </div>
   </nav>
 
-  <!-- ===== Main ===== -->
   <main class="container">
     <h1 class="page-title">Self&nbsp;Practice</h1>
 
     <div class="work-grid">
       <!-- ▶ Practice 1 -->
-      <article class="work-card">
+      <article class="work-card" data-text="Exploring lighting and texture in Blender.">
         <img class="work-cover" src="assets/img/practice1.jpg" alt="3D Typography Study">
         <div class="overlay">
           <div>
@@ -89,7 +126,7 @@
       </article>
 
       <!-- ▶ Practice 2 -->
-      <article class="work-card">
+      <article class="work-card" data-text="Lines grow using Perlin noise in Processing.">
         <img class="work-cover" src="assets/img/practice2.jpg" alt="Generative Line Art">
         <div class="overlay">
           <div>
@@ -98,75 +135,80 @@
           </div>
         </div>
       </article>
-
-      <!-- Continue adding more cards using the same structure -->
     </div>
   </main>
 
-  <!-- ===== Interaction Script ===== -->
   <script>
-  /* =========================================================================
-     Self-Practice big-card interactions
-     ========================================================================= */
   (function () {
     const cards = document.querySelectorAll('.work-card');
     const body  = document.body;
 
-    /* --- 1. Scroll fade-in --- */
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-          io.unobserve(entry.target);                // Stop observing after first appearance
+          io.unobserve(entry.target);
         }
       });
     }, { threshold: 0.2 });
     cards.forEach(c => io.observe(c));
 
-    /* --- 2. Expand / Collapse --- */
     cards.forEach(card => card.addEventListener('click', () => expand(card)));
 
-    function expand(card){
+    function expand(card) {
       if (card.classList.contains('expanded')) return;
 
       const closeBtn = document.createElement('button');
       closeBtn.className = 'close-btn';
       closeBtn.innerHTML = '&times;';
-      closeBtn.addEventListener('click', e=>{
+      closeBtn.addEventListener('click', e => {
         e.stopPropagation();
         collapse(card, closeBtn);
       });
-      card.appendChild(closeBtn);
 
+      card.appendChild(closeBtn);
       card.classList.add('expanded');
       body.style.overflow = 'hidden';
 
-      const onKey = e => e.key === 'Escape' && collapse(card, closeBtn, onKey);
+      // Add typing animation
+      const text = card.dataset.text || '';
+      const textElem = document.createElement('p');
+      textElem.className = 'typing-text';
+      textElem.textContent = text;
+      card.appendChild(textElem);
+
+      // Escape key support
+      const onKey = e => {
+        if (e.key === 'Escape') collapse(card, closeBtn, onKey, textElem);
+      };
       document.addEventListener('keydown', onKey);
 
-      setTimeout(()=>{
-        document.addEventListener('click', outside, { once:true });
-        function outside(ev){
-          if(!card.contains(ev.target)) collapse(card, closeBtn, onKey);
-        }
+      // Click outside to collapse
+      setTimeout(() => {
+        document.addEventListener('click', function outside(ev) {
+          if (!card.contains(ev.target)) {
+            collapse(card, closeBtn, onKey, textElem);
+          }
+        }, { once: true });
       });
     }
 
-    function collapse(card, btn, keyHandler){
+    function collapse(card, btn, keyHandler, textElem) {
       card.classList.remove('expanded');
       body.style.overflow = '';
       btn.remove();
-      if(keyHandler) document.removeEventListener('keydown', keyHandler);
+      if (textElem) textElem.remove();
+      if (keyHandler) document.removeEventListener('keydown', keyHandler);
     }
 
-    /* --- 3. Subtle scroll parallax --- */
+    // Parallax on scroll
     window.addEventListener('scroll', () => {
       cards.forEach(card => {
         const rect = card.getBoundingClientRect();
         const d = rect.top - innerHeight * 0.9;
-        card.style.setProperty('--parallax', `${Math.max(d,0)}px`);
+        card.style.setProperty('--parallax', `${Math.max(d, 0)}px`);
       });
-    }, { passive:true });
+    }, { passive: true });
   })();
   </script>
 </body>
