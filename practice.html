@@ -9,12 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Site styles -->
+  <!-- Site styles (确保 style.css 已含你给出的全部规则) -->
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="page-dark">
+<body class="page-dark works-page"><!-- 加 works-page 让交错位移生效 -->
 
+  <!-- ===== 导航 ===== -->
   <nav class="nav">
     <div class="nav-inner container">
       <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
@@ -28,28 +29,105 @@
     </div>
   </nav>
 
-  <!-- ===== Main Content ===== -->
+  <!-- ===== 主内容 ===== -->
   <main class="container">
     <h1 class="page-title">Self&nbsp;Practice</h1>
 
     <div class="work-grid">
-      <!-- Example practice card -->
+      <!-- ====== Practice Card 1 ====== -->
       <article class="work-card">
-        <figure class="work-thumb">
-          <img src="assets/img/practice1.jpg" alt="Practice 1 thumbnail">
-        </figure>
-        <h2 class="work-title">3D Typography Study</h2>
-        <p class="work-desc">Exploring lighting and texture in Blender.</p>
+        <img class="work-cover" src="assets/img/practice1.jpg" alt="3D Typography Study">
+        <div class="overlay">
+          <div>
+            <h2 class="work-title">3D Typography Study</h2>
+            <p class="work-desc">Exploring lighting and texture in Blender.</p>
+          </div>
+        </div>
       </article>
 
+      <!-- ====== Practice Card 2 ====== -->
       <article class="work-card">
-        <figure class="work-thumb">
-          <img src="assets/img/practice2.jpg" alt="Practice 2 thumbnail">
-        </figure>
-        <h2 class="work-title">Generative Line Art</h2>
-        <p class="work-desc">Coded in Processing; lines grow based on Perlin noise.</p>
+        <img class="work-cover" src="assets/img/practice2.jpg" alt="Generative Line Art">
+        <div class="overlay">
+          <div>
+            <h2 class="work-title">Generative Line Art</h2>
+            <p class="work-desc">Coded in Processing; lines grow based on Perlin noise.</p>
+          </div>
+        </div>
       </article>
+
+      <!-- ===== 再添加更多卡片时直接复制上面结构 ===== -->
     </div>
   </main>
+
+  <!-- ===== 交互脚本 ===== -->
+  <script>
+  /* =========================================================================
+     Self-Practice big-card interactions
+     ========================================================================= */
+  (function () {
+    const cards  = document.querySelectorAll('.work-card');
+    const body   = document.body;
+
+    /* ---------- 1. 滚动出现动画 ---------- */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('in-view');
+      });
+    }, { threshold: 0.2 });
+
+    cards.forEach(card => io.observe(card));
+
+    /* ---------- 2. 点击展开 / 关闭 ---------- */
+    cards.forEach(card => card.addEventListener('click', () => expandCard(card)));
+
+    function expandCard(card) {
+      // 已经展开就不处理
+      if (card.classList.contains('expanded')) return;
+
+      // 创建关闭按钮
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'close-btn';
+      closeBtn.innerHTML = '&times;';
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        collapseCard(card, closeBtn);
+      });
+      card.appendChild(closeBtn);
+
+      // 展开
+      card.classList.add('expanded');
+      body.style.overflow = 'hidden';
+
+      // Esc 键关闭
+      const onKey = (e) => (e.key === 'Escape') && collapseCard(card, closeBtn, onKey);
+      document.addEventListener('keydown', onKey);
+
+      // 点击空白处（卡片外）也关闭
+      setTimeout(() => {
+        document.addEventListener('click', outsideClick, { once: true });
+        function outsideClick(ev) {
+          if (!card.contains(ev.target)) collapseCard(card, closeBtn, onKey);
+        }
+      });
+    }
+
+    function collapseCard(card, btn, keyHandler) {
+      card.classList.remove('expanded');
+      body.style.overflow = '';
+      btn.remove();
+      if (keyHandler) document.removeEventListener('keydown', keyHandler);
+    }
+
+    /* ---------- 3. 轻微滚动视差 ---------- */
+    window.addEventListener('scroll', () => {
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const dist = rect.top - window.innerHeight * 0.9; // 进入视口上方时差值趋零
+        card.style.setProperty('--parallax', `${Math.max(dist, 0)}px`);
+      });
+    }, { passive: true });
+  })();
+  </script>
 </body>
 </html>
