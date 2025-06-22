@@ -9,13 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Site styles -->
+  <!-- 公共样式 -->
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="page-dark">
 
-  <!-- ===== Navbar（原样保留） ===== -->
+  <!-- ===== Navbar ===== -->
   <nav class="nav">
     <div class="nav-inner container">
       <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
@@ -29,7 +29,7 @@
     </div>
   </nav>
 
-  <!-- ===== Works ===== -->
+  <!-- ===== Works Section ===== -->
   <main class="container works-page">
     <h1 class="page-title">Works</h1>
 
@@ -40,13 +40,7 @@
         <div class="overlay">Echoes of Ice<br><small>摄影 + 声音互动装置 · 2024</small></div>
         <div class="detail">
           <h2>Echoes of Ice</h2>
-          <p>冰块融化时的微观声纹被实时采样，通过 MAX/MSP 生成低频 Drone，与 4×8 米高清摄影挂幅共同形成沉浸式空间。观众步入其中，仿佛置身时间缓慢流逝的极寒峡湾。</p>
-          <p>技术要点：</p>
-          <ul>
-            <li>水下电容麦克风 + Arduino 实时数据采集</li>
-            <li>声纹→MIDI→合成器 → 10.2 声道环绕</li>
-            <li>水雾冷却系统保持 5 °C 环境温度</li>
-          </ul>
+          <p>冰块融化时的微观声纹被实时采样，通过 MAX/MSP 生成低频 Drone，与 4×8 米高清摄影挂幅共同形成沉浸式空间。</p>
         </div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
@@ -57,13 +51,7 @@
         <div class="overlay">RGB Mycelium<br><small>3D 打印与生物材质 · 2024</small></div>
         <div class="detail">
           <h2>RGB Mycelium</h2>
-          <p>利用 3D 打印 TPU 网格框架，引导菌丝体在 R/G/B 光谱下生长，探索人造结构与有机材料的融合形态。</p>
-          <p>展品包括：</p>
-          <ol>
-            <li>72 小时生长过程延时摄影</li>
-            <li>可触摸的菌丝灯具原型</li>
-            <li>光谱-生长速率对比图表</li>
-          </ol>
+          <p>利用 3D 打印 TPU 网格框架，引导菌丝体在 R/G/B 光谱下生长。</p>
         </div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
@@ -74,7 +62,7 @@
         <div class="overlay">Synthetic Horizons<br><small>AI 生成地形 · 2023</small></div>
         <div class="detail">
           <h2>Synthetic Horizons</h2>
-          <p>用 GAN 训练卫星地形数据，生成“从未存在”的行星地貌，并通过 CNC 雕刻成 1 m×0.5 m 铝合金浮雕。</p>
+          <p>用 GAN 训练卫星地形数据，生成“从未存在”的行星地貌。</p>
         </div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
@@ -85,7 +73,7 @@
         <div class="overlay">Sea of Glyphs<br><small>交互海浪投影 · 2023</small></div>
         <div class="detail">
           <h2>Sea of Glyphs</h2>
-          <p>观众挥动手臂便能在墙面上掀起“书法海浪”，笔触化为波峰，随动作实时起伏。</p>
+          <p>观众挥动手臂便能在墙面上掀起“书法海浪”。</p>
         </div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
@@ -107,16 +95,16 @@
         <div class="overlay">Nebula Synth<br><small>数据可视音序器 · 2021</small></div>
         <div class="detail">
           <h2>Nebula Synth</h2>
-          <p>把 NASA 星云光谱数据映射到音序器步进，旋钮控制波段，实时生成氛围乐。</p>
+          <p>把 NASA 星云光谱数据映射到音序器步进。</p>
         </div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
     </div>
   </main>
 
-  <!-- ===== Works 脚本 ===== -->
+  <!-- ===== Works Script ===== -->
   <script>
-    /* ---------- Intersection 淡入 ---------- */
+    /* --- Intersection 淡入 --- */
     const io = new IntersectionObserver(entries=>{
       entries.forEach(e=>{
         if(e.isIntersecting){
@@ -127,14 +115,14 @@
     },{threshold:.3});
     document.querySelectorAll('.work-card').forEach(c=>io.observe(c));
 
-    /* ---------- 滚动 Parallax ---------- */
+    /* --- 滚动 Parallax --- */
     function updateParallax(){
       const vh = innerHeight;
       document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card=>{
         const rect = card.getBoundingClientRect();
         const p = (rect.top + rect.height*0.5)/vh;
         const sign = parseInt(card.dataset.sign)||1;
-        const t = (p-0.5)*120*sign;                // ±60 px
+        const t = (p-0.5)*120*sign;             // ±60 px
         card.style.setProperty('--parallax', t.toFixed(1)+'px');
       });
     }
@@ -142,7 +130,7 @@
     addEventListener('load', updateParallax);
     addEventListener('resize', updateParallax);
 
-    /* ---------- 展开 / 关闭 ---------- */
+    /* --- 展开 / 关闭 --- */
     document.querySelectorAll('.work-card').forEach(card=>{
       const overlay = card.querySelector('.overlay');
       const detail  = card.querySelector('.detail');
