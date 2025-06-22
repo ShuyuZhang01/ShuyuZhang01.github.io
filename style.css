@@ -27,19 +27,18 @@ body {
   background: transparent !important;
 }
 
-/* ---------- 首页特殊样式 ---------- */
-body.home {
-  overflow: hidden !important;
-  height: 100vh !important;
+/* ---------- 选中文本高亮 ---------- */
+::selection {
+  background: rgba(99,102,241,.6);
 }
 
-body.home .hero {
-  height: 100vh;
-  overflow: hidden;
-}
-
-body.home .brand {
-  display: none;
+/* ========== 全站统一标题 ========== */
+.page-title {
+  font-family: "Savate", serif;
+  font-weight: normal;
+  font-size: 3rem;
+  margin-bottom: 4rem;
+  text-align: left;
 }
 
 /* ---------- 容器 & 工具 ---------- */
@@ -104,6 +103,21 @@ body.home .brand {
   color: #9ca3af;
 }
 
+/* ---------- 首页特殊样式 ---------- */
+body.home {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+body.home .hero {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body.home .brand {
+  display: none;
+}
+
 /* ---------- HERO 区 ---------- */
 .hero {
   position: relative;
@@ -161,20 +175,6 @@ body.home .brand {
   background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
 }
 
-/* ---------- 选中文本高亮 ---------- */
-::selection {
-  background: rgba(99,102,241,.6);
-}
-
-/* ========== 全站统一标题 ========== */
-.page-title {
-  font-family: "Savate", serif;
-  font-weight: normal;
-  font-size: 3rem;
-  margin-bottom: 4rem;
-  text-align: left;
-}
-
 /* ---------- 深色通用页面 (About / CV / Contact 等) ---------- */
 .page-dark {
   background: #000;
@@ -197,6 +197,44 @@ body.home .brand {
   color: #9ca3af;
 }
 
+/* ========== About 页面 ========== */
+.about-page {
+  padding-top: 7rem;
+}
+
+.about-main-title {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  margin-bottom: 3.5rem;
+  text-align: left;
+  width: 100%;
+}
+
+.about-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+.portrait-wrapper {
+  flex: 0 0 360px;
+}
+
+.about-text {
+  flex: 1 1 0;
+}
+
+.portrait-photo {
+  width: 22rem;
+  height: 22rem;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s ease;
+}
+
 /* ---------- Works 页面 ---------- */
 .works-page {
   padding-top: 7rem;
@@ -206,7 +244,7 @@ body.home .brand {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
   gap: 4rem 3rem;
-  margin-bottom: 4rem;
+  margin-bottom: 6rem;
 }
 
 @media (min-width: 1101px) {
@@ -216,8 +254,8 @@ body.home .brand {
   }
   
   .works-page .work-grid article {
-  transform: none !important;
-}
+    transform: none !important;
+  }
 }
 
 .works-page .work-card {
@@ -337,6 +375,16 @@ body.home .brand {
   .works-page .work-grid article:nth-child(2n) {
     transform: none;
   }
+  
+  .about-flex {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .portrait-wrapper {
+    flex: 1 1 100%;
+    text-align: center;
+  }
 }
 
 @media (max-width: 640px) {
@@ -362,4 +410,17 @@ body.home .brand {
     font-size: .8rem;
     flex-wrap: wrap;
   }
+  
+  .about-main-title {
+    font-size: 2.25rem;
+  }
+  
+ .portrait-photo {
+  width: 22rem;
+  height: 22rem;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s ease;
+}
 }

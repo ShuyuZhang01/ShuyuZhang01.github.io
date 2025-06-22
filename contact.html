@@ -8,9 +8,70 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
   <!-- 全站样式 -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- 联系页面特定样式 -->
+  <style>
+    /* 联系页面特定样式 */
+    .contact-page .container {
+      padding-left: clamp(1.5rem, 6vw, 5rem);
+    }
+    
+    .contact-page .page-title {
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      text-align: left;
+      margin-bottom: 2.5rem;
+    }
+    
+    .contact-form {
+      max-width: 600px;
+      font-family: "Open Sans", sans-serif;
+    }
+    
+    .contact-field {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0 1.5rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      font-family: "Open Sans", sans-serif;
+    }
+    
+    .contact-btn {
+      padding: 0.8rem 2rem;
+      background: #fff;
+      color: #000;
+      border: none;
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .contact-btn:hover {
+      background: #7dd3fc;
+    }
+    
+    .email-alt {
+      margin-top: 3rem;
+      font-family: "Open Sans", sans-serif;
+      color: #9ca3af;
+    }
+    
+    .email-alt a {
+      color: #7dd3fc;
+      text-decoration: none;
+    }
+    
+    .email-alt a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
 <body class="page-dark contact-page">
@@ -36,12 +97,12 @@
 
     <form action="https://formspree.io/f/mrbkavao" method="POST" class="contact-form">
 
-      <label>
+      <label style="display: block; margin-bottom: 0.5rem; font-family: 'Open Sans', sans-serif;">
         Your&nbsp;email:
         <input name="email" type="email" class="contact-field" required>
       </label>
 
-      <label>
+      <label style="display: block; margin-bottom: 0.5rem; font-family: 'Open Sans', sans-serif;">
         Your&nbsp;message:
         <textarea name="message" rows="4" class="contact-field" required></textarea>
       </label>
