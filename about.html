@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>About · Shuyu Zhang</title>
 
-    <!-- ============== Fonts ============== -->
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet" />
 
-    <!-- ============== Site Styles ============== -->
+    <!-- Global Styles -->
     <link rel="stylesheet" href="style.css" />
 
-    <!-- ============== Page‑specific quick styles ============== -->
+    <!-- Page‑specific quick styles -->
     <style>
       /* side‑by‑side portrait + text */
       .about-flex {
@@ -22,15 +22,20 @@
         align-items: flex-start;
       }
       .about-flex .portrait-wrapper {
-        flex: 0 0 220px; /* fixed width image column */
+        flex: 0 0 180px; /* slightly narrower column */
       }
       .about-flex .about-text {
         flex: 1 1 0;
       }
+      /* smaller portrait image */
+      .portrait-photo {
+        width: 9rem;  /* 144px */
+        height: 9rem;
+      }
       /* headline */
       .about-main-title {
         text-align: center;
-        font-size: 3rem; /* larger headline */
+        font-size: 3rem;
         margin-bottom: 2.5rem;
       }
       @media (max-width: 640px) {
@@ -46,7 +51,7 @@
   </head>
 
   <body class="page-dark">
-    <!-- ============= NAVBAR ============= -->
+    <!-- NAVBAR -->
     <nav class="nav">
       <div class="nav-inner container">
         <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
@@ -60,10 +65,9 @@
       </div>
     </nav>
 
-    <!-- ============ MAIN CONTENT ============ -->
+    <!-- MAIN CONTENT -->
     <main class="container" style="padding-bottom:6rem;">
       <section id="about" class="about-section">
-        <!-- Enlarged & centered headline -->
         <h1 class="section-title about-main-title">About <span class="highlight">Shuyu Zhang</span></h1>
 
         <div class="about-flex">
@@ -93,8 +97,8 @@
             <p>Beyond her work, street dance (Popping &amp; Hip-hop) and video games are significant sources of inspiration and joy, often weaving their way into her artistic creations. She is proficient in English (IELTS 6.5) and Mandarin (native), and continuously draws inspiration from art museums worldwide.</p>
 
             <p class="closing">Shuyu Zhang is a creator constantly weaving new experiences between code, light, movement, and space — an explorer bridging the real and virtual, technology and emotion.</p>
-          </div><!-- /.about-text -->
-        </div><!-- /.about-flex -->
+          </div>
+        </div>
       </section>
     </main>
   </body>
