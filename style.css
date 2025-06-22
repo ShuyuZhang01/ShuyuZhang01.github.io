@@ -13,6 +13,10 @@ body {
   background: #000;
   color: #fff;
   -webkit-font-smoothing: antialiased;
+  scrollbar-width: none; /* Firefox */
+}
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge 等基于 Chromium 浏览器 */
 }
 
 /* ---------- 容器 & 工具 ---------- */
