@@ -6,27 +6,26 @@
   <title>Works · Shuyu Zhang</title>
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Site styles -->
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- 添加Works页面标题特定样式 -->
   <style>
     .works-page .page-title {
       font-family: "Open Sans", sans-serif;
       font-weight: 600;
       text-align: left;
       margin-bottom: 2.5rem;
+      padding-left: clamp(1.5rem, 6vw, 5rem);
     }
   </style>
 </head>
 
 <body class="page-dark">
-
-  <!-- ===== Navbar（保持原样） ===== -->
+  <!-- ===== Navbar ===== -->
   <nav class="nav">
     <div class="nav-inner container">
       <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
@@ -40,60 +39,29 @@
     </div>
   </nav>
 
-  <!-- ===== Works ===== -->
+  <!-- ===== Works Section ===== -->
   <main class="container works-page">
     <h1 class="page-title">Works</h1>
-
     <div class="work-grid">
-
-      <!-- 1 -->
-      <article class="work-card" data-full="Echoes of Ice – 一个结合冰块融化声音采样与摄影打印的沉浸装置" data-sign="1">
+      <!-- 示例卡片 1 -->
+      <article class="work-card" data-sign="1" data-full="Echoes of Ice – 一个结合冰块融化声音采样与摄影打印的沉浸装置">
         <img class="work-cover" src="assets/img/works/ice.jpg" alt="Echoes of Ice">
         <div class="overlay">Echoes of Ice<br><small>摄影 + 声音互动装置 · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
-      <!-- 2 -->
-      <article class="work-card" data-full="RGB Mycelium – 利用霓虹光生长菌丝的可视化实验" data-sign="-1">
+      <!-- 示例卡片 2 -->
+      <article class="work-card" data-sign="-1" data-full="RGB Mycelium – 利用霓虹光生长菌丝的可视化实验">
         <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="RGB Mycelium">
         <div class="overlay">RGB Mycelium<br><small>3D 打印与生物材质 · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
-      <!-- 3 -->
-      <article class="work-card" data-full="Synthetic Horizons – 基于卫星数据与 AI 推断的地形雕塑" data-sign="1">
-        <img class="work-cover" src="assets/img/works/horizons.jpg" alt="Synthetic Horizons">
-        <div class="overlay">Synthetic Horizons<br><small>AI 生成地形 · 2023</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
-      <!-- 4 -->
-      <article class="work-card" data-full="Sea of Glyphs – 交互投影让书法笔触化为波浪" data-sign="-1">
-        <img class="work-cover" src="assets/img/works/glyphs.jpg" alt="Sea of Glyphs">
-        <div class="overlay">Sea of Glyphs<br><small>交互海浪投影 · 2023</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
-      <!-- 5 -->
-      <article class="work-card" data-full="Ink Constellation – 触控墙面将墨迹映射为星座" data-sign="1">
-        <img class="work-cover" src="assets/img/works/ink.jpg" alt="Ink Constellation">
-        <div class="overlay">Ink Constellation<br><small>水墨触控墙面 · 2022</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
-      <!-- 6 -->
-      <article class="work-card" data-full="Nebula Synth – 星云数据驱动音序器" data-sign="-1">
-        <img class="work-cover" src="assets/img/works/nebula.jpg" alt="Nebula Synth">
-        <div class="overlay">Nebula Synth<br><small>数据可视音序器 · 2021</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
     </div>
   </main>
 
-  <!-- ===== Works 交互脚本 ===== -->
+  <!-- ===== Works Interaction Script ===== -->
   <script>
-    /* ---------- Intersection 淡入 ---------- */
+    // 淡入动画
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -101,32 +69,30 @@
           io.unobserve(e.target);
         }
       });
-    }, {threshold: .3});
+    }, { threshold: 0.3 });
     document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
-    /* ---------- 滚动 Parallax 上下位移 ---------- */
-function updateParallax() {
-  const vh = innerHeight;
-  document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
-    const rect = card.getBoundingClientRect();
-    const progress = (rect.top + rect.height * 0.5) / vh;
-    const sign = parseInt(card.dataset.sign) || 1;
-    
-    // 改进后的公式：确保所有卡片都有明显且平滑的位移
-    const translate = (progress - 0.5) * 80 * sign; 
-    card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
-  });
-}
-    addEventListener('scroll', updateParallax, {passive: true});
+    // Parallax 滚动偏移
+    function updateParallax() {
+      const vh = innerHeight;
+      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const p = (rect.top + rect.height * 0.5) / vh;
+        const sign = parseInt(card.dataset.sign) || 1;
+        const t = (p - 0.5) * 80 * sign;
+        card.style.setProperty('--parallax', t.toFixed(1) + 'px');
+      });
+    }
+    addEventListener('scroll', updateParallax, { passive: true });
     addEventListener('load', updateParallax);
     addEventListener('resize', updateParallax);
 
-    /* ---------- 点击展开 / 关闭 ---------- */
+    // 点击展开关闭卡片
     document.querySelectorAll('.work-card').forEach(card => {
       const overlay = card.querySelector('.overlay');
-      const close   = card.querySelector('.close-btn');
+      const close = card.querySelector('.close-btn');
       const fullTxt = card.dataset.full;
-      const short   = overlay.innerHTML;
+      const short = overlay.innerHTML;
 
       card.addEventListener('click', () => {
         if (card.classList.contains('expanded')) return;
