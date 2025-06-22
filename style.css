@@ -57,12 +57,13 @@ body{
 /* ---------- 选中文本高亮 ---------- */
 ::selection{background:rgba(99,102,241,.6);}
 
-/* ---------- Works 页面 ---------- */
+/* ---------- Works 页面 (旧版本占位，可保留) ---------- */
 .page-light{background:#f8fafc;color:#0f172a;min-height:100%;padding-top:6rem;}
 .page-light .page-title{
   font-family:"Savate",serif;font-weight:700;
   font-size:2.25rem;margin-bottom:2rem;
 }
+/* 旧 .work-grid/.work-card 规则会被新规则覆盖 */
 .work-grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
 .work-card{background:#fff;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.08);border-radius:.5rem;}
 .work-card h2{font-size:1.25rem;margin-bottom:.5rem;}
@@ -78,10 +79,7 @@ body{
 
 /* ---------- 深色通用页面 (About / CV / Contact 等) ---------- */
 .page-dark{background:#000;color:#fff;min-height:100%;padding-top:6rem;}
-/* ★ 底部留白：所有深色页自动预留 4rem */
-.page-dark::after{
-  content:'';display:block;height:4rem;
-}
+.page-dark::after{content:'';display:block;height:4rem;}   /* 底部留白 */
 .page-dark .nav a{color:#fff;}
 .page-dark .nav a:hover{color:#9ca3af;}
 
@@ -90,7 +88,6 @@ body{
   font-family:Cambria,Georgia,'Times New Roman',serif;
   overflow:auto;min-height:100%;
 }
-/* ★保持导航字体统一（覆盖上面的衬线设置）*/
 .cv-page .nav,
 .cv-page .nav *{font-family:"Poppins",sans-serif;}
 
@@ -120,3 +117,63 @@ body{
   .brand{flex:1 1 100%;margin-bottom:.5rem;}
   .nav-list{margin-left:0;justify-content:center;gap:.75rem;font-size:.8rem;flex-wrap:wrap;}
 }
+
+/* ====================================================================== */
+/* ========================  新版 Works 专用样式  ========================= */
+/* ====================================================================== */
+
+/* ▶ 整体留白：导航 + 大型视觉 */
+.works-page{padding-top:7rem;}
+
+/* ---------- 大卡片交错布局 ---------- */
+.work-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(600px,1fr));
+  gap:5rem 4rem;
+}
+@media(min-width:1101px){
+  .work-grid article:nth-child(2n){transform:translateY(180px);}
+}
+
+/* ---------- 卡片基础 + 滚动过渡 ---------- */
+.work-card{
+  position:relative;overflow:hidden;cursor:pointer;
+  border-radius:1.25rem;
+  box-shadow:0 16px 40px rgba(0,0,0,.4);
+  opacity:0;transform:translateY(var(--parallax,60px)) scale(.94);
+  transition:opacity .8s ease,box-shadow .6s ease,transform .8s ease;
+  will-change:transform;
+}
+.work-card.in-view{opacity:1;transform:translateY(var(--parallax,0)) scale(1);}
+.work-cover{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;}
+.work-card:hover:not(.expanded){box-shadow:0 22px 60px rgba(0,0,0,.55);}
+
+/* ---------- 悬浮文字层 ---------- */
+.overlay{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:2rem;line-height:1.45;font-size:1.25rem;
+  background:rgba(0,0,0,.55);color:#fff;opacity:0;transition:opacity .35s;
+}
+.work-card:hover .overlay{opacity:1;}
+
+/* ---------- 展开状态 ---------- */
+.work-card.expanded{
+  position:fixed;top:50%;left:50%;z-index:120;
+  transform:translate(-50%,-50%) scale(1) !important;
+  width:92vw;height:92vh;border-radius:1.5rem;
+  box-shadow:0 28px 64px rgba(0,0,0,.65);
+}
+.work-card.expanded .overlay{
+  background:rgba(0,0,0,.38);
+  font-size:clamp(1rem,2.2vw,1.35rem);
+}
+
+/* ---------- 关闭按钮 ---------- */
+.close-btn{
+  position:absolute;top:1.4rem;right:1.4rem;z-index:5;
+  width:2.6rem;height:2.6rem;border:none;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(0,0,0,.65);color:#fff;font-size:1.45rem;
+  cursor:pointer;opacity:0;transform:scale(.8);transition:.3s;
+}
+.work-card.expanded .close-btn{opacity:1;transform:none;}
