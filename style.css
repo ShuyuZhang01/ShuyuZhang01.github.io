@@ -178,6 +178,23 @@ body {
   flex-direction: column;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /* 左右弹窗动画，根据 expanded-left 和 expanded-right */
+.works-page .work-card.expanded-left {
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%) scale(1) !important;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.works-page .work-card.expanded-right {
+  right: 0;
+  left: auto;
+  top: 50%;
+  transform: translate(0, -50%) scale(1) !important;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
 }
 
 .works-page .work-card.expanded .work-cover {

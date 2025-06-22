@@ -126,7 +126,7 @@
     addEventListener('load', updateParallax);
     addEventListener('resize', updateParallax);
 
-    document.querySelectorAll('.work-card').forEach(card => {
+      /*document.querySelectorAll('.work-card').forEach(card => {
       const overlay = card.querySelector('.overlay');
       const close = card.querySelector('.close-btn');
       const fullTxt = card.dataset.full;
@@ -144,8 +144,41 @@
         card.classList.remove('expanded');
         overlay.innerHTML = short;
         document.body.style.overflow = 'auto';
+        */
+        
+
+
+
+
+        
+     document.querySelectorAll('.work-card').forEach(card => {
+     const overlay = card.querySelector('.overlay');
+     const close = card.querySelector('.close-btn');
+     const fullTxt = card.dataset.full;
+     const short = overlay.innerHTML;
+     const sign = parseInt(card.dataset.sign) || 1; // 这里是新增的
+
+      card.addEventListener('click', () => {
+      if (card.classList.contains('expanded')) return;
+      card.classList.add('expanded');
+    // 新增下面这两行
+      card.classList.remove('expanded-left', 'expanded-right');
+      if (sign === 1) {
+      card.classList.add('expanded-left');
+      } else {
+      card.classList.add('expanded-right');
+      }
+      overlay.innerHTML = fullTxt;
+      document.body.style.overflow = 'hidden';
       });
-    });
+
+      close.addEventListener('click', e => {
+    e.stopPropagation();
+      card.classList.remove('expanded', 'expanded-left', 'expanded-right'); // 一起移除
+      overlay.innerHTML = short;
+      document.body.style.overflow = 'auto';
+  });
+});
   </script>
 </body>
 </html>
