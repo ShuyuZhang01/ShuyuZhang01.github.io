@@ -8,9 +8,57 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
   <!-- Global styles -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- CV页面特定样式 -->
+  <style>
+    .cv-page .container {
+      padding-left: clamp(1.5rem, 6vw, 5rem);
+    }
+    
+    .cv-page .page-title {
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      text-align: left;
+      margin-bottom: 2.5rem;
+    }
+    
+    .cv-center-block {
+      margin-top: 2rem !important;
+    }
+    
+    .cv-section-title {
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin: 2.5rem 0 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 0.5rem;
+    }
+    
+    .cv-list {
+      list-style-type: none;
+      padding-left: 0;
+      font-family: "Open Sans", sans-serif;
+      line-height: 1.6;
+    }
+    
+    .cv-list li {
+      margin-bottom: 1rem;
+    }
+    
+    a {
+      color: #7dd3fc;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 
 <body class="page-dark cv-page">
@@ -29,12 +77,13 @@
     </div>
   </nav>
 
-  <!-- ===== CV CONTENT ===== -->
-  <main class="container" style="max-width:800px; padding-bottom:6rem;">
+  <!-- ===== 主内容 ===== -->
+  <main class="container">
+    <h1 class="page-title">CV</h1>
 
     <!-- Personal info -->
-    <div class="cv-center-block" style="text-align:center; margin-top:3rem;">
-      <h1>SHUYU ZHANG</h1>
+    <div class="cv-center-block" style="text-align:center; margin-top:0;">
+      <h1 style="font-family: 'Open Sans', sans-serif; font-size: 2rem; margin-bottom: 1rem;">SHUYU ZHANG</h1>
       <p><em>Interactive &amp; Spatial Experience Designer&nbsp;|&nbsp;Digital Artist</em></p>
       <p>London, UK&nbsp;| +44&nbsp;(0)7468&nbsp;438&nbsp;097&nbsp;| zayaismyname@163.com</p>
       <p>Portfolio:&nbsp;<a href="https://example.com" target="_blank" rel="noopener">Dropbox link</a></p>
@@ -44,7 +93,7 @@
     <h2 class="cv-section-title">EDUCATION</h2>
     <ul class="cv-list">
       <li><strong>MA Computational Arts (in progress)</strong> — Goldsmiths, University of London, UK | Sep&nbsp;2024 – Sep&nbsp;2026</li>
-      <li><strong>BA Arts, Technology &amp; Entertainment (First Class Honours)</strong> — Xi’an Jiaotong‑Liverpool University, China | Sep&nbsp;2019 – Jun&nbsp;2024</li>
+      <li><strong>BA Arts, Technology &amp; Entertainment (First Class Honours)</strong> — Xi'an Jiaotong‑Liverpool University, China | Sep&nbsp;2019 – Jun&nbsp;2024</li>
     </ul>
 
     <!-- CORE SKILLS & IMPACT -->
@@ -53,7 +102,7 @@
       <li><strong>Interactive &amp; Spatial Experience Design</strong> — Unity (C#, VFX Graph, VR), Unreal, OptiTrack.<br>Led motion‑capture and VFX for 2025 live VR‑dance performance.</li>
       <li><strong>Creative Coding &amp; Generative Art</strong> — JavaScript, TouchDesigner, Processing.<br>Created <em>Piano Piece of Day and Night</em> (2024), a time‑driven flower lifecycle animation.</li>
       <li><strong>Physical Computing</strong> — Arduino C/C++, welding.<br>Built <em>Can I Have Some Water?</em> (2024) interactive plant installation detecting soil moisture.</li>
-      <li><strong>Game Modding</strong> — Lua, rigging, Spriter, narrative.<br>Authored <em>Don't Starve Together</em> mod “The Hiphop Dancer Yu”.</li>
+      <li><strong>Game Modding</strong> — Lua, rigging, Spriter, narrative.<br>Authored <em>Don't Starve Together</em> mod "The Hiphop Dancer Yu".</li>
     </ul>
 
     <!-- PROFESSIONAL EXPERIENCE -->
@@ -85,7 +134,7 @@
     <h2 class="cv-section-title">REFEREES</h2>
     <ul class="cv-list">
       <li><strong>Jessica Wolpert</strong> — Senior Lecturer, Goldsmiths, University of London<br>Email: J.Wolpert@gold.ac.uk | Phone: +44&nbsp;7813&nbsp;035&nbsp;494</li>
-      <li><strong>Kim Lau</strong> — Associate Professor, Xi’an Jiaotong‑Liverpool University<br>Email: kim.lau02@xjtlu.edu.cn | Phone: +86&nbsp;188&nbsp;6269&nbsp;1160</li>
+      <li><strong>Kim Lau</strong> — Associate Professor, Xi'an Jiaotong‑Liverpool University<br>Email: kim.lau02@xjtlu.edu.cn | Phone: +86&nbsp;188&nbsp;6269&nbsp;1160</li>
     </ul>
 
   </main>

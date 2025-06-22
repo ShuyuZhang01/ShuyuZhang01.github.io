@@ -1,121 +1,147 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>About · Shuyu Zhang</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Works · Shuyu Zhang</title>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Global Styles -->
-    <link rel="stylesheet" href="style.css" />
+  <!-- Site styles -->
+  <link rel="stylesheet" href="style.css">
 
-    <!-- Page‑specific quick styles -->
-    <style>
-      /* side‑by‑side portrait + text */
-      .about-flex {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        align-items: center;
-      }
-      .about-flex .portrait-wrapper {
-        flex: 0 0 360px; /* accommodate larger photo */
-      }
-      .about-flex .about-text {
-        flex: 1 1 0;
-      }
-      /* portrait photo – larger, true head‑shot size */
-      .portrait-photo {
-        width: 22rem;  /* 352px */
-        height: 22rem;
-        object-fit: cover;
-        border-radius: 50%;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-        transition: transform 0.3s ease;
-      }
-      .portrait-photo:hover {
-        transform: scale(1.03);
-      }
-      /* headline */
-      .about-main-title {
-         text-align: left;
-         font-family: 'Open Sans', sans-serif;
-         font-weight: 700;
-         font-size: 3rem;
-         margin: 0 0 3.5rem 0;
-    width: 100%;
-  }
-      @media (max-width: 640px) {
-        .about-flex {
-          flex-direction: column;
-          align-items: center;
+  <!-- 添加Works页面标题特定样式 -->
+  <style>
+    .works-page .page-title {
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      text-align: left;
+      margin-bottom: 2.5rem;
+    }
+  </style>
+</head>
+
+<body class="page-dark">
+
+  <!-- ===== Navbar（保持原样） ===== -->
+  <nav class="nav">
+    <div class="nav-inner container">
+      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
+      <ul class="nav-list">
+        <li><a href="about.html">About</a></li>
+        <li><a href="works.html">Works</a></li>
+        <li><a href="practice.html">Self&nbsp;Practice</a></li>
+        <li><a href="cv.html">CV</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== Works ===== -->
+  <main class="container works-page">
+    <h1 class="page-title">Works</h1>
+
+    <div class="work-grid">
+
+      <!-- 1 -->
+      <article class="work-card" data-full="Echoes of Ice – 一个结合冰块融化声音采样与摄影打印的沉浸装置" data-sign="1">
+        <img class="work-cover" src="assets/img/works/ice.jpg" alt="Echoes of Ice">
+        <div class="overlay">Echoes of Ice<br><small>摄影 + 声音互动装置 · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 2 -->
+      <article class="work-card" data-full="RGB Mycelium – 利用霓虹光生长菌丝的可视化实验" data-sign="-1">
+        <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="RGB Mycelium">
+        <div class="overlay">RGB Mycelium<br><small>3D 打印与生物材质 · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 3 -->
+      <article class="work-card" data-full="Synthetic Horizons – 基于卫星数据与 AI 推断的地形雕塑" data-sign="1">
+        <img class="work-cover" src="assets/img/works/horizons.jpg" alt="Synthetic Horizons">
+        <div class="overlay">Synthetic Horizons<br><small>AI 生成地形 · 2023</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 4 -->
+      <article class="work-card" data-full="Sea of Glyphs – 交互投影让书法笔触化为波浪" data-sign="-1">
+        <img class="work-cover" src="assets/img/works/glyphs.jpg" alt="Sea of Glyphs">
+        <div class="overlay">Sea of Glyphs<br><small>交互海浪投影 · 2023</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 5 -->
+      <article class="work-card" data-full="Ink Constellation – 触控墙面将墨迹映射为星座" data-sign="1">
+        <img class="work-cover" src="assets/img/works/ink.jpg" alt="Ink Constellation">
+        <div class="overlay">Ink Constellation<br><small>水墨触控墙面 · 2022</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- 6 -->
+      <article class="work-card" data-full="Nebula Synth – 星云数据驱动音序器" data-sign="-1">
+        <img class="work-cover" src="assets/img/works/nebula.jpg" alt="Nebula Synth">
+        <div class="overlay">Nebula Synth<br><small>数据可视音序器 · 2021</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- ===== Works 交互脚本 ===== -->
+  <script>
+    /* ---------- Intersection 淡入 ---------- */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
         }
-        .portrait-photo {
-          width: 11rem; /* scale down on mobile */
-          height: 11rem;
-        }
-        .about-main-title {
-          font-size: 2.25rem;
-          text-align: left;
-        }
-      }
-    </style>
-  </head>
+      });
+    }, {threshold: .3});
+    document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
-  <body class="page-dark">
-    <!-- NAVBAR -->
-    <nav class="nav">
-      <div class="nav-inner container">
-        <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
-        <ul class="nav-list">
-          <li><a href="about.html">About</a></li>
-          <li><a href="works.html">Works</a></li>
-          <li><a href="practice.html">Self&nbsp;Practice</a></li>
-          <li><a href="cv.html">CV</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-    </nav>
+    /* ---------- 滚动 Parallax 上下位移 ---------- */
+function updateParallax() {
+  const vh = innerHeight;
+  document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const progress = (rect.top + rect.height * 0.5) / vh;
+    const sign = parseInt(card.dataset.sign) || 1;
+    
+    // 改进后的公式：确保所有卡片都有明显且平滑的位移
+    const translate = (progress - 0.5) * 80 * sign; 
+    card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
+  });
+}
+    addEventListener('scroll', updateParallax, {passive: true});
+    addEventListener('load', updateParallax);
+    addEventListener('resize', updateParallax);
 
-    <!-- MAIN CONTENT -->
-    <main class="container" style="padding-bottom:6rem;">
-      <section id="about" class="about-section">
-        <h1 class="section-title about-main-title">About <span class="highlight">Shuyu Zhang</span></h1>
+    /* ---------- 点击展开 / 关闭 ---------- */
+    document.querySelectorAll('.work-card').forEach(card => {
+      const overlay = card.querySelector('.overlay');
+      const close   = card.querySelector('.close-btn');
+      const fullTxt = card.dataset.full;
+      const short   = overlay.innerHTML;
 
-        <div class="about-flex">
-          <!-- Portrait Photo -->
-          <figure class="portrait-wrapper">
-            <img src="assets/photo/shuyu.jpg" alt="Portrait of Shuyu Zhang" class="portrait-photo" />
-          </figure>
+      card.addEventListener('click', () => {
+        if (card.classList.contains('expanded')) return;
+        card.classList.add('expanded');
+        overlay.innerHTML = fullTxt;
+        document.body.style.overflow = 'hidden';
+      });
 
-          <!-- Bio Text -->
-          <div class="about-text">
-            <p><strong>Shuyu Zhang (张书语)</strong>, born in 2001 in Xining, Qinghai, China, is a child nurtured by the mountains. Her journey has taken her through the vibrant cities of Chengdu, Beijing, Nanning, and Suzhou in China, and she now lives and studies in London, UK.</p>
-
-            <p>As an <strong>Interactive &amp; Spatial Experience Designer</strong> and <strong>Digital Artist</strong>, Shuyu's academic and creative pursuits consistently center on exploring the fascinating relationship between humans and the digital world. She is dedicated to innovating at the intersection of physical space and the virtual realm, constantly experimenting with mediums such as interactive installations, game experiences, and generative art as bridges for communication. Shuyu excels at rapid self-learning and integrating new technologies (Unity VR, TouchDesigner, motion capture, Arduino) to create compelling works that evoke immediate surprise and resonance in audiences—even before they grasp the underlying concept.</p>
-
-            <h3 class="subsection-title">Selected Projects</h3>
-            <ul class="list-styled">
-              <li><strong>Motion Capture Tech Lead</strong> for a live performance where a dancer shared the stage with their own real-time driven VR avatar.</li>
-              <li><em>Piano Piece of Day and Night</em> — a pure code-based artwork using JavaScript to visualize the life cycle of flowers blooming and wilting with a virtual sun, choreographed by time.</li>
-              <li><em>Can I Have Some Water?</em> — an interactive plant installation exploring plant "emotional expression" from a post-humanist perspective.</li>
-              <li><em>The Hiphop Dancer Yu</em> — a custom character mod for <cite>Don't Starve Together</cite> where dance becomes a weapon for survival, fulfilling her dream of "living inside her favorite game."</li>
-            </ul>
-
-            <h3 class="subsection-title">Professional Experience</h3>
-            <p>Shuyu has demonstrated strong cross-disciplinary collaboration skills, gaining valuable experience in roles such as Design Assistant at cultural tourism and education technology companies, contributing to user research, story-map design, and event execution.</p>
-
-            <h3 class="subsection-title">Inspiration &amp; Interests</h3>
-            <p>Beyond her work, street dance (Popping &amp; Hip-hop) and video games are significant sources of inspiration and joy, often weaving their way into her artistic creations. She is proficient in English (IELTS 6.5) and Mandarin (native), and continuously draws inspiration from art museums worldwide.</p>
-
-            <p class="closing">Shuyu Zhang is a creator constantly weaving new experiences between code, light, movement, and space — an explorer bridging the real and virtual, technology and emotion.</p>
-          </div>
-        </div>
-      </section>
-    </main>
-  </body>
+      close.addEventListener('click', e => {
+        e.stopPropagation();
+        card.classList.remove('expanded');
+        overlay.innerHTML = short;
+        document.body.style.overflow = 'auto';
+      });
+    });
+  </script>
+</body>
 </html>

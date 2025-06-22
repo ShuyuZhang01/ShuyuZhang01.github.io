@@ -8,36 +8,50 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- 公共样式（保持原样，不做任何改动） -->
+  <!-- Global styles -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- 仅本页生效的尺寸微调 -->
+  <!-- Page-specific styles -->
   <style>
-    /* ========= Self-Practice 独占样式 ========== */
-    .practice-page{padding-top:7rem;}                 /* 顶部留白 */
-
-    .practice-page .work-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-      gap:3rem 2rem;                                 /* 更紧凑的行/列间距 */
+    /* ========= Self-Practice exclusive styles ========== */
+    .practice-page {
+      padding-top: 7rem;                 /* Top spacing */
     }
 
-    /* 不需要交错位移，若保留可调小一点 */
-    @media(min-width:1101px){
-      .practice-page .work-grid article:nth-child(2n){
-        transform:none;
+    .practice-page .container {
+      padding-left: clamp(1.5rem, 6vw, 5rem);
+    }
+    
+    .practice-page .page-title {
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      text-align: left;
+      margin-bottom: 2.5rem;
+    }
+
+    .practice-page .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 3rem 2rem;                   /* Tighter row/column spacing */
+    }
+
+    /* No staggered displacement, if kept can be adjusted smaller */
+    @media (min-width: 1101px) {
+      .practice-page .work-grid article:nth-child(2n) {
+        transform: none;
       }
     }
 
-    /* 缩短封面高度、减弱阴影 */
-    .practice-page .work-cover{aspect-ratio:4/3;}
-    .practice-page .work-card{box-shadow:0 12px 32px rgba(0,0,0,.38);}
+    /* Reduced cover height, softened shadow */
+    .practice-page .work-cover { aspect-ratio: 4/3; }
+    .practice-page .work-card { box-shadow: 0 12px 32px rgba(0,0,0,.38); }
 
-    /* 弹窗尺寸同步缩小 */
-    .practice-page .work-card.expanded{
-      width:85vw;
-      height:85vh;
+    /* Reduced popup size */
+    .practice-page .work-card.expanded {
+      width: 85vw;
+      height: 85vh;
     }
   </style>
 </head>
@@ -85,7 +99,7 @@
         </div>
       </article>
 
-      <!-- 继续复制上面结构添加更多卡片 -->
+      <!-- Continue adding more cards using the same structure -->
     </div>
   </main>
 
@@ -98,18 +112,18 @@
     const cards = document.querySelectorAll('.work-card');
     const body  = document.body;
 
-    /* --- 1. 滚动淡入 --- */
+    /* --- 1. Scroll fade-in --- */
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-          io.unobserve(entry.target);                // 进场一次后就不再观察
+          io.unobserve(entry.target);                // Stop observing after first appearance
         }
       });
     }, { threshold: 0.2 });
     cards.forEach(c => io.observe(c));
 
-    /* --- 2. 展开 / 关闭 --- */
+    /* --- 2. Expand / Collapse --- */
     cards.forEach(card => card.addEventListener('click', () => expand(card)));
 
     function expand(card){
@@ -145,7 +159,7 @@
       if(keyHandler) document.removeEventListener('keydown', keyHandler);
     }
 
-    /* --- 3. 轻微滚动视差 --- */
+    /* --- 3. Subtle scroll parallax --- */
     window.addEventListener('scroll', () => {
       cards.forEach(card => {
         const rect = card.getBoundingClientRect();
