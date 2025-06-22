@@ -1,70 +1,120 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>About · Shuyu Zhang</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About · Shuyu Zhang</title>
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet" />
 
-  <!-- Site styles -->
-  <link rel="stylesheet" href="style.css">
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="style.css" />
 
-  <!-- 添加About页面标题特定样式 -->
-  <style>
-    .about-page .page-title {
-      font-family: "Open Sans", sans-serif;
-      font-weight: 600;
-      text-align: left;
-      margin-bottom: 2.5rem;
-    }
-  </style>
-</head>
+    <!-- Page‑specific quick styles -->
+    <style>
+      /* side‑by‑side portrait + text */
+      .about-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        align-items: center;
+      }
+      .about-flex .portrait-wrapper {
+        flex: 0 0 360px; /* accommodate larger photo */
+      }
+      .about-flex .about-text {
+        flex: 1 1 0;
+      }
+      /* portrait photo – larger, true head‑shot size */
+      .portrait-photo {
+        width: 22rem;  /* 352px */
+        height: 22rem;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+        transition: transform 0.3s ease;
+      }
+      .portrait-photo:hover {
+        transform: scale(1.03);
+      }
+      /* headline */
+      .about-main-title {
+         text-align: left;
+         font-family: 'Open Sans', sans-serif;
+         font-weight: 700;
+         font-size: 3rem;
+         margin: 0 0 3.5rem 0;
+         width: 100%;
+  }
+      @media (max-width: 640px) {
+        .about-flex {
+          flex-direction: column;
+          align-items: center;
+        }
+        .portrait-photo {
+          width: 11rem; /* scale down on mobile */
+          height: 11rem;
+        }
+        .about-main-title {
+          font-size: 2.25rem;
+        }
+      }
+    </style>
+  </head>
 
-<body class="page-dark about-page">
-
-  <!-- ===== Navbar ===== -->
-  <nav class="nav">
-    <div class="nav-inner container">
-      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
-      <ul class="nav-list">
-        <li><a href="about.html">About</a></li>
-        <li><a href="works.html">Works</a></li>
-        <li><a href="practice.html">Self&nbsp;Practice</a></li>
-        <li><a href="cv.html">CV</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- ===== About ===== -->
-  <main class="container">
-    <h1 class="page-title">About Shuyu Zhang</h1>
-
-    <div class="about-flex">
-      <div class="portrait-wrapper">
-        <img src="assets/img/about/portrait.jpg" alt="Shuyu Zhang" class="portrait-photo">
-      </div>
-      
-      <div class="about-text">
-        <p>Shuyu Zhang is a multidisciplinary artist and designer working at the intersection of technology, nature, and traditional art forms. Her practice explores the poetic relationships between organic systems and digital interfaces.</p>
-        
-        <p>Born in Shanghai and educated at Central Saint Martins (BA) and the Royal College of Art (MA), Zhang's work has been exhibited internationally, including at the Venice Biennale's collateral events, Ars Electronica, and the Shanghai Biennale.</p>
-        
-        <p>Her recent research focuses on:</p>
-        <ul>
-          <li>Biomimetic interfaces that respond to environmental data</li>
-          <li>Algorithmic reinterpretations of traditional ink painting</li>
-          <li>Sound sculptures using organic materials as conductors</li>
+  <body class="page-dark">
+    <!-- NAVBAR -->
+    <nav class="nav">
+      <div class="nav-inner container">
+        <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
+        <ul class="nav-list">
+          <li><a href="about.html">About</a></li>
+          <li><a href="works.html">Works</a></li>
+          <li><a href="practice.html">Self&nbsp;Practice</a></li>
+          <li><a href="cv.html">CV</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
-        
-        <p>Zhang is currently based between London and Beijing, where she leads the experimental design studio Aperture Fields.</p>
       </div>
-    </div>
-  </main>
+    </nav>
 
-</body>
+    <!-- MAIN CONTENT -->
+    <main class="container" style="padding-bottom:6rem;">
+      <section id="about" class="about-section">
+        <h1 class="section-title about-main-title">About <span class="highlight">Shuyu Zhang</span></h1>
+
+        <div class="about-flex">
+          <!-- Portrait Photo -->
+          <figure class="portrait-wrapper">
+            <img src="assets/photo/shuyu.jpg" alt="Portrait of Shuyu Zhang" class="portrait-photo" />
+          </figure>
+
+          <!-- Bio Text -->
+          <div class="about-text">
+            <p><strong>Shuyu Zhang (张书语)</strong>, born in 2001 in Xining, Qinghai, China, is a child nurtured by the mountains. Her journey has taken her through the vibrant cities of Chengdu, Beijing, Nanning, and Suzhou in China, and she now lives and studies in London, UK.</p>
+
+            <p>As an <strong>Interactive &amp; Spatial Experience Designer</strong> and <strong>Digital Artist</strong>, Shuyu's academic and creative pursuits consistently center on exploring the fascinating relationship between humans and the digital world. She is dedicated to innovating at the intersection of physical space and the virtual realm, constantly experimenting with mediums such as interactive installations, game experiences, and generative art as bridges for communication. Shuyu excels at rapid self-learning and integrating new technologies (Unity VR, TouchDesigner, motion capture, Arduino) to create compelling works that evoke immediate surprise and resonance in audiences—even before they grasp the underlying concept.</p>
+
+            <h3 class="subsection-title">Selected Projects</h3>
+            <ul class="list-styled">
+              <li><strong>Motion Capture Tech Lead</strong> for a live performance where a dancer shared the stage with their own real-time driven VR avatar.</li>
+              <li><em>Piano Piece of Day and Night</em> — a pure code-based artwork using JavaScript to visualize the life cycle of flowers blooming and wilting with a virtual sun, choreographed by time.</li>
+              <li><em>Can I Have Some Water?</em> — an interactive plant installation exploring plant "emotional expression" from a post-humanist perspective.</li>
+              <li><em>The Hiphop Dancer Yu</em> — a custom character mod for <cite>Don't Starve Together</cite> where dance becomes a weapon for survival, fulfilling her dream of "living inside her favorite game."</li>
+            </ul>
+
+            <h3 class="subsection-title">Professional Experience</h3>
+            <p>Shuyu has demonstrated strong cross-disciplinary collaboration skills, gaining valuable experience in roles such as Design Assistant at cultural tourism and education technology companies, contributing to user research, story-map design, and event execution.</p>
+
+            <h3 class="subsection-title">Inspiration &amp; Interests</h3>
+            <p>Beyond her work, street dance (Popping &amp; Hip-hop) and video games are significant sources of inspiration and joy, often weaving their way into her artistic creations. She is proficient in English (IELTS 6.5) and Mandarin (native), and continuously draws inspiration from art museums worldwide.</p>
+
+            <p class="closing">Shuyu Zhang is a creator constantly weaving new experiences between code, light, movement, and space — an explorer bridging the real and virtual, technology and emotion.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>
