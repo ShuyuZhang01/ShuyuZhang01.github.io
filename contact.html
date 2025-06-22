@@ -18,9 +18,6 @@
     /* 联系页面特定样式 */
     .contact-page .container {
       padding-left: clamp(1.5rem, 6vw, 5rem);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
     
     .contact-page .page-title {
@@ -28,15 +25,19 @@
       font-weight: 600;
       text-align: left;
       margin-bottom: 2.5rem;
+    }
+    
+    .contact-form-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       width: 100%;
-      max-width: 600px;
     }
     
     .contact-form {
       max-width: 600px;
       width: 100%;
       font-family: "Open Sans", sans-serif;
-      margin: 0 auto;
     }
     
     .form-label {
@@ -117,32 +118,34 @@
 
   <!-- ===== 主内容 ===== -->
   <main class="container">
-    <h1 class="page-title">Contact</h1>
+    <div class="contact-form-container">
+      <h1 class="page-title">Contact</h1>
 
-    <form action="https://formspree.io/f/mrbkavao" method="POST" class="contact-form">
-      <label class="form-label">
-        Your&nbsp;email:
-        <input name="email" type="email" class="contact-field" required>
-      </label>
+      <form action="https://formspree.io/f/mrbkavao" method="POST" class="contact-form">
+        <label class="form-label">
+          Your&nbsp;email:
+          <input name="email" type="email" class="contact-field" required>
+        </label>
 
-      <label class="form-label">
-        Your&nbsp;message:
-        <textarea name="message" rows="4" class="contact-field" required></textarea>
-      </label>
+        <label class="form-label">
+          Your&nbsp;message:
+          <textarea name="message" rows="4" class="contact-field" required></textarea>
+        </label>
 
-      <div class="btn-wrap">
-        <button type="submit" class="contact-btn">Send</button>
-      </div>
-    </form>
+        <div class="btn-wrap">
+          <button type="submit" class="contact-btn">Send</button>
+        </div>
+      </form>
 
-    <!-- 额外联系方式 -->
-    <p class="email-alt">
-      Or email me directly at
-      <a href="mailto:zayaismyname@163.com">zayaismyname@163.com</a><br>
-      Instagram:
-      <a href="https://www.instagram.com/dancingparentheses/" target="_blank">@dancingparentheses</a> &nbsp;|&nbsp;
-      WeChat: <span style="font-weight:600;">mh2584617059</span>
-    </p>
+      <!-- 额外联系方式 -->
+      <p class="email-alt">
+        Or email me directly at
+        <a href="mailto:zayaismyname@163.com">zayaismyname@163.com</a><br>
+        Instagram:
+        <a href="https://www.instagram.com/dancingparentheses/" target="_blank">@dancingparentheses</a> &nbsp;|&nbsp;
+        WeChat: <span style="font-weight:600;">mh2584617059</span>
+      </p>
+    </div>
   </main>
 
 </body>
