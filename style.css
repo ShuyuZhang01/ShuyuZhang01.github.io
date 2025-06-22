@@ -198,3 +198,19 @@ body{
 .page-dark a{color:#7dd3fc;}          /* 靛青浅色，自己可换 */
 .page-dark a:hover{color:#38bdf8;}    /* hover 更亮 */
 
+/* === 首页 Hero：桌面再靠左，手机往上 === */
+
+/* (1) ≥1024 px —— 再贴左一点 */
+@media (min-width:1024px){
+  .hero .container{
+    margin-left:0.5rem;      /* 8 px；你觉得还想贴左就写 0 或 0.25rem */
+  }
+}
+
+/* (2) ≤640 px —— 不居中，向上挪 */
+@media (max-width:640px){
+  .hero-content{
+    justify-content:flex-start;  /* 垂直对齐顶部 */
+    padding-top:3rem;            /* 距离导航 48 px；想再靠顶写 2rem/1rem */
+  }
+}
