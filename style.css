@@ -34,8 +34,8 @@ body {
 
 /* ========== 全站统一标题 ========== */
 .page-title {
-  font-family: "Savate", serif;
-  font-weight: normal;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;    /* 或 bold，视觉和works.html更统一 */
   font-size: 3rem;
   margin-bottom: 4rem;
   text-align: left;
@@ -45,12 +45,12 @@ body {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding-left: clamp(1.5rem, 6vw, 5rem);
+  padding-right: 1.5rem;
 }
-
 @media (min-width: 640px) {
   .container {
-    padding: 0 3rem;
+    padding-right: 3rem;
   }
 }
 
