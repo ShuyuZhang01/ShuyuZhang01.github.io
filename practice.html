@@ -12,32 +12,38 @@
   <!-- 公共样式（保持原样，不做任何改动） -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- 仅本页生效的尺寸微调 -->
+  <!-- 仅本页生效的尺寸微调 & 顶部对齐 -->
   <style>
     /* ========= Self-Practice 独占样式 ========== */
-    .practice-page{padding-top:7rem;}                 /* 顶部留白 */
-
-    .practice-page .work-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-      gap:3rem 2rem;                                 /* 更紧凑的行/列间距 */
+    /* ① 顶部留白与其它深色页面一致 */
+    .practice-page {
+      padding-top: 6rem;
     }
 
-    /* 不需要交错位移，若保留可调小一点 */
-    @media(min-width:1101px){
-      .practice-page .work-grid article:nth-child(2n){
-        transform:none;
+    /* ② 卡片网格：紧凑尺寸，只影响本页 */
+    .practice-page .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 3rem 2rem;
+    }
+    @media (min-width: 1101px) {
+      .practice-page .work-grid article:nth-child(2n) {
+        transform: none;
       }
     }
 
-    /* 缩短封面高度、减弱阴影 */
-    .practice-page .work-cover{aspect-ratio:4/3;}
-    .practice-page .work-card{box-shadow:0 12px 32px rgba(0,0,0,.38);}
+    /* ③ 缩短封面高度、弱化阴影 */
+    .practice-page .work-cover {
+      aspect-ratio: 4/3;
+    }
+    .practice-page .work-card {
+      box-shadow: 0 12px 32px rgba(0,0,0,.38);
+    }
 
-    /* 弹窗尺寸同步缩小 */
-    .practice-page .work-card.expanded{
-      width:85vw;
-      height:85vh;
+    /* ④ 弹窗尺寸同步缩小 */
+    .practice-page .work-card.expanded {
+      width: 85vw;
+      height: 85vh;
     }
   </style>
 </head>
@@ -91,68 +97,61 @@
 
   <!-- ===== Interaction Script ===== -->
   <script>
-  /* =========================================================================
-     Self-Practice big-card interactions
-     ========================================================================= */
   (function () {
     const cards = document.querySelectorAll('.work-card');
     const body  = document.body;
 
-    /* --- 1. 滚动淡入 --- */
-    const io = new IntersectionObserver((entries) => {
+    /* 1. 滚动淡入 */
+    const io = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-          io.unobserve(entry.target);                // 进场一次后就不再观察
+          io.unobserve(entry.target);
         }
       });
     }, { threshold: 0.2 });
     cards.forEach(c => io.observe(c));
 
-    /* --- 2. 展开 / 关闭 --- */
+    /* 2. 展开/关闭 */
     cards.forEach(card => card.addEventListener('click', () => expand(card)));
 
-    function expand(card){
+    function expand(card) {
       if (card.classList.contains('expanded')) return;
-
-      const closeBtn = document.createElement('button');
-      closeBtn.className = 'close-btn';
-      closeBtn.innerHTML = '&times;';
-      closeBtn.addEventListener('click', e=>{
+      const btn = document.createElement('button');
+      btn.className = 'close-btn';
+      btn.innerHTML = '&times;';
+      btn.addEventListener('click', e => {
         e.stopPropagation();
-        collapse(card, closeBtn);
+        collapse(card, btn);
       });
-      card.appendChild(closeBtn);
-
+      card.appendChild(btn);
       card.classList.add('expanded');
       body.style.overflow = 'hidden';
-
-      const onKey = e => e.key === 'Escape' && collapse(card, closeBtn, onKey);
+      const onKey = e => e.key === 'Escape' && collapse(card, btn, onKey);
       document.addEventListener('keydown', onKey);
-
-      setTimeout(()=>{
-        document.addEventListener('click', outside, { once:true });
-        function outside(ev){
-          if(!card.contains(ev.target)) collapse(card, closeBtn, onKey);
+      setTimeout(() => {
+        document.addEventListener('click', outside, { once: true });
+        function outside(ev) {
+          if (!card.contains(ev.target)) collapse(card, btn, onKey);
         }
       });
     }
 
-    function collapse(card, btn, keyHandler){
+    function collapse(card, btn, keyHandler) {
       card.classList.remove('expanded');
       body.style.overflow = '';
       btn.remove();
-      if(keyHandler) document.removeEventListener('keydown', keyHandler);
+      if (keyHandler) document.removeEventListener('keydown', keyHandler);
     }
 
-    /* --- 3. 轻微滚动视差 --- */
+    /* 3. 轻微滚动视差 */
     window.addEventListener('scroll', () => {
       cards.forEach(card => {
         const rect = card.getBoundingClientRect();
         const d = rect.top - innerHeight * 0.9;
         card.style.setProperty('--parallax', `${Math.max(d,0)}px`);
       });
-    }, { passive:true });
+    }, { passive: true });
   })();
   </script>
 </body>
