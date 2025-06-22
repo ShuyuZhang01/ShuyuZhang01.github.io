@@ -230,6 +230,66 @@ body {
   top: 1.2rem;
 }
 
+/* ---------- 首页 Hero 样式 ---------- */
+.hero {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+.hero-mask {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg,rgba(0,0,0,0.4) 60%,#000 100%);
+  z-index: 2;
+}
+.hero-content {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: left;
+  max-width: 600px;
+}
+.hero-title {
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+}
+.hero-sub {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: #e5e7eb;
+}
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-content {
+    max-width: 95vw;
+    padding: 0 1rem;
+  }
+}
+
 /* ---------- 深色通用页面 (About / CV / Contact 等) ---------- */
 .page-dark {
   background: #000;
