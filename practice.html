@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Self Practice · Shuyu Zhang</title>
 
-  <!-- 字体 -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- 通用样式 -->
+  <!-- Site styles -->
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -17,7 +17,7 @@
 
   <nav class="nav">
     <div class="nav-inner container">
-      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a><!-- ← 点击回首页 -->
+      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
       <ul class="nav-list">
         <li><a href="about.html">About</a></li>
         <li><a href="works.html">Works</a></li>
@@ -28,26 +28,27 @@
     </div>
   </nav>
 
-  <!-- ===== 页面正文 ===== -->
+  <!-- ===== Main Content ===== -->
   <main class="container">
     <h1 class="page-title">Self&nbsp;Practice</h1>
 
     <div class="work-grid">
-      <!-- 示例练习卡片 1 -->
+      <!-- Example practice card -->
       <article class="work-card">
-        <img src="assets/img/practice1.jpg" alt="Practice 1" style="width:100%;border-radius:.375rem;margin-bottom:.75rem;">
-        <h2>3D Typography Study</h2>
-        <p>Exploring lighting and texture in Blender.</p>
+        <figure class="work-thumb">
+          <img src="assets/img/practice1.jpg" alt="Practice 1 thumbnail">
+        </figure>
+        <h2 class="work-title">3D Typography Study</h2>
+        <p class="work-desc">Exploring lighting and texture in Blender.</p>
       </article>
 
-      <!-- 示例练习卡片 2 -->
       <article class="work-card">
-        <img src="assets/img/practice2.jpg" alt="Practice 2" style="width:100%;border-radius:.375rem;margin-bottom:.75rem;">
-        <h2>Generative Line Art</h2>
-        <p>Coded in Processing; lines grow based on Perlin noise.</p>
+        <figure class="work-thumb">
+          <img src="assets/img/practice2.jpg" alt="Practice 2 thumbnail">
+        </figure>
+        <h2 class="work-title">Generative Line Art</h2>
+        <p class="work-desc">Coded in Processing; lines grow based on Perlin noise.</p>
       </article>
-
-      <!-- 继续复制 <article class="work-card"> … </article> 填充更多练习 -->
     </div>
   </main>
 </body>

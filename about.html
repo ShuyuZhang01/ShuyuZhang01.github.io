@@ -1,40 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>About · Shuyu Zhang</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About · Shuyu Zhang</title>
 
-  <!-- 字体 -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
+    <!-- ============== Fonts ============== -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- 统一样式 -->
-  <link rel="stylesheet" href="style.css">
-</head>
+    <!-- ============== Site Styles ============== -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-<body class="page-dark">
+  <body class="page-dark">
+    <!-- ============= NAVBAR ============= -->
+    <nav class="nav">
+      <div class="nav-inner container">
+        <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
+        <ul class="nav-list">
+          <li><a href="about.html">About</a></li>
+          <li><a href="works.html">Works</a></li>
+          <li><a href="practice.html">Self&nbsp;Practice</a></li>
+          <li><a href="cv.html">CV</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
 
-  <nav class="nav">
-    <div class="nav-inner container">
-      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a><!-- ← 点击回首页 -->
-      <ul class="nav-list">
-        <li><a href="about.html">About</a></li>
-        <li><a href="works.html">Works</a></li>
-        <li><a href="practice.html">Self&nbsp;Practice</a></li>
-        <li><a href="cv.html">CV</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
+    <!-- ============ MAIN CONTENT ============ -->
+    <main class="container">
+      <h1 class="page-title">About&nbsp;Me</h1>
 
-  <!-- ===== 页面正文 ===== -->
-  <main class="container">
-    <h1 class="page-title">About&nbsp;Me</h1>
+      <section id="about" class="about-section">
+        <h2 class="section-title">
+          About <span class="highlight">Shuyu Zhang</span>
+        </h2>
 
-    <p class="lead-text">
-      这里写你的自我介绍……
-    </p>
-  </main>
-</body>
+        <!-- Portrait Photo -->
+        <figure class="portrait-wrapper">
+          <img
+            src="assets/shuyu.jpg"
+            alt="Portrait of Shuyu Zhang"
+            class="portrait-photo"
+          />
+        </figure>
+
+        <p>
+          <strong>Shuyu Zhang (张书语)</strong>, born in 2001 in Xining, Qinghai,
+          China, is a child nurtured by the mountains. Her journey has taken her
+          through the vibrant cities of Chengdu, Beijing, Nanning, and Suzhou in
+          China, and she now lives and studies in London, UK.
+        </p>
+
+        <p>
+          As an <strong>Interactive &amp; Spatial Experience Designer</strong> and
+          <strong>Digital Artist</strong>, Shuyu's academic and creative
+          pursuits consistently center on exploring the fascinating relationship
+          between humans and the digital world. She is dedicated to innovating
+          at the intersection of physical space and the virtual realm,
+          constantly experimenting with mediums such as interactive
+          installations, game experiences, and generative art as bridges for
+          communication. Shuyu excels at rapid self-learning and integrating new
+          technologies (Unity VR, TouchDesigner, motion capture, Arduino) to
+          create compelling works that evoke immediate surprise and resonance in
+          audiences—even before they grasp the underlying concept.
+        </p>
+
+        <h3 class="subsection-title">Selected Projects</h3>
+        <ul class="list-styled">
+          <li>
+            <strong>Motion Capture Tech Lead</strong> for a live performance
+            where a dancer shared the stage with their own real-time driven VR
+            avatar.
+          </li>
+          <li>
+            <em>Piano Piece of Day and Night</em> — a pure code-based artwork
+            using JavaScript to visualize the life cycle of flowers blooming
+            and wilting with a virtual sun, choreographed by time.
+          </li>
+          <li>
+            <em>Can I Have Some Water?</em> — an interactive plant installation
+            exploring plant "emotional expression" from a post‑humanist
+            perspective.
+          </li>
+          <li>
+            <em>The Hiphop Dancer Yu</em> — a custom character mod for
+            <cite>Don't Starve Together</cite> where dance becomes a weapon for
+            survival, fulfilling her dream of "living inside her favorite
+            game."
+          </li>
+        </ul>
+
+        <h3 class="subsection-title">Professional Experience</h3>
+        <p>
+          Shuyu has demonstrated strong cross‑disciplinary collaboration skills,
+          gaining valuable experience in roles such as Design Assistant at
+          cultural tourism and education technology companies, contributing to
+          user research, story‑map design, and event execution.
+        </p>
+
+        <h3 class="subsection-title">Inspiration &amp; Interests</h3>
+        <p>
+          Beyond her work, street dance (Popping &amp; Hip‑hop) and video games
+          are significant sources of inspiration and joy, often weaving their
+          way into her artistic creations. She is proficient in English (IELTS
+          6.5) and Mandarin (native), and continuously draws inspiration from
+          art museums worldwide.
+        </p>
+
+        <p class="closing">
+          Shuyu Zhang is a creator constantly weaving new experiences between
+          code, light, movement, and space — an explorer bridging the real and
+          virtual, technology and emotion.
+        </p>
+      </section>
+    </main>
+  </body>
 </html>
