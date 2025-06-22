@@ -202,15 +202,47 @@ body{
   color:#9ca3af;            /* 悬停时爱改什么颜色都行；也可继续用白色 */
 }
 
+/* === 仅 CV 页：整体排版 / 行距 / 缩进 === */
 .cv-page{
   font-family: Cambria, Georgia, 'Times New Roman', serif;
 }
 
-.cv-page{
-  overflow:auto;     /* 解除 body 上的 overflow:hidden */
-  height:auto;       /* 允许内容自然撑高 */
-  min-height:100%;   /* 仍保证最小一屏高度 */
+/* 个人信息块居中 */
+.cv-page .cv-center-block{
+  text-align:center;
+  line-height:1.4;
+  margin-bottom:2rem;
 }
+.cv-page .cv-center-block h1{
+  font-family:"Savate",serif;
+  font-size:2.25rem;
+  font-weight:700;
+  margin-bottom:.25rem;
+}
+.cv-page .cv-center-block p{
+  font-weight:600;
+  margin:.15rem 0;
+}
+
+/* 二级标题（EDUCATION / CORE SKILLS …） */
+.cv-page .cv-section-title{
+  font-size:1.25rem;
+  font-weight:700;
+  margin:1.2rem 0 .45rem;
+}
+
+/* 列表排版 */
+.cv-page ul{
+  list-style:disc;
+  margin-left:1.4rem;          /* 左缩进 */
+  margin-bottom:.8rem;
+  line-height:1.55;            /* 行距 */
+}
+.cv-page ul ul{
+  list-style:circle;
+  margin-left:1.25rem;
+}
+
 /* === 首页 Hero：桌面再靠左，手机往上 === */
 
 /* 电脑端*/
