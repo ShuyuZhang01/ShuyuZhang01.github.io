@@ -169,10 +169,10 @@ body.home .brand {
 /* ========== 全站统一标题 ========== */
 .page-title {
   font-family: "Savate", serif;
-  font-weight: 700;
-  font-size: 2.25rem;
-  margin-bottom: 2rem;
-  text-align: center;
+  font-weight: normal;
+  font-size: 3rem;
+  margin-bottom: 4rem;
+  text-align: left;
 }
 
 /* ---------- 深色通用页面 (About / CV / Contact 等) ---------- */
@@ -205,7 +205,8 @@ body.home .brand {
 .works-page .work-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
-  gap: 5rem 4rem;
+  gap: 4rem 3rem;
+  margin-bottom: 4rem;
 }
 
 @media (min-width: 1101px) {
@@ -214,9 +215,9 @@ body.home .brand {
     align-items: start;
   }
   
-  .works-page .work-grid article:nth-child(2n) {
-    transform: translateY(180px);
-  }
+  .works-page .work-grid article {
+  transform: none !important;
+}
 }
 
 .works-page .work-card {
@@ -227,14 +228,16 @@ body.home .brand {
   box-shadow: 0 16px 40px rgba(0,0,0,.4);
   opacity: 0;
   transform: translateY(var(--parallax,60px)) scale(.94);
-  transition: opacity .8s ease, box-shadow .6s ease, transform .8s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.8s ease, 
+              box-shadow 0.6s ease;
   will-change: transform;
   max-width: 100%;
 }
 
 .works-page .work-card.in-view {
   opacity: 1;
-  transform: translateY(var(--parallax,0)) scale(1);
+  transform: translateY(var(--parallax,0)) scale(1) !important;
 }
 
 .works-page .work-cover {

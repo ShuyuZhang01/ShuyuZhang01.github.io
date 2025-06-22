@@ -18,7 +18,7 @@
       font-family: 'Open Sans', sans-serif;
       font-weight: 700;
       font-size: 3rem;
-      margin: 0 0 2rem 0; /* top right bottom left */
+      margin: 0 0 3.5rem 0; /* top right bottom left */
       align-self: flex-start;
       width: 100%;
     }
@@ -120,8 +120,8 @@ function updateParallax() {
     const progress = (rect.top + rect.height * 0.5) / vh;
     const sign = parseInt(card.dataset.sign) || 1;
     
-    // 新公式：确保所有卡片都有明显位移
-    const translate = Math.abs(progress - 0.5) * 100 * sign; 
+    // 改进后的公式：确保所有卡片都有明显且平滑的位移
+    const translate = (progress - 0.5) * 80 * sign; 
     card.style.setProperty('--parallax', translate.toFixed(1) + 'px');
   });
 }
