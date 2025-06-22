@@ -14,17 +14,32 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
+    .works-page {
+      padding-top: 7rem;
+    }
+    .works-page .container {
+      padding-left: clamp(1.5rem, 6vw, 5rem);
+    }
     .works-page .page-title {
       font-family: "Open Sans", sans-serif;
       font-weight: 600;
       text-align: left;
       margin-bottom: 2.5rem;
-      padding-left: clamp(1.5rem, 6vw, 5rem);
+    }
+    .works-page .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 5rem 4rem;
+    }
+    @media (min-width: 1101px) {
+      .works-page .work-grid article:nth-child(2n) {
+        transform: translateY(160px);
+      }
     }
   </style>
 </head>
 
-<body class="page-dark">
+<body class="page-dark works-page">
   <!-- ===== Navbar ===== -->
   <nav class="nav">
     <div class="nav-inner container">
@@ -40,7 +55,7 @@
   </nav>
 
   <!-- ===== Works Section ===== -->
-  <main class="container works-page">
+  <main class="container">
     <h1 class="page-title">Works</h1>
     <div class="work-grid">
       <!-- 示例卡片 1 -->
@@ -61,7 +76,6 @@
 
   <!-- ===== Works Interaction Script ===== -->
   <script>
-    // 淡入动画
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -72,7 +86,6 @@
     }, { threshold: 0.3 });
     document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
-    // Parallax 滚动偏移
     function updateParallax() {
       const vh = innerHeight;
       document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
@@ -87,7 +100,6 @@
     addEventListener('load', updateParallax);
     addEventListener('resize', updateParallax);
 
-    // 点击展开关闭卡片
     document.querySelectorAll('.work-card').forEach(card => {
       const overlay = card.querySelector('.overlay');
       const close = card.querySelector('.close-btn');
