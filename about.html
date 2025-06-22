@@ -6,14 +6,8 @@
     <title>About · Shuyu Zhang</title>
 
     <!-- ============== Fonts ============== -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet" />
 
     <!-- ============== Site Styles ============== -->
     <link rel="stylesheet" href="style.css" />
@@ -33,13 +27,19 @@
       .about-flex .about-text {
         flex: 1 1 0;
       }
+      /* headline */
+      .about-main-title {
+        text-align: center;
+        font-size: 3rem; /* larger headline */
+        margin-bottom: 2.5rem;
+      }
       @media (max-width: 640px) {
         .about-flex {
           flex-direction: column;
           align-items: center;
         }
-        .about-flex .portrait-wrapper {
-          flex: none;
+        .about-main-title {
+          font-size: 2.25rem;
         }
       }
     </style>
@@ -63,16 +63,13 @@
     <!-- ============ MAIN CONTENT ============ -->
     <main class="container" style="padding-bottom:6rem;">
       <section id="about" class="about-section">
-        <h2 class="section-title">About <span class="highlight">Shuyu Zhang</span></h2>
+        <!-- Enlarged & centered headline -->
+        <h1 class="section-title about-main-title">About <span class="highlight">Shuyu Zhang</span></h1>
 
         <div class="about-flex">
           <!-- Portrait Photo -->
           <figure class="portrait-wrapper">
-            <img
-              src="assets/photo/shuyu.jpg"
-              alt="Portrait of Shuyu Zhang"
-              class="portrait-photo"
-            />
+            <img src="assets/photo/shuyu.jpg" alt="Portrait of Shuyu Zhang" class="portrait-photo" />
           </figure>
 
           <!-- Bio Text -->
