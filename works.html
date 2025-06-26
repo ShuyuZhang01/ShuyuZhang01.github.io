@@ -38,117 +38,171 @@
   <main class="container">
     <h1 class="page-title">Works</h1>
     <div class="work-grid">
-      <!-- 卡片 1 -->
-      <article class="work-card" data-sign="1" data-full="Echoes of Ice – 一个结合冰块融化声音采样与摄影打印的沉浸装置">
-        <img class="work-cover" src="assets/img/works/ice.jpg" alt="Echoes of Ice">
-        <div class="overlay">Echoes of Ice<br><small>摄影 + 声音互动装置 · 2024</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-      <!-- 卡片 2 -->
-      <article class="work-card" data-sign="-1" data-full="RGB Mycelium – 利用霓虹光生长菌丝的可视化实验">
-        <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="RGB Mycelium">
-        <div class="overlay">RGB Mycelium<br><small>3D 打印与生物材质 · 2024</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-      <!-- 卡片 3 -->
-      <article class="work-card" data-sign="1" data-full="Digital Bloom – 一个结合算法动画与植物视觉语言的影像作品">
-        <img class="work-cover" src="assets/img/works/digitalbloom.jpg" alt="Digital Bloom">
-        <div class="overlay">Digital Bloom<br><small>生成艺术 · 2023</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-      <!-- 卡片 4 -->
-      <article class="work-card" data-sign="-1" data-full="Liquid Memory – 用水墨溶解效果表达记忆碎片的实验短片">
-        <img class="work-cover" src="assets/img/works/liquidmemory.jpg" alt="Liquid Memory">
-        <div class="overlay">Liquid Memory<br><small>影像装置 · 2024</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-      <!-- 卡片 5 -->
-      <article class="work-card" data-sign="1" data-full="Mechanical Garden – 一个由小型机械臂驱动的互动花园">
-        <img class="work-cover" src="assets/img/works/mechanicalgarden.jpg" alt="Mechanical Garden">
-        <div class="overlay">Mechanical Garden<br><small>机械交互 · 2023</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-      <!-- 卡片 6 -->
-      <article class="work-card" data-sign="-1" data-full="Whispers of Code – 利用编程语言生成诗意文字与图形的项目">
-        <img class="work-cover" src="assets/img/works/whispers.jpg" alt="Whispers of Code">
-        <div class="overlay">Whispers of Code<br><small>代码诗学 · 2024</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
+      <article id="yu" class="work-card" data-sign="1">
+  <img class="work-cover" src="assets/img/works/ice.jpg" alt="Hiphop dancer Yu">
+  <div class="overlay">
+    Hiphop dancer Yu<br><small>installation performance and game · 2024</small>
+  </div>
+  <button class="close-btn" aria-label="Close">&times;</button>
+</article>
+
+<!-- 卡片 2：flower day and night -->
+<article id="flower" class="work-card" data-sign="-1">
+  <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="flower day and night">
+  <div class="overlay">
+    flower day and night <br><small> JavaScript · 2024</small>
+  </div>
+  <button class="close-btn" aria-label="Close">&times;</button>
+</article>
+
+<!-- 卡片 3：Motioncapture dancing -->
+<article id="mocap" class="work-card" data-sign="1">
+  <img class="work-cover" src="assets/img/works/digitalbloom.jpg" alt="Motioncapture dancin">
+  <div class="overlay">
+    mocap<br><small>MotionCapture unity VR · 2023</small>
+  </div>
+  <button class="close-btn" aria-label="Close">&times;</button>
+</article>
+
+<!-- 卡片 4：Can I have some water -->
+<article id="water" class="work-card" data-sign="-1">
+  <img class="work-cover" src="assets/img/works/liquidmemory.jpg" alt="Can I have some water">
+  <div class="overlay">
+    Liquid Memory<br><small>installation Arduino · 2024</small>
+  </div>
+  <button class="close-btn" aria-label="Close">&times;</button>
+</article>
+
+<!-- 卡片 5：dream -->
+<article id="AI" class="work-card" data-sign="1">
+  <img class="work-cover" src="assets/img/works/mechanicalgarden.jpg" alt="Mechanical Garden">
+  <div class="overlay">
+    dream<br><small> Unreal Engine 4 · 2023</small>
+  </div>
+  <button class="close-btn" aria-label="Close">&times;</button>
+</article>
+
+  </div>
+  <button class="close-btn" aria-label="Close">&times;</button>
+</article>
     </div>
   </main>
   <!-- ===== Works Interaction Script ===== -->
-  <script>
-    // Intersection Observer for scroll animations
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('in-view');
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.3 });
-    document.querySelectorAll('.work-card').forEach(c => io.observe(c));
+<script>
+/* -----------------------------------------------------------
+   1) detailHTML：存放每张卡片的长篇介绍（可含 <iframe>）
+      —— 这里只先写了 id="yu" 的内容，其余先留空。
+----------------------------------------------------------- */
+const detailHTML = {
+  yu: `
+    <div class="detail">
+      <h2 style="margin-bottom:1.5rem;">Hiphop dancer Yu — installation × game mod</h2>
+      <p style="line-height:1.7;margin-bottom:2rem;">
+        Centered around the author-artist’s favorite game
+        <strong>Don’t Starve Together</strong>, this work blends her coming-of-age story with the realities of China’s street-dance scene. It tells the story of a young woman (the artist herself) living in a university dorm, torn between abandoning her passion for dance and the pressures of everyday life. When she is once again tormented by her own mediocrity in dance, the game’s antagonist—Maxwell—appears, promising that entering “the Constant” (the game world) will make her a dance master. Tempted by Maxwell, she enters the Constant full of hope, only to discover it was all a trick: in this world, she is the only one who can dance, making her the dance master by default. In reality, she hasn’t truly become a master, and must now rely on her limited dance skills to survive in the perilous, shadowy world. 
+        The project unfolds in two intertwined formats: an installation and live performance—the real world—and a custom game mod—the virtual world. This project marks the artist’s first attempt at exploring the interaction between the virtual and the real, though she was not aware of it at the time. She tried to use the game to connect her real life and the virtual world, which, at that time, was simply a place for her to escape. After all, at least in the virtual world, she could become a dance master.
 
-    // Parallax effect on scroll
-    function updateParallax() {
-      const vh = innerHeight;
-      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const p = (rect.top + rect.height * 0.5) / vh;
-        const sign = parseInt(card.dataset.sign) || 1;
-        const t = (p - 0.5) * 80 * sign;
-        card.style.setProperty('--parallax', t.toFixed(1) + 'px');
-      });
+      </p>
+      <div style="margin:2.5rem 0;">
+        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;
+                    border-radius:1rem;box-shadow:0 6px 36px rgba(0,0,0,.4);">
+          <iframe
+            src="https://www.youtube.com/embed/fQroMDVXbRU"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+            allow="autoplay; encrypted-media" allowfullscreen
+            title="Hiphop dancer Yu"></iframe>
+        </div>
+      </div>
+    </div>
+  `,
+
+  flower: ``,
+  mocap : ``,
+  water : ``,
+  AI    : ``,
+};
+
+/* -----------------------------------------------------------
+   2) Intersection Observer：保持不变
+----------------------------------------------------------- */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in-view');
+      io.unobserve(e.target);
     }
-    addEventListener('scroll', updateParallax, { passive: true });
-    addEventListener('load', updateParallax);
-    addEventListener('resize', updateParallax);
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
-    // Card expansion functionality
-    document.querySelectorAll('.work-card').forEach(card => {
-      const overlay = card.querySelector('.overlay');
-      const close = card.querySelector('.close-btn');
-      const fullTxt = card.dataset.full;
-      const short = overlay.innerHTML;
-      const sign = parseInt(card.dataset.sign) || 1;
+/* -----------------------------------------------------------
+   3) 视差效果：保持不变
+----------------------------------------------------------- */
+function updateParallax() {
+  const vh = innerHeight;
+  document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const p = (rect.top + rect.height * 0.5) / vh;
+    const sign = parseInt(card.dataset.sign) || 1;
+    const t = (p - 0.5) * 80 * sign;
+    card.style.setProperty('--parallax', t.toFixed(1) + 'px');
+  });
+}
+addEventListener('scroll', updateParallax, { passive: true });
+addEventListener('load', updateParallax);
+addEventListener('resize', updateParallax);
 
-      card.addEventListener('click', () => {
-        if (card.classList.contains('expanded')) return;
-        // Store original position for animation
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty('--original-top', `${rect.top}px`);
-        card.style.setProperty('--original-left', `${rect.left}px`);
-        card.style.setProperty('--original-width', `${rect.width}px`);
-        card.style.setProperty('--original-height', `${rect.height}px`);
-        card.classList.add('expanded');
-        if (sign === 1) {
-          card.classList.add('expanded-left');
-        } else {
-          card.classList.add('expanded-right');
-        }
-        overlay.innerHTML = fullTxt;
-        document.body.style.overflow = 'hidden';
-      });
+/* -----------------------------------------------------------
+   4) 卡片展开逻辑：在原基础上改 3 行
+      - 先保存短简介 short
+      - 点击时优先用 detailHTML[id]；没有就 fallback 到原 data-full 或 short
+----------------------------------------------------------- */
+document.querySelectorAll('.work-card').forEach(card => {
+  const overlay = card.querySelector('.overlay');
+  const close   = card.querySelector('.close-btn');
+  const short   = overlay.innerHTML;                 // ① 记住简介
+  const fullTxt = card.dataset.full;                 // 仍可兼容旧 data-full
+  const sign    = parseInt(card.dataset.sign) || 1;
 
-      close.addEventListener('click', e => {
-        e.stopPropagation();
-        card.classList.remove('expanded', 'expanded-left', 'expanded-right');
-        overlay.innerHTML = short;
-        document.body.style.overflow = 'auto';
-      });
-    });
+  card.addEventListener('click', () => {
+    if (card.classList.contains('expanded')) return;
 
-    // Close expanded card when clicking outside
-    document.addEventListener('click', function(e) {
-      const expandedCard = document.querySelector('.work-card.expanded');
-      if (expandedCard && !expandedCard.contains(e.target)) {
-        const overlay = expandedCard.querySelector('.overlay');
-        const short = expandedCard.dataset.short || '';
-        expandedCard.classList.remove('expanded', 'expanded-left', 'expanded-right');
-        overlay.innerHTML = short;
-        document.body.style.overflow = 'auto';
-      }
-    });
-  </script>
+    // 记录原位置，用于 CSS 动画
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--original-top', `${rect.top}px`);
+    card.style.setProperty('--original-left', `${rect.left}px`);
+    card.style.setProperty('--original-width', `${rect.width}px`);
+    card.style.setProperty('--original-height', `${rect.height}px`);
+
+    // ② 选择要显示的长内容
+    const longHTML = detailHTML[card.id] || fullTxt || short;
+    overlay.innerHTML = longHTML;
+
+    card.classList.add('expanded',
+      sign === 1 ? 'expanded-left' : 'expanded-right');
+    document.body.style.overflow = 'hidden';
+  });
+
+  // 关闭按钮
+  close.addEventListener('click', e => {
+    e.stopPropagation();
+    collapse();
+  });
+
+  // 点空白区域关闭
+  document.addEventListener('click', e => {
+    if (card.classList.contains('expanded') && !card.contains(e.target)) {
+      collapse();
+    }
+  });
+
+  // 收起函数
+  function collapse() {
+    card.classList.remove('expanded', 'expanded-left', 'expanded-right');
+    overlay.innerHTML = short;                       // ③ 恢复简介
+    document.body.style.overflow = 'auto';
+  }
+});
+</script>
 </body>
 </html>
