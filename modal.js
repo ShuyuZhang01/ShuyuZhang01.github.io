@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "dancer.png", "dancer (2).png", "dancer (3).png", "dancer (4).png",
     "dancer (5).png", "dancer (6).png", "dancer (7).png", "dancer (8).png",
     "dancer (9).png", "dancer (10).png", "dancer (11).png", "dancer (12).png",
-    "dancer (13).jpg", "dancer (14).jpg", "dancer (15).jpg"
+    "dancer13.jpg", "dancer14.jpg", "dancer15.jpg"
   ];
 
   /* 2. 动态生成 <img> - 更安全的版本 */
