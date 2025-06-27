@@ -1,68 +1,66 @@
-/* ---------- 全局基础 ---------- */
+/* ========== 全局基础样式 ========== */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+:root {
+  --z-index-nav: 100;
+  --z-index-modal: 200;
+  --z-index-expanded-card: 150;
+  --primary-color: #7dd3fc;
+  --text-color: #fff;
+  --bg-color: #000;
+  --overlay-bg: rgba(0, 0, 0, 0.55);
+}
+
 html {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
-  overflow: -moz-scrollbars-none; /* 旧版 Firefox */
+  height: 100%;
 }
 
 body {
   font-family: "Poppins", sans-serif;
-  background: #000;
-  color: #fff;
+  background: var(--bg-color);
+  color: var(--text-color);
   -webkit-font-smoothing: antialiased;
-  -ms-overflow-style: none; /* 确保 IE/Edge 生效 */
   height: 100%;
+  overflow-y: auto;
 }
 
 ::-webkit-scrollbar {
-  display: none; /* Chrome/Safari/Opera */
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
+  display: none;
 }
 
-/* ---------- 选中文本高亮 ---------- */
 ::selection {
-  background: rgba(99,102,241,.6);
+  background: rgba(99, 102, 241, 0.6);
 }
 
-/* ========== 全站统一标题 ========== */
-.page-title {
-  font-family: "Open Sans", sans-serif;
-  font-weight: 600;
-  font-size: 3rem;
-  margin-bottom: 4rem;
-  text-align: left;
-}
-
-/* ---------- 容器 & 工具 ---------- */
+/* ========== 布局容器 ========== */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding-left: clamp(1.5rem, 6vw, 5rem);
   padding-right: 1.5rem;
 }
+
 @media (min-width: 640px) {
   .container {
     padding-right: 3rem;
   }
 }
 
-/* ---------- 导航栏 ---------- */
+/* ========== 导航栏 ========== */
 .nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 20;
+  z-index: var(--z-index-nav);
   padding: 1rem 0;
-  background: rgba(0, 0, 0, .3);
+  background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(6px);
 }
 
@@ -80,66 +78,86 @@ body {
 }
 
 .nav a {
-  color: #fff;
+  color: var(--text-color);
   text-decoration: none;
-  font-size: .9rem;
-  transition: .3s;
+  font-size: 0.9rem;
+  transition: color 0.3s;
 }
 
 .nav a:hover {
-  color: #7dd3fc;
+  color: var(--primary-color);
 }
 
 .brand {
   font-family: "Savate", serif;
   font-weight: 700;
   font-size: 1rem;
-  letter-spacing: .05em;
-  color: #fff;
-  text-decoration: none;
+  letter-spacing: 0.05em;
+  color: var(--text-color);
 }
 
 .brand:hover {
   color: #9ca3af;
 }
 
-/* ---------- Works 页面 ---------- */
+/* ========== 页面通用样式 ========== */
+.page-title {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  font-size: 3rem;
+  margin-bottom: 4rem;
+  text-align: left;
+}
+
+.page-dark {
+  background: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100%;
+  padding-top: 6rem;
+}
+
+.page-dark::after {
+  content: '';
+  display: block;
+  height: 4rem;
+}
+
+/* ========== Works 页面特定样式 ========== */
 .works-page {
   padding-top: 7rem;
 }
 
-.works-page .work-grid {
+.work-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 5rem 4rem;
 }
 
-
-.works-page .work-card {
+.work-card {
   position: relative;
   overflow: hidden;
   cursor: pointer;
   border-radius: 1.25rem;
-  box-shadow: 0 16px 40px rgba(0,0,0,.4);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
   opacity: 0;
-  transform: translateY(var(--parallax,60px)) scale(.94);
-  transition: opacity .8s ease, box-shadow .6s ease, transform .8s ease;
+  transform: translateY(60px) scale(0.94);
+  transition: opacity 0.8s ease, box-shadow 0.6s ease, transform 0.8s ease;
   will-change: transform;
 }
 
-.works-page .work-card.in-view {
+.work-card.in-view {
   opacity: 1;
-  transform: translateY(var(--parallax,0)) scale(1);
+  transform: translateY(0) scale(1);
 }
 
-.works-page .work-cover {
+.work-cover {
   display: block;
   width: 100%;
   aspect-ratio: 3/2;
   object-fit: cover;
 }
 
-.works-page .overlay {
+.overlay {
   position: absolute;
   inset: 0;
   display: flex;
@@ -149,34 +167,45 @@ body {
   padding: 2rem;
   line-height: 1.45;
   font-size: 1.25rem;
-  background: rgba(0,0,0,.55);
-  color: #fff;
+  background: var(--overlay-bg);
+  color: var(--text-color);
   opacity: 0;
-  transition: opacity .35s;
+  transition: opacity 0.35s;
+  pointer-events: none;
+  flex-direction: column;
 }
 
-.works-page .work-card:hover .overlay {
+.work-card:hover .overlay {
   opacity: 1;
 }
 
-.works-page .work-card.expanded {
+.overlay small {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-top: 0.25rem;
+  opacity: 0.85;
+}
+
+/* ========== 卡片展开样式 ========== */
+.work-card.expanded {
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 120;
+  z-index: var(--z-index-expanded-card);
   transform: translate(-50%, -50%) scale(1) !important;
   width: 92vw;
   height: 92vh;
   border-radius: 1.5rem;
-  box-shadow: 0 28px 64px rgba(0,0,0,.65);
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.65);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  animation: cardExpand 0.3s ease-out forwards;
 }
 
-/* 左侧弹窗样式 */
-.works-page .work-card.expanded-left {
+.work-card.expanded-left {
   left: 0;
   top: 50%;
   transform: translate(0, -50%) scale(1) !important;
@@ -185,8 +214,7 @@ body {
   animation: slideInFromLeft 0.5s ease-out forwards;
 }
 
-/* 右侧弹窗样式 */
-.works-page .work-card.expanded-right {
+.work-card.expanded-right {
   right: 0;
   left: auto;
   top: 50%;
@@ -196,7 +224,40 @@ body {
   animation: slideInFromRight 0.5s ease-out forwards;
 }
 
-/* 动画效果 */
+.work-card.expanded .overlay {
+  background: rgba(0, 0, 0, 0.38);
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  opacity: 1 !important;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  z-index: 5;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.65);
+  color: var(--text-color);
+  font-size: 1.45rem;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s;
+}
+
+.work-card.expanded .close-btn {
+  opacity: 1;
+  transform: none;
+  position: sticky;
+  top: 1.2rem;
+}
+
+/* ========== 动画定义 ========== */
 @keyframes slideInFromLeft {
   from {
     transform: translate(-100%, -50%) scale(0.9);
@@ -219,57 +280,100 @@ body {
   }
 }
 
-.works-page .work-card.expanded .work-cover {
+@keyframes cardExpand {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ========== Modal 样式 ========== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: var(--z-index-modal);
+}
+
+.hidden {
+  display: none;
+}
+
+.modal {
+  width: 96%;
+  max-width: 1100px;
+  max-height: 93vh;
+  overflow-y: auto;
+  background: #111;
+  color: #eee;
+  padding: 36px 36px 48px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.modal .close {
+  position: absolute;
+  top: 22px;
+  right: 26px;
+  font-size: 34px;
+  line-height: 1;
+  background: none;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.modal .close:hover {
+  color: #fff;
+}
+
+.videoWrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+}
+
+.videoWrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.intro {
+  margin: 30px 0;
+  line-height: 1.65;
+  font-size: 1rem;
+}
+
+.photos {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(47%, 1fr));
+}
+
+.photos img {
   width: 100%;
   height: auto;
-  flex: 0 0 auto;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
 }
 
-.works-page .work-card.expanded .overlay {
-  background: rgba(0,0,0,.38);
-  font-size: clamp(1rem,2.2vw,1.35rem);
-  opacity: 1 !important;
+.photos img:hover {
+  transform: scale(1.02);
 }
 
-.works-page .work-card.expanded .detail {
-  display: block;
-  flex: 1 1 auto;
-  overflow-y: auto;
-  padding: 2rem;
-  line-height: 1.7;
-  max-width: 60ch;
-  margin: auto;
-  color: #fff;
-}
-
-.works-page .close-btn {
-  position: absolute;
-  top: 1.4rem;
-  right: 1.4rem;
-  z-index: 5;
-  width: 2.6rem;
-  height: 2.6rem;
-  border: none;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: rgba(0,0,0,.65);
-  color: #fff;
-  font-size: 1.45rem;
-  cursor: pointer;
-  opacity: 0;
-  transform: scale(.8);
-  transition: .3s;
-}
-
-.works-page .work-card.expanded .close-btn {
-  opacity: 1;
-  transform: none;
-  position: sticky;
-  top: 1.2rem;
-}
-
-/* ---------- 首页 Hero 样式 ---------- */
+/* ========== 首页 Hero 样式 ========== */
 .hero {
   position: relative;
   width: 100vw;
@@ -280,6 +384,7 @@ body {
   align-items: center;
   justify-content: center;
 }
+
 .hero video {
   position: absolute;
   top: 0;
@@ -289,14 +394,17 @@ body {
   object-fit: cover;
   z-index: 1;
 }
+
 .hero-mask {
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg,rgba(0,0,0,0.4) 60%,#000 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 60%, #000 100%);
   z-index: 2;
 }
+
 .hero-content {
   position: absolute;
   z-index: 3;
@@ -308,19 +416,20 @@ body {
   max-width: 600px;
   padding-left: 0;
 }
+
 .hero-title {
   font-size: 7rem;
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.5rem;
   letter-spacing: -0.03em;
-  text-align: left;
 }
+
 .hero-sub {
   font-size: 2rem;
   color: #e5e7eb;
-  text-align: left;
 }
+
 @media (max-width: 600px) {
   .hero-title {
     font-size: 2.5rem;
@@ -329,55 +438,77 @@ body {
     max-width: 95vw;
     padding: 0 1rem;
   }
+  
+  .work-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .work-card {
+    transform: translateY(30px) scale(0.94);
+  }
 }
 
-/* ---------- 深色通用页面 (About / CV / Contact 等) ---------- */
-.page-dark {
-  background: #000;
-  color: #fff;
-  min-height: 100%;
-  padding-top: 6rem;
+/* ========== 移动端优化 ========== */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .nav-list {
+    gap: 1rem;
+  }
+  
+  .modal {
+    padding: 24px;
+    width: 95%;
+  }
+}
+/* ========== Modal 样式 ========== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
 }
 
-.page-dark::after {
-  content: '';
-  display: block;
-  height: 4rem;
+.modal {
+  width: 90%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #111;
+  color: #eee;
+  padding: 36px;
+  border-radius: 20px;
+  position: relative;
 }
 
-.page-dark .nav a {
-  color: #fff;
+.hidden {
+  display: none;
 }
 
-.page-dark .nav a:hover {
-  color: #9ca3af;
+/* ========== 图片画廊样式 ========== */
+.photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
-/* ========= Modal ========= */
-.overlay{
-  position:fixed; inset:0;
-  display:flex; justify-content:center; align-items:center;
-  background:rgba(0,0,0,.6); z-index:999;
+.gallery-img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  object-fit: cover;
 }
-.hidden{display:none}
-.modal{
-  width:90%; max-width:600px; max-height:90vh; overflow-y:auto;
-  background:#111; color:#eee; padding:24px;
-  border-radius:16px; position:relative;
-}
-.close{
-  position:absolute; top:12px; right:16px;
-  font-size:28px; border:none; background:none;
-  color:#bbb; cursor:pointer;
-}
-.close:hover{color:#fff}
-.videoWrap{position:relative; width:100%; padding-top:56.25%}
-.videoWrap iframe{position:absolute; inset:0; width:100%; height:100%}
-.intro{margin:24px 0; line-height:1.6}
-.photos{
-  display:grid; gap:12px;
-  grid-template-columns:repeat(auto-fill,minmax(45%,1fr));
-}
-.photos img{
-  width:100%; height:160px; object-fit:cover; border-radius:8px;
+
+.gallery-img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
