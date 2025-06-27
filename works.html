@@ -189,10 +189,17 @@
     loadPhotos(); // 加载照片
   };
 
-  const closeModal = () => {
-    modalOverlay.classList.add('hidden');
-    document.body.style.overflow = '';
-  };
+const closeModal = () => {
+  // 停止视频播放
+  const videoIframe = document.querySelector('.videoWrap iframe');
+  if (videoIframe) {
+    // 替换src来停止视频（YouTube适用）
+    videoIframe.src = videoIframe.src.replace('autoplay=1', 'autoplay=0');
+  }
+  
+  modalOverlay.classList.add('hidden');
+  document.body.style.overflow = '';
+};
 
   // 加载照片函数
   function loadPhotos() {
