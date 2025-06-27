@@ -26,16 +26,17 @@
     .work-card .overlay{
       font-weight:600;
       line-height:1.35;
+      white-space:normal;   /* ⬅︎ 保证换行生效 */
     }
     .work-card .overlay small{
-      display:block;              /* 换行到第二行 */
-      font-size:.8rem;            /* 更小字号 */
+      display:block;        /* 换行到第二行 */
+      font-size:.8rem;
       font-weight:400;
       margin-top:.25rem;
       opacity:.85;
     }
 
-    /* -------------- Modal -------------- */
+    /* -------------- Modal -------------- */ -------------- */
     .modal-overlay{
       position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
       background:rgba(0,0,0,.6);z-index:999;
@@ -170,7 +171,7 @@
   });
 
   /* Inject photos */
-  const photos=['dancer.png','dancer (2).png','dancer (3).png','dancer (4).png','dancer (5).png','dancer (6).png','dancer (7).png','dancer (8).png','dancer (9).png','dancer (10).png','dancer (11).png','dancer (12).png','dancer13.jpg','dancer14.jpg','dancer15.jpg'];
+  const photos=['dancer.png','dancer (2).png','dancer (3).png','dancer (4).png','dancer (5).png','dancer (6).png','dancer (7).png','dancer (8).png','dancer (9).png','dancer (10).png','dancer (11).png','dancer (12).png','dancer (13).jpg','dancer (14).jpg','dancer (15).jpg'];
   const photoBox=document.querySelector('#modalOverlay .photos');
   photos.forEach(f=>{const img=new Image();img.src=`assets/photo/${f}`;img.alt=f;photoBox.appendChild(img);});
   </script>
