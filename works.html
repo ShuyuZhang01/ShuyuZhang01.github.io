@@ -27,6 +27,8 @@
       font-weight:600;
       line-height:1.35;
       white-space:normal;   /* ⬅︎ 保证换行生效 */
+      pointer-events:none;  /* ← 就加这一行 */
+      flex-direction:column;  /* ← 新增：改成纵向排布 */
     }
     .work-card .overlay small{
       display:block;        /* 换行到第二行 */
