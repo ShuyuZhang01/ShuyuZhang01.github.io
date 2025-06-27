@@ -33,6 +33,18 @@ document.addEventListener("DOMContentLoaded", () => {
     
     if (!overlay || !closeBtn) return; // 确保元素存在
 
+  // 停止视频播放的函数
+const stopVideo = () => {
+  if (videoIframe) {
+    // 彻底移除iframe并重新插入
+    const iframeParent = videoIframe.parentNode;
+    const iframeClone = videoIframe.cloneNode(true);
+    iframeParent.removeChild(videoIframe);
+    iframeParent.appendChild(iframeClone);
+  }
+};
+
+
     // 打开modal时加载照片
     const openModal = () => {
       overlay.classList.remove("hidden");
