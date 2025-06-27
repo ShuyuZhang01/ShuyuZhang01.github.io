@@ -1,4 +1,4 @@
-// modal.js
+modalOverlay// modal.js
 document.addEventListener("DOMContentLoaded", () => {
   /* 1. 图片文件名列表 */
   const photoFiles = [
@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const openModal = () => {
       overlay.classList.remove("hidden");
+      
       document.body.style.overflow = "hidden";
       loadPhotos();
     };

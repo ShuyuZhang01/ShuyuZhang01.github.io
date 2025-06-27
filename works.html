@@ -130,12 +130,13 @@
     <div class="modal">
       <button id="closeModal" class="close" aria-label="Close">&times;</button>
       <div class="videoWrap">
-  <iframe src="https://www.youtube.com/embed/fQroMDVXbRU" 
-          title="Hiphop dancer Yu" 
-          frameborder="0" 
-          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen></iframe>
-</div>
+        <iframe id="youtubeVideo"
+                src="https://www.youtube.com/embed/fQroMDVXbRU?enablejsapi=1"
+                title="Hiphop dancer Yu"
+                frameborder="0"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+      </div>
       <p class="intro">Centered around the author-artist's favorite game <strong>Don't Starve Together</strong>, this work blends her coming-of-age story with the realities of China's street-dance scene. It tells the story of a young woman (the artist herself) living in a university dorm, torn between abandoning her passion for dance and the pressures of everyday life. When she is once again tormented by her own mediocrity in dance, the game's antagonist—Maxwell—appears, promising that entering "the Constant" (the game world) will make her a dance master. Tempted by Maxwell, she enters the Constant full of hope, only to discover it was all a trick: in this world, she is the only one who can dance, making her the dance master by default. In reality, she hasn't truly become a master, and must now rely on her limited dance skills to survive in the perilous, shadowy world. The project unfolds in two intertwined formats: an installation and live performance—the real world—and a custom game mod—the virtual world. This project marks the artist's first attempt at exploring the interaction between the virtual and the real, though she was not aware of it at the time. She tried to use the game to connect her real life and the virtual world, which, at that time, was simply a place for her to escape. After all, at least in the virtual world, she could become a dance master.</p>
       <div class="photos"></div>
     </div>
@@ -143,6 +144,91 @@
 
   <!-- ===== Scripts ===== -->
 <script>
+// YouTube 播放器全局变量
+let player;
+
+// 加载YouTube API
+const loadYouTubeAPI = () => {
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+};
+
+// 当YouTube API准备好时的回调
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('youtubeVideo', {
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+// 播放器准备就绪
+function onPlayerReady(event) {
+  // 可以在这里设置自动播放等
+  // event.target.playVideo();
+}
+
+// 播放器状态变化
+function onPlayerStateChange(event) {
+  // 可以在这里处理播放状态变化
+}
+
+// 打开模态框
+const openModal = (e) => {
+  e.stopPropagation();
+  const modalOverlay = document.getElementById('modalOverlay');
+  modalOverlay.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  
+  // 初始化或重新加载播放器
+  if (!player) {
+    loadYouTubeAPI();
+  } else {
+    // 如果播放器已存在，重新加载视频
+    player.loadVideoById('fQroMDVXbRU');
+  }
+  
+  loadPhotos();
+};
+
+// 关闭模态框
+const closeModal = () => {
+  if (player && player.stopVideo) {
+    player.stopVideo();
+  }
+  
+  const modalOverlay = document.getElementById('modalOverlay');
+  modalOverlay.classList.add('hidden');
+  document.body.style.overflow = '';
+};
+
+// 加载照片
+function loadPhotos() {
+  const photoBox = document.querySelector('.photos');
+  const photoFiles = [
+    'dancer13.jpg','dancer14.jpg','dancer15.jpg',
+    'dancer.png','dancer (2).png','dancer (3).png',
+    'dancer (4).png','dancer (5).png','dancer (6).png',
+    'dancer (7).png','dancer (8).png','dancer (9).png',
+    'dancer (10).png','dancer (11).png','dancer (12).png',
+  ];
+  
+  photoBox.innerHTML = '';
+  
+  photoFiles.forEach(f => {
+    const img = new Image();
+    img.src = `assets/photo/${f}`;
+    img.alt = f;
+    img.loading = 'lazy';
+    img.classList.add('gallery-img');
+    photoBox.appendChild(img);
+  });
+}
+
+// 页面加载完成后执行
 (() => {
   /* ========== 进场动画 ========== */
   const cards = document.querySelectorAll('.work-card');
@@ -176,61 +262,16 @@
   addEventListener('resize', updateParallax);
   addEventListener('load', updateParallax);
 
-  /* ========== 卡片点击处理 ========== */
+  // 确保模态框元素存在
   const modalOverlay = document.getElementById('modalOverlay');
   const closeModalBtn = document.getElementById('closeModal');
   const yuCard = document.getElementById('yu');
-
-  const openModal = e => {
-    e.stopPropagation();
-    modalOverlay.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    loadPhotos(); // 加载照片
-  };
-
- const closeModal = () => {
-    // 停止视频播放
-    const videoIframe = document.querySelector('.videoWrap iframe');
-    if (videoIframe) {
-      // 替换为更可靠的停止视频方法
-      videoIframe.src = ''; // 清空src是最可靠的方法
-    }
-    
-    modalOverlay.classList.add('hidden');
-    document.body.style.overflow = '';
-  };
-
-
-  // 加载照片函数
-  function loadPhotos() {
-    const photoBox = modalOverlay.querySelector('.photos');
-    const photoFiles = [
-      'dancer13.jpg','dancer14.jpg','dancer15.jpg',
-      'dancer.png','dancer (2).png','dancer (3).png',
-      'dancer (4).png','dancer (5).png','dancer (6).png',
-      'dancer (7).png','dancer (8).png','dancer (9).png',
-      'dancer (10).png','dancer (11).png','dancer (12).png',
-    ];
-    
-    // 清空现有照片
-    photoBox.innerHTML = '';
-    
-    // 加载新照片
-    photoFiles.forEach(f => {
-      const img = new Image();
-      img.src = `assets/photo/${f}`;
-      img.alt = f;
-      img.loading = 'lazy';
-      photoBox.appendChild(img);
-    });
-  }
 
   // 为所有卡片添加点击处理
   cards.forEach(card => {
     const closeBtn = card.querySelector('.close-btn');
     const sign = parseInt(card.dataset.sign, 10) || 1;
 
-    // 点击卡片
     card.addEventListener('click', (e) => {
       if (card.id === 'yu') {
         openModal(e);
@@ -245,7 +286,6 @@
       }
     });
 
-    // 点击关闭按钮
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (card.id === 'yu') {
@@ -265,6 +305,9 @@
   document.addEventListener('keydown', e => { 
     if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) closeModal(); 
   });
+
+  // 预加载YouTube API
+  loadYouTubeAPI();
 })();
 </script>
 </body>
