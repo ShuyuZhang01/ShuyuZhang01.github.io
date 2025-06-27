@@ -136,46 +136,112 @@
   </div>
 
   <!-- ===== Scripts ===== -->
-  <script>
-  /* Intersection & parallax (unchanged) */
-  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}})},{threshold:0.3});document.querySelectorAll('.work-card').forEach(c=>io.observe(c));
-  function updateParallax(){const vh=innerHeight;document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card=>{const r=card.getBoundingClientRect();const p=(r.top+r.height/2)/vh;const sign=parseInt(card.dataset.sign)||1;card.style.setProperty('--parallax',((p-0.5)*80*sign).toFixed(1)+'px');});}
-  addEventListener('scroll',updateParallax,{passive:true});addEventListener('load',updateParallax);addEventListener('resize',updateParallax);
+<script>
+(() => {
+  /* ========== 进场动画（兼容写法） ========== */
+  const cards = document.querySelectorAll('.work-card');
+  const reveal = el => el.classList.add('in-view');
 
-  /* Modal logic */
-  const modalOverlay=document.getElementById('modalOverlay');
-  const closeModalBtn=document.getElementById('closeModal');
-  document.getElementById('yu').addEventListener('click',e=>{e.stopPropagation();modalOverlay.classList.remove('hidden');document.body.style.overflow='hidden';});
-  const closeModal=()=>{modalOverlay.classList.add('hidden');document.body.style.overflow='auto';};
-  closeModalBtn.addEventListener('click',closeModal);
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modalOverlay.classList.contains('hidden')) closeModal();});
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          reveal(e.target);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    cards.forEach(c => io.observe(c));
+  } else {
+    // 不支持 IntersectionObserver 的浏览器直接显示
+    cards.forEach(reveal);
+  }
 
-  /* Other cards original expand */
-  document.querySelectorAll('.work-card').forEach(card=>{
-    if(card.id==='yu')return;
-    const overlay=card.querySelector('.overlay');
-    const closeBtn=card.querySelector('.close-btn');
-    const shortHTML=overlay.innerHTML;
-    const sign=parseInt(card.dataset.sign)||1;
-    card.addEventListener('click',()=>{
-      if(card.classList.contains('expanded'))return;
-      const r=card.getBoundingClientRect();
-      card.style.setProperty('--original-top',`${r.top}px`);
-      card.style.setProperty('--original-left',`${r.left}px`);
-      card.style.setProperty('--original-width',`${r.width}px`);
-      card.style.setProperty('--original-height',`${r.height}px`);
-      card.classList.add('expanded',sign===1?'expanded-left':'expanded-right');
-      document.body.style.overflow='hidden';
+  /* ========== 滚动视差 ========== */
+  function updateParallax() {
+    const vh = innerHeight;
+    document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const percent = (rect.top + rect.height / 2) / vh;
+      const sign = parseInt(card.dataset.sign, 10) || 1;
+      card.style.setProperty('--parallax', ((percent - 0.5) * 80 * sign).toFixed(1) + 'px');
     });
-    const collapse=()=>{card.classList.remove('expanded','expanded-left','expanded-right');document.body.style.overflow='auto';};
-    closeBtn.addEventListener('click',e=>{e.stopPropagation();collapse();});
-    document.addEventListener('click',e=>{if(card.classList.contains('expanded')&&!card.contains(e.target)) collapse();});
+  }
+  addEventListener('scroll', updateParallax, { passive: true });
+  addEventListener('resize', updateParallax);
+  addEventListener('load',   updateParallax);
+
+  /* ========== Yu 卡片 —— Modal 弹窗 ========== */
+  const modalOverlay   = document.getElementById('modalOverlay');
+  const closeModalBtn  = document.getElementById('closeModal');
+  const yuCard         = document.getElementById('yu');
+
+  const openModal = e => {
+    e.stopPropagation();
+    modalOverlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeModal = () => {
+    modalOverlay.classList.add('hidden');
+    document.body.style.overflow = '';
+  };
+
+  yuCard.addEventListener('click', openModal);
+  closeModalBtn.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) closeModal(); });
+
+  /* —— 懒加载照片 —— */
+  const photoBox   = modalOverlay.querySelector('.photos');
+  const photoFiles = [
+    'dancer13.jpg','dancer14.jpg','dancer15.jpg',
+    'dancer.png','dancer (2).png','dancer (3).png',
+    'dancer (4).png','dancer (5).png','dancer (6).png',
+    'dancer (7).png','dancer (8).png','dancer (9).png',
+    'dancer (10).png','dancer (11).png','dancer (12).png',
+  ];
+  let photosInjected = false;
+  modalOverlay.addEventListener('transitionend', () => {
+    if (!photosInjected && !modalOverlay.classList.contains('hidden')) {
+      photoFiles.forEach(f => {
+        const img = new Image();
+        img.src = `assets/photo/${f}`;
+        img.alt = f;
+        photoBox.appendChild(img);
+      });
+      photosInjected = true;
+    }
   });
 
-  /* Inject photos */
-  const photos=['dancer13.jpg','dancer14.jpg','dancer15.jpg','dancer.png','dancer (2).png','dancer (3).png','dancer (4).png','dancer (5).png','dancer (6).png','dancer (7).png','dancer (8).png','dancer (9).png','dancer (10).png','dancer (11).png','dancer (12).png'];
-  const photoBox=document.querySelector('#modalOverlay .photos');
-  photos.forEach(f=>{const img=new Image();img.src=`assets/photo/${f}`;img.alt=f;photoBox.appendChild(img);});
-  </script>
+  /* ========== 其余卡片 —— 左/右侧弹出 ========== */
+  cards.forEach(card => {
+    if (card.id === 'yu') return; // Yu 卡片已用 modal 处理
+
+    const closeBtn = card.querySelector('.close-btn');
+    const sign     = parseInt(card.dataset.sign, 10) || 1;
+
+    const expand = () => {
+      if (card.classList.contains('expanded')) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--original-top',    `${r.top}px`);
+      card.style.setProperty('--original-left',   `${r.left}px`);
+      card.style.setProperty('--original-width',  `${r.width}px`);
+      card.style.setProperty('--original-height', `${r.height}px`);
+      card.classList.add('expanded', sign === 1 ? 'expanded-left' : 'expanded-right');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const collapse = () => {
+      card.classList.remove('expanded', 'expanded-left', 'expanded-right');
+      document.body.style.overflow = '';
+    };
+
+    card.addEventListener('click', expand);
+    closeBtn.addEventListener('click', e => { e.stopPropagation(); collapse(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && card.classList.contains('expanded')) collapse(); });
+    document.addEventListener('click',   e => { if (card.classList.contains('expanded') && !card.contains(e.target)) collapse(); });
+  });
+})();
+</script>
 </body>
 </html>
