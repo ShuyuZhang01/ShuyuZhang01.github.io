@@ -8,57 +8,50 @@ document.addEventListener("DOMContentLoaded", () => {
     "dancer13.jpg", "dancer14.jpg", "dancer15.jpg"
   ];
 
-  /* 2. 动态生成 <img> - 更安全的版本 */
   const loadPhotos = () => {
     const box = document.querySelector(".photos");
-    if (!box) return; // 确保元素存在
-    
-    // 清空现有内容（避免重复加载）
+    if (!box) return;
     box.innerHTML = '';
     
     photoFiles.forEach(name => {
       const img = new Image();
       img.src = `assets/photo/${name}`;
       img.alt = name;
-      img.loading = "lazy"; // 懒加载
-      img.classList.add("gallery-img"); // 添加类名方便样式控制
+      img.loading = "lazy";
+      img.classList.add("gallery-img");
       box.appendChild(img);
     });
   };
 
-  /* 3. 改进的开关逻辑 */
   const setupModal = () => {
     const overlay = document.getElementById("overlay");
     const closeBtn = document.getElementById("closeModal");
+    const videoIframe = document.querySelector(".videoWrap iframe"); // 获取视频iframe
     
-    if (!overlay || !closeBtn) return; // 确保元素存在
+    if (!overlay || !closeBtn) return;
 
-  // 停止视频播放的函数
-const stopVideo = () => {
-  if (videoIframe) {
-    // 彻底移除iframe并重新插入
-    const iframeParent = videoIframe.parentNode;
-    const iframeClone = videoIframe.cloneNode(true);
-    iframeParent.removeChild(videoIframe);
-    iframeParent.appendChild(iframeClone);
-  }
-};
+    // 停止视频播放的函数
+    const stopVideo = () => {
+      if (videoIframe) {
+        // 替换src来停止视频（YouTube适用）
+        videoIframe.src = videoIframe.src.replace('autoplay=1', 'autoplay=0');
+        // 或者使用API（如果有的话）
+        // videoIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      }
+    };
 
-
-    // 打开modal时加载照片
     const openModal = () => {
       overlay.classList.remove("hidden");
-      document.body.style.overflow = "hidden"; // 禁止背景滚动
+      document.body.style.overflow = "hidden";
       loadPhotos();
     };
 
-    // 关闭modal
     const closeModal = () => {
       overlay.classList.add("hidden");
-      document.body.style.overflow = ""; // 恢复背景滚动
+      document.body.style.overflow = "";
+      stopVideo(); // 关闭时停止视频
     };
 
-    // 事件监听（更安全的写法）
     const openBtn = document.getElementById("openModal");
     if (openBtn) {
       openBtn.addEventListener("click", openModal);
@@ -66,12 +59,10 @@ const stopVideo = () => {
     
     closeBtn.addEventListener("click", closeModal);
     
-    // 点击modal外部关闭
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) closeModal();
     });
     
-    // ESC键关闭
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !overlay.classList.contains("hidden")) {
         closeModal();
@@ -79,6 +70,5 @@ const stopVideo = () => {
     });
   };
 
-  // 初始化
   setupModal();
 });
