@@ -11,12 +11,34 @@
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
   <style>
-    /* 覆盖原有列宽，方便你测试动画 */
+    /* 保留你原来为了测试动画而写的列宽覆盖 */
     .works-page .work-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
       gap: 5rem 4rem;
     }
+
+    /* ============ Modal 样式 ============ */
+    .overlay{
+      position:fixed;inset:0;
+      display:flex;justify-content:center;align-items:center;
+      background:rgba(0,0,0,.6);z-index:999;
+    }
+    .hidden{display:none}
+    .modal{
+      width:90%;max-width:600px;max-height:90vh;overflow-y:auto;
+      background:#111;color:#eee;padding:24px;border-radius:16px;position:relative;
+    }
+    .modal .close{
+      position:absolute;top:12px;right:16px;font-size:28px;
+      background:none;border:none;color:#bbb;cursor:pointer;
+    }
+    .modal .close:hover{color:#fff}
+    .videoWrap{position:relative;width:100%;padding-top:56.25%}
+    .videoWrap iframe{position:absolute;inset:0;width:100%;height:100%}
+    .intro{margin:24px 0;line-height:1.6}
+    .photos{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(45%,1fr))}
+    .photos img{width:100%;height:160px;object-fit:cover;border-radius:8px}
   </style>
 </head>
 
@@ -38,171 +60,194 @@
   <main class="container">
     <h1 class="page-title">Works</h1>
     <div class="work-grid">
+
+      <!-- 卡片 1：Hiphop dancer Yu -->
       <article id="yu" class="work-card" data-sign="1">
-  <img class="work-cover" src="assets/img/works/ice.jpg" alt="Hiphop dancer Yu">
-  <div class="overlay">
-    Hiphop dancer Yu<br><small>installation performance and game · 2024</small>
-  </div>
-  <button class="close-btn" aria-label="Close">&times;</button>
-</article>
+        <img class="work-cover" src="assets/photo/dancer(15).jpg" alt="Hiphop dancer Yu">
+        <div class="overlay">
+          Hiphop dancer Yu<br><small>installation performance and game · 2024</small>
+        </div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
 
-<!-- 卡片 2：flower day and night -->
-<article id="flower" class="work-card" data-sign="-1">
-  <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="flower day and night">
-  <div class="overlay">
-    flower day and night <br><small> JavaScript · 2024</small>
-  </div>
-  <button class="close-btn" aria-label="Close">&times;</button>
-</article>
+      <!-- 卡片 2：flower day and night -->
+      <article id="flower" class="work-card" data-sign="-1">
+        <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="flower day and night">
+        <div class="overlay">
+          flower day and night <br><small> JavaScript · 2024</small>
+        </div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
 
-<!-- 卡片 3：Motioncapture dancing -->
-<article id="mocap" class="work-card" data-sign="1">
-  <img class="work-cover" src="assets/img/works/digitalbloom.jpg" alt="Motioncapture dancin">
-  <div class="overlay">
-    mocap<br><small>MotionCapture unity VR · 2023</small>
-  </div>
-  <button class="close-btn" aria-label="Close">&times;</button>
-</article>
+      <!-- 卡片 3：Motioncapture dancing -->
+      <article id="mocap" class="work-card" data-sign="1">
+        <img class="work-cover" src="assets/img/works/digitalbloom.jpg" alt="Motioncapture dancin">
+        <div class="overlay">
+          mocap<br><small>MotionCapture unity VR · 2023</small>
+        </div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
 
-<!-- 卡片 4：Can I have some water -->
-<article id="water" class="work-card" data-sign="-1">
-  <img class="work-cover" src="assets/img/works/liquidmemory.jpg" alt="Can I have some water">
-  <div class="overlay">
-    Liquid Memory<br><small>installation Arduino · 2024</small>
-  </div>
-  <button class="close-btn" aria-label="Close">&times;</button>
-</article>
+      <!-- 卡片 4：Can I have some water -->
+      <article id="water" class="work-card" data-sign="-1">
+        <img class="work-cover" src="assets/img/works/liquidmemory.jpg" alt="Can I have some water">
+        <div class="overlay">
+          Liquid Memory<br><small>installation Arduino · 2024</small>
+        </div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
 
-<!-- 卡片 5：dream -->
-<article id="AI" class="work-card" data-sign="1">
-  <img class="work-cover" src="assets/img/works/mechanicalgarden.jpg" alt="Mechanical Garden">
-  <div class="overlay">
-    dream<br><small> Unreal Engine 4 · 2023</small>
-  </div>
-  <button class="close-btn" aria-label="Close">&times;</button>
-</article>
+      <!-- 卡片 5：dream -->
+      <article id="AI" class="work-card" data-sign="1">
+        <img class="work-cover" src="assets/img/works/mechanicalgarden.jpg" alt="Mechanical Garden">
+        <div class="overlay">
+          dream<br><small> Unreal Engine 4 · 2023</small>
+        </div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
 
-  </div>
-  <button class="close-btn" aria-label="Close">&times;</button>
-</article>
     </div>
   </main>
-  <!-- ===== Works Interaction Script ===== -->
-<script>
-/* -----------------------------------------------------------
-   1) detailHTML：存放每张卡片的长篇介绍（可含 <iframe>）
-      —— 这里只先写了 id="yu" 的内容，其余先留空。
------------------------------------------------------------ */
-const detailHTML = {
-  yu: `
-    <div class="detail">
-      <h2 style="margin-bottom:1.5rem;">Hiphop dancer Yu — installation × game mod</h2>
-      <p style="line-height:1.7;margin-bottom:2rem;">
-        Centered around the author-artist’s favorite game
-        <strong>Don’t Starve Together</strong>, this work blends her coming-of-age story with the realities of China’s street-dance scene. It tells the story of a young woman (the artist herself) living in a university dorm, torn between abandoning her passion for dance and the pressures of everyday life. When she is once again tormented by her own mediocrity in dance, the game’s antagonist—Maxwell—appears, promising that entering “the Constant” (the game world) will make her a dance master. Tempted by Maxwell, she enters the Constant full of hope, only to discover it was all a trick: in this world, she is the only one who can dance, making her the dance master by default. In reality, she hasn’t truly become a master, and must now rely on her limited dance skills to survive in the perilous, shadowy world. 
-        The project unfolds in two intertwined formats: an installation and live performance—the real world—and a custom game mod—the virtual world. This project marks the artist’s first attempt at exploring the interaction between the virtual and the real, though she was not aware of it at the time. She tried to use the game to connect her real life and the virtual world, which, at that time, was simply a place for her to escape. After all, at least in the virtual world, she could become a dance master.
 
-      </p>
-      <div style="margin:2.5rem 0;">
-        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;
-                    border-radius:1rem;box-shadow:0 6px 36px rgba(0,0,0,.4);">
-          <iframe
-            src="https://www.youtube.com/embed/fQroMDVXbRU"
-            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
-            allow="autoplay; encrypted-media" allowfullscreen
-            title="Hiphop dancer Yu"></iframe>
-        </div>
+  <!-- ===== Modal Overlay for Hiphop dancer Yu ===== -->
+  <div id="overlay" class="overlay hidden">
+    <div class="modal">
+      <button id="closeModal" class="close" aria-label="Close">&times;</button>
+      <!-- 1. YouTube 视频 -->
+      <div class="videoWrap">
+        <iframe src="https://www.youtube.com/embed/fQroMDVXbRU" title="Hiphop dancer Yu" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
       </div>
+
+      <!-- 2. 介绍文字 -->
+      <p class="intro">
+        Centered around the author‑artist’s favorite game <strong>Don’t Starve Together</strong>, this work blends her coming‑of‑age story with the realities of China’s street‑dance scene. It tells the story of a young woman (the artist herself) living in a university dorm, torn between abandoning her passion for dance and the pressures of everyday life. When she is once again tormented by her own mediocrity in dance, the game’s antagonist—Maxwell—appears, promising that entering “the Constant” (the game world) will make her a dance master. Tempted by Maxwell, she enters the Constant full of hope, only to discover it was all a trick: in this world, she is the only one who can dance, making her the dance master by default. In reality, she hasn’t truly become a master, and must now rely on her limited dance skills to survive in the perilous, shadowy world. The project unfolds in two intertwined formats: an installation and live performance—the real world—and a custom game mod—the virtual world. This project marks the artist’s first attempt at exploring the interaction between the virtual and the real, though she was not aware of it at the time. She tried to use the game to connect her real life and the virtual world, which, at that time, was simply a place for her to escape. After all, at least in the virtual world, she could become a dance master.
+      </p>
+
+      <!-- 3. 图片容器，JS 会自动注入 <img> -->
+      <div class="photos"></div>
     </div>
-  `,
+  </div>
 
-  flower: ``,
-  mocap : ``,
-  water : ``,
-  AI    : ``,
-};
+  <!-- ===== Works Interaction + Modal Script ===== -->
+  <script>
+  /* -----------------------------------------------------------
+     1) detailHTML：如果以后还想给其它卡片用旧的展开效果
+        —— 这里只保留空对象，不再给 yu 写长文，改用独立弹窗。
+  ----------------------------------------------------------- */
+  const detailHTML = { flower:"", mocap:"", water:"", AI:"" };
 
-/* -----------------------------------------------------------
-   2) Intersection Observer：保持不变
------------------------------------------------------------ */
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in-view');
-      io.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.3 });
-document.querySelectorAll('.work-card').forEach(c => io.observe(c));
+  /* -----------------------------------------------------------
+     2) Intersection Observer：保持不变
+  ----------------------------------------------------------- */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.work-card').forEach(c => io.observe(c));
 
-/* -----------------------------------------------------------
-   3) 视差效果：保持不变
------------------------------------------------------------ */
-function updateParallax() {
-  const vh = innerHeight;
-  document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
-    const rect = card.getBoundingClientRect();
-    const p = (rect.top + rect.height * 0.5) / vh;
-    const sign = parseInt(card.dataset.sign) || 1;
-    const t = (p - 0.5) * 80 * sign;
-    card.style.setProperty('--parallax', t.toFixed(1) + 'px');
-  });
-}
-addEventListener('scroll', updateParallax, { passive: true });
-addEventListener('load', updateParallax);
-addEventListener('resize', updateParallax);
-
-/* -----------------------------------------------------------
-   4) 卡片展开逻辑：在原基础上改 3 行
-      - 先保存短简介 short
-      - 点击时优先用 detailHTML[id]；没有就 fallback 到原 data-full 或 short
------------------------------------------------------------ */
-document.querySelectorAll('.work-card').forEach(card => {
-  const overlay = card.querySelector('.overlay');
-  const close   = card.querySelector('.close-btn');
-  const short   = overlay.innerHTML;                 // ① 记住简介
-  const fullTxt = card.dataset.full;                 // 仍可兼容旧 data-full
-  const sign    = parseInt(card.dataset.sign) || 1;
-
-  card.addEventListener('click', () => {
-    if (card.classList.contains('expanded')) return;
-
-    // 记录原位置，用于 CSS 动画
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty('--original-top', `${rect.top}px`);
-    card.style.setProperty('--original-left', `${rect.left}px`);
-    card.style.setProperty('--original-width', `${rect.width}px`);
-    card.style.setProperty('--original-height', `${rect.height}px`);
-
-    // ② 选择要显示的长内容
-    const longHTML = detailHTML[card.id] || fullTxt || short;
-    overlay.innerHTML = longHTML;
-
-    card.classList.add('expanded',
-      sign === 1 ? 'expanded-left' : 'expanded-right');
-    document.body.style.overflow = 'hidden';
-  });
-
-  // 关闭按钮
-  close.addEventListener('click', e => {
-    e.stopPropagation();
-    collapse();
-  });
-
-  // 点空白区域关闭
-  document.addEventListener('click', e => {
-    if (card.classList.contains('expanded') && !card.contains(e.target)) {
-      collapse();
-    }
-  });
-
-  // 收起函数
-  function collapse() {
-    card.classList.remove('expanded', 'expanded-left', 'expanded-right');
-    overlay.innerHTML = short;                       // ③ 恢复简介
-    document.body.style.overflow = 'auto';
+  /* -----------------------------------------------------------
+     3) 视差效果：保持不变
+  ----------------------------------------------------------- */
+  function updateParallax() {
+    const vh = innerHeight;
+    document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const p = (rect.top + rect.height * 0.5) / vh;
+      const sign = parseInt(card.dataset.sign) || 1;
+      const t = (p - 0.5) * 80 * sign;
+      card.style.setProperty('--parallax', t.toFixed(1) + 'px');
+    });
   }
-});
-</script>
+  addEventListener('scroll', updateParallax, { passive: true });
+  addEventListener('load', updateParallax);
+  addEventListener('resize', updateParallax);
+
+  /* -----------------------------------------------------------
+     4) 卡片展开逻辑：除 id="yu" 以外保持原功能。
+        点击 yu 切换为弹窗，而非旧的卡片放大。
+  ----------------------------------------------------------- */
+  const overlayModal = document.getElementById('overlay');
+  const closeModalBtn = document.getElementById('closeModal');
+
+  document.querySelectorAll('.work-card').forEach(card => {
+    if (card.id === 'yu') {
+      // 直接弹窗
+      card.addEventListener('click', e => {
+        e.stopPropagation();
+        overlayModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      });
+    } else {
+      // ======= 原来的卡片展开代码 =======
+      const overlay = card.querySelector('.overlay');
+      const close   = card.querySelector('.close-btn');
+      const short   = overlay.innerHTML;
+      const fullTxt = card.dataset.full;
+      const sign    = parseInt(card.dataset.sign) || 1;
+
+      card.addEventListener('click', () => {
+        if (card.classList.contains('expanded')) return;
+
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--original-top', `${rect.top}px`);
+        card.style.setProperty('--original-left', `${rect.left}px`);
+        card.style.setProperty('--original-width', `${rect.width}px`);
+        card.style.setProperty('--original-height', `${rect.height}px`);
+
+        const longHTML = detailHTML[card.id] || fullTxt || short;
+        overlay.innerHTML = longHTML;
+
+        card.classList.add('expanded', sign === 1 ? 'expanded-left' : 'expanded-right');
+        document.body.style.overflow = 'hidden';
+      });
+
+      // 关闭按钮
+      close.addEventListener('click', e => {
+        e.stopPropagation();
+        collapse();
+      });
+
+      // 点空白区域关闭
+      document.addEventListener('click', e => {
+        if (card.classList.contains('expanded') && !card.contains(e.target)) {
+          collapse();
+        }
+      });
+
+      function collapse() {
+        card.classList.remove('expanded','expanded-left','expanded-right');
+        overlay.innerHTML = short;
+        document.body.style.overflow = 'auto';
+      }
+    }
+  });
+
+  // ======= 弹窗关闭按钮 =======
+  closeModalBtn.addEventListener('click', () => {
+    overlayModal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  });
+
+  /* -----------------------------------------------------------
+     5) 动态生成照片 <img>
+  ----------------------------------------------------------- */
+  const photoFiles = [
+    'dancer.png','dancer (2).png','dancer (3).png','dancer (4).png',
+    'dancer (5).png','dancer (6).png','dancer (7).png','dancer (8).png',
+    'dancer (9).png','dancer (10).png','dancer (11).png','dancer (12).png',
+    'dancer (13).jpg','dancer (14).jpg','dancer (15).jpg'
+  ];
+  const photoBox = document.querySelector('#overlay .photos');
+  photoFiles.forEach(name => {
+    const img = document.createElement('img');
+    img.src = `assets/photo/${name}`;
+    img.alt = name;
+    photoBox.appendChild(img);
+  });
+  </script>
 </body>
 </html>
