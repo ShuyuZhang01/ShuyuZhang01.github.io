@@ -10,61 +10,68 @@
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- 站点主样式 -->
+  <!-- Global stylesheet -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- 只对 works 页面生效的快速样式 -->
+  <!-- Inline tweaks for Works page -->
   <style>
-    /* ——— 作品网格列宽覆盖（方便你测试动画） ——— */
+    /* -------------- Works grid test -------------- */
     .works-page .work-grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(500px,1fr));
       gap:5rem 4rem;
     }
 
-    /* ============ Modal ============ */
+    /* -------------- Card hover overlay -------------- */
+    .work-card .overlay{
+      font-weight:600;
+      line-height:1.35;
+    }
+    .work-card .overlay small{
+      display:block;              /* 换行到第二行 */
+      font-size:.8rem;            /* 更小字号 */
+      font-weight:400;
+      margin-top:.25rem;
+      opacity:.85;
+    }
+
+    /* -------------- Modal -------------- */
     .modal-overlay{
-      position:fixed;inset:0;
-      display:flex;justify-content:center;align-items:center;
-      background:rgba(0,0,0,.6);
-      z-index:999;
+      position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
+      background:rgba(0,0,0,.6);z-index:999;
     }
     .hidden{display:none}
     .modal{
-      width:95%;           /* 相对窗口再宽一点 */
-      max-width:900px;     /* 由 600 → 900px */
-      max-height:92vh;
+      width:96%;               /* 再加宽一点 */
+      max-width:1100px;        /* 由 900 → 1100 */
+      max-height:93vh;
       overflow-y:auto;
-      background:#111;
-      color:#eee;
-      padding:32px 32px 40px;
-      border-radius:18px;
+      background:#111;color:#eee;
+      padding:36px 36px 48px;
+      border-radius:20px;
       position:relative;
     }
     .modal .close{
-      position:absolute;top:20px;right:24px;
-      font-size:32px;line-height:1;background:none;border:none;
-      color:#ddd;cursor:pointer;z-index:10;
+      position:absolute;top:22px;right:26px;font-size:34px;line-height:1;
+      background:none;border:none;color:#ddd;cursor:pointer;z-index:10;
     }
     .modal .close:hover{color:#fff}
 
     .videoWrap{position:relative;width:100%;padding-top:56.25%}
     .videoWrap iframe{position:absolute;inset:0;width:100%;height:100%}
 
-    .intro{margin:28px 0;line-height:1.65;font-size:1rem}
+    .intro{margin:30px 0;line-height:1.65;font-size:1rem}
 
     .photos{
-      display:grid;
-      gap:14px;
+      display:grid;gap:16px;
       grid-template-columns:repeat(auto-fill,minmax(47%,1fr));
     }
     .photos img{
-      width:100%;height:180px;
-      object-fit:cover;border-radius:10px;
+      width:100%;height:auto;          /* 等比放大 */
+      border-radius:10px;
     }
   </style>
 </head>
-
 <body class="page-dark works-page">
 
   <!-- ===== Navbar ===== -->
@@ -85,167 +92,87 @@
   <main class="container">
     <h1 class="page-title">Works</h1>
     <div class="work-grid">
-
-      <!-- Card 1: Hiphop dancer Yu -->
+      <!-- Card: Yu (opens modal) -->
       <article id="yu" class="work-card" data-sign="1">
         <img class="work-cover" src="assets/photo/dancer(15).jpg" alt="Hiphop dancer Yu">
-        <div class="overlay">
-          Hiphop dancer Yu<br><small>installation performance &amp; game · 2024</small>
-        </div>
+        <div class="overlay">Hiphop dancer Yu<small>installation performance &amp; game · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
-      <!-- 其余卡片保持原来逻辑 -->
+      <!-- Other cards unchanged -->
       <article id="flower" class="work-card" data-sign="-1">
         <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="flower day and night">
-        <div class="overlay">flower day and night<br><small>JavaScript · 2024</small></div>
+        <div class="overlay">flower day and night<small>JavaScript · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
       <article id="mocap" class="work-card" data-sign="1">
         <img class="work-cover" src="assets/img/works/digitalbloom.jpg" alt="Mocap">
-        <div class="overlay">mocap<br><small>MotionCapture Unity VR · 2023</small></div>
+        <div class="overlay">mocap<small>MotionCapture Unity VR · 2023</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
       <article id="water" class="work-card" data-sign="-1">
         <img class="work-cover" src="assets/img/works/liquidmemory.jpg" alt="Liquid Memory">
-        <div class="overlay">Liquid Memory<br><small>Installation Arduino · 2024</small></div>
+        <div class="overlay">Liquid Memory<small>Installation Arduino · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
       <article id="AI" class="work-card" data-sign="1">
         <img class="work-cover" src="assets/img/works/mechanicalgarden.jpg" alt="Mechanical Garden">
-        <div class="overlay">dream<br><small>Unreal Engine 4 · 2023</small></div>
+        <div class="overlay">dream<small>Unreal Engine 4 · 2023</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
-
     </div>
   </main>
 
-  <!-- ===== Modal for Yu ===== -->
+  <!-- ===== Modal (Yu) ===== -->
   <div id="modalOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal">
       <button id="closeModal" class="close" aria-label="Close">&times;</button>
-
-      <!-- 1. YouTube 视频 -->
-      <div class="videoWrap">
-        <iframe src="https://www.youtube.com/embed/fQroMDVXbRU"
-                title="Hiphop dancer Yu" frameborder="0" allowfullscreen></iframe>
-      </div>
-
-      <!-- 2. 介绍全文 -->
-      <p class="intro">
-        Centered around the author-artist’s favorite game <strong>Don’t Starve Together</strong>,
-        this work blends her coming-of-age story with the realities of China’s street-dance scene.
-        It tells the story of a young woman (the artist herself) living in a university dorm,
-        torn between abandoning her passion for dance and the pressures of everyday life.
-        When she is once again tormented by her own mediocrity in dance, the game’s antagonist—Maxwell—appears,
-        promising that entering “the Constant” (the game world) will make her a dance master.
-        Tempted by Maxwell, she enters the Constant full of hope, only to discover it was all a trick:
-        in this world, she is the only one who can dance, making her the dance master by default.
-        In reality, she hasn’t truly become a master, and must now rely on her limited dance skills
-        to survive in the perilous, shadowy world. The project unfolds in two intertwined formats:
-        an installation and live performance—the real world—and a custom game mod—the virtual world.
-        This project marks the artist’s first attempt at exploring the interaction between the virtual and the real,
-        though she was not aware of it at the time. She tried to use the game to connect her real life
-        and the virtual world, which, at that time, was simply a place for her to escape.
-        After all, at least in the virtual world, she could become a dance master.
-      </p>
-
-      <!-- 3. 照片容器 -->
+      <div class="videoWrap"><iframe src="https://www.youtube.com/embed/fQroMDVXbRU" title="Hiphop dancer Yu" frameborder="0" allowfullscreen></iframe></div>
+      <p class="intro">Centered around the author-artist’s favorite game <strong>Don’t Starve Together</strong>, this work blends her coming-of-age story with the realities of China’s street-dance scene. It tells the story of a young woman (the artist herself) living in a university dorm, torn between abandoning her passion for dance and the pressures of everyday life. When she is once again tormented by her own mediocrity in dance, the game’s antagonist—Maxwell—appears, promising that entering “the Constant” (the game world) will make her a dance master. Tempted by Maxwell, she enters the Constant full of hope, only to discover it was all a trick: in this world, she is the only one who can dance, making her the dance master by default. In reality, she hasn’t truly become a master, and must now rely on her limited dance skills to survive in the perilous, shadowy world. The project unfolds in two intertwined formats: an installation and live performance—the real world—and a custom game mod—the virtual world. This project marks the artist’s first attempt at exploring the interaction between the virtual and the real, though she was not aware of it at the time. She tried to use the game to connect her real life and the virtual world, which, at that time, was simply a place for her to escape. After all, at least in the virtual world, she could become a dance master.</p>
       <div class="photos"></div>
     </div>
   </div>
 
   <!-- ===== Scripts ===== -->
   <script>
-  /* ---------- Intersection reveal & parallax ---------- */
-  const io = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add('in-view');
-        io.unobserve(e.target);
-      }
-    });
-  },{threshold:0.3});
-  document.querySelectorAll('.work-card').forEach(c=>io.observe(c));
+  /* Intersection & parallax (unchanged) */
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in-view');io.unobserve(e.target);}})},{threshold:0.3});document.querySelectorAll('.work-card').forEach(c=>io.observe(c));
+  function updateParallax(){const vh=innerHeight;document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card=>{const r=card.getBoundingClientRect();const p=(r.top+r.height/2)/vh;const sign=parseInt(card.dataset.sign)||1;card.style.setProperty('--parallax',((p-0.5)*80*sign).toFixed(1)+'px');});}
+  addEventListener('scroll',updateParallax,{passive:true});addEventListener('load',updateParallax);addEventListener('resize',updateParallax);
 
-  function updateParallax(){
-    const vh = innerHeight;
-    document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card=>{
-      const r = card.getBoundingClientRect();
-      const p = (r.top + r.height/2) / vh;
-      const sign = parseInt(card.dataset.sign)||1;
-      card.style.setProperty('--parallax', ((p-0.5)*80*sign).toFixed(1)+'px');
-    });
-  }
-  addEventListener('scroll',updateParallax,{passive:true});
-  addEventListener('load',updateParallax);
-  addEventListener('resize',updateParallax);
-
-  /* ---------- Modal logic for Yu ---------- */
-  const modalOverlay = document.getElementById('modalOverlay');
-  const closeModalBtn = document.getElementById('closeModal');
-
-  document.getElementById('yu').addEventListener('click',e=>{
-    e.stopPropagation();
-    modalOverlay.classList.remove('hidden');
-    document.body.style.overflow='hidden';
-  });
-
-  const closeModal = ()=>{
-    modalOverlay.classList.add('hidden');
-    document.body.style.overflow='auto';
-  };
+  /* Modal logic */
+  const modalOverlay=document.getElementById('modalOverlay');
+  const closeModalBtn=document.getElementById('closeModal');
+  document.getElementById('yu').addEventListener('click',e=>{e.stopPropagation();modalOverlay.classList.remove('hidden');document.body.style.overflow='hidden';});
+  const closeModal=()=>{modalOverlay.classList.add('hidden');document.body.style.overflow='auto';};
   closeModalBtn.addEventListener('click',closeModal);
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape' && !modalOverlay.classList.contains('hidden')) closeModal();
-  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modalOverlay.classList.contains('hidden')) closeModal();});
 
-  /* ---------- Other cards keep original expand ---------- */
+  /* Other cards original expand */
   document.querySelectorAll('.work-card').forEach(card=>{
-    if(card.id==='yu') return;
-    const overlay = card.querySelector('.overlay');
-    const short   = overlay.innerHTML;
-    const sign    = parseInt(card.dataset.sign)||1;
-    const close   = card.querySelector('.close-btn');
-
+    if(card.id==='yu')return;
+    const overlay=card.querySelector('.overlay');
+    const closeBtn=card.querySelector('.close-btn');
+    const shortHTML=overlay.innerHTML;
+    const sign=parseInt(card.dataset.sign)||1;
     card.addEventListener('click',()=>{
-      if(card.classList.contains('expanded')) return;
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--original-top', r.top+'px');
-      card.style.setProperty('--original-left', r.left+'px');
-      card.style.setProperty('--original-width', r.width+'px');
-      card.style.setProperty('--original-height', r.height+'px');
-      card.classList.add('expanded', sign===1?'expanded-left':'expanded-right');
+      if(card.classList.contains('expanded'))return;
+      const r=card.getBoundingClientRect();
+      card.style.setProperty('--original-top',`${r.top}px`);
+      card.style.setProperty('--original-left',`${r.left}px`);
+      card.style.setProperty('--original-width',`${r.width}px`);
+      card.style.setProperty('--original-height',`${r.height}px`);
+      card.classList.add('expanded',sign===1?'expanded-left':'expanded-right');
       document.body.style.overflow='hidden';
     });
-
-    const collapse = ()=>{
-      card.classList.remove('expanded','expanded-left','expanded-right');
-      document.body.style.overflow='auto';
-    };
-    close.addEventListener('click',e=>{e.stopPropagation();collapse();});
-    document.addEventListener('click',e=>{
-      if(card.classList.contains('expanded') && !card.contains(e.target)) collapse();
-    });
+    const collapse=()=>{card.classList.remove('expanded','expanded-left','expanded-right');document.body.style.overflow='auto';};
+    closeBtn.addEventListener('click',e=>{e.stopPropagation();collapse();});
+    document.addEventListener('click',e=>{if(card.classList.contains('expanded')&&!card.contains(e.target)) collapse();});
   });
 
-  /* ---------- Inject photos into modal ---------- */
-  const photos = [
-    'dancer.png','dancer (2).png','dancer (3).png','dancer (4).png',
-    'dancer (5).png','dancer (6).png','dancer (7).png','dancer (8).png',
-    'dancer (9).png','dancer (10).png','dancer (11).png','dancer (12).png',
-    'dancer (13).jpg','dancer (14).jpg','dancer (15).jpg'
-  ];
-  const photoBox = document.querySelector('#modalOverlay .photos');
-  photos.forEach(f=>{
-    const img = new Image();
-    img.src = `assets/photo/${f}`;
-    img.alt = f;
-    photoBox.appendChild(img);
-  });
+  /* Inject photos */
+  const photos=['dancer.png','dancer (2).png','dancer (3).png','dancer (4).png','dancer (5).png','dancer (6).png','dancer (7).png','dancer (8).png','dancer (9).png','dancer (10).png','dancer (11).png','dancer (12).png','dancer13.jpg','dancer14.jpg','dancer15.jpg'];
+  const photoBox=document.querySelector('#modalOverlay .photos');
+  photos.forEach(f=>{const img=new Image();img.src=`assets/photo/${f}`;img.alt=f;photoBox.appendChild(img);});
   </script>
 </body>
 </html>
