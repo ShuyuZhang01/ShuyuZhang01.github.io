@@ -467,33 +467,66 @@ body {
 }
 
 /* ========== 移动端优化 ========== */
-@media (max-width: 768px) {
-  .page-title {
-    font-size: 2.25rem;
-    margin-bottom: 2rem;
+/* 手机 ≤600px */
+@media (max-width: 600px) {
+  .hero-title { font-size: 2.5rem; }
+
+  .nav-inner { flex-wrap: wrap; }
+
+  .brand {
+    flex: 0 0 100%;
+    margin-bottom: 0.25rem;
+    text-align: center;
   }
 
-  .nav-inner {
-    flex-wrap: wrap;      /* 允许换行，但方向仍是 row */
-  }
-  .brand {                /* SHUYU ZHANG */
-    flex: 0 0 100%;       /* 占满整行，自动把后面链接推到下一行 */
-    margin-bottom: 0.25rem; 
-    text-align: center;   /* 可按需微调上下间距 */
-  }
-  
-   .hero-sub {
-    font-size: 1.5rem;   /* 按需改成你喜欢的大小 */
-  }
+  /* === 新增：让导航菜单水平居中 & 取消右偏 === */
   .nav-list {
-    gap: 1rem;
+    margin-left: 0;        /* 覆盖桌面端的 auto */
+    width: 100%;           /* 占满整行 */
+    justify-content: center;
   }
-  
-  .modal {
-    padding: 24px;
-    width: 95%;
+
+  /* 修正拼写：去掉空格 */
+  .hero-sub {
+    font-size: 1.25rem;
+    color: #e5e7eb;
   }
+
+  /* 其余保持原样… */
+  .hero-content { max-width: 95vw; padding: 0 1rem; }
+  .work-grid    { grid-template-columns: 1fr; gap: 3rem; }
+  .work-card    { transform: translateY(30px) scale(0.94); }
+  .hero { width: 100%; } 
 }
+
+/* 手机 / 小平板 ≤768px */
+@media (max-width: 768px) {
+  .page-title { font-size: 2.25rem; margin-bottom: 2rem; }
+
+  .nav-inner { flex-wrap: wrap; }
+
+  .brand {
+    flex: 0 0 100%;
+    margin-bottom: 0.25rem;
+    text-align: center;
+  }
+
+  /* === 同样让导航菜单居中 === */
+  .nav-list {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;             /* 这一行你原本就有 */
+  }
+
+  .hero-sub { font-size: 1.5rem; }
+  .hero { width: 100%; } 
+
+  .modal { padding: 24px; width: 95%; }
+}
+
+
+
 /* ========== Modal 样式 ========== */
 .modal-overlay {
   position: fixed;
