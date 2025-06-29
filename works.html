@@ -139,7 +139,7 @@ The project unfolds in two intertwined formats: an installation and live perform
     },
     dream: {
       videoId: '2m7fuvJwC5M',
-      intro: `Redemption is a moving-image work born of the artist’s own brush with death. Rooted in an authentic resuscitation experience, the piece revolves around the intertwined themes of depression, suicide, and rebirth. It blends academic research, personal testimony, and digital world-building to trace a psychological journey that moves from hospital bed and psychiatric ward into a dreamscape—only to return to reality.  
+      intro: `Redemption is a moving-image work born of the artist's own brush with death. Rooted in an authentic resuscitation experience, the piece revolves around the intertwined themes of depression, suicide, and rebirth. It blends academic research, personal testimony, and digital world-building to trace a psychological journey that moves from hospital bed and psychiatric ward into a dreamscape—only to return to reality.  
 
 Dedicated to everyone teetering on the edge of darkness, the film invites you to discover the still-blazing creativity within vulnerability and to believe in your power to bring color back into the real world.  
 
@@ -164,7 +164,7 @@ Using pure JavaScript, the piece simulates the sun-flower diurnal rhythm, explor
       videoId : '1037983368',
       intro   : `This project explores the concept of post-humanism by examining the relationships between humans and non-human entities such as plants and water. It challenges anthropocentric perspectives by creating an interactive installation that simulates communication between humans and plants.  
 
-Through the “Symbiotic Plant” installation, the project allows plants to express their need for water using light signals, prompting human participants to respond and engage in a symbolic symbiotic relationship.  
+Through the "Symbiotic Plant" installation, the project allows plants to express their need for water using light signals, prompting human participants to respond and engage in a symbolic symbiotic relationship.  
 
 Grounded in key theoretical frameworks—including Animism, Actor-Network Theory (ANT), post-human ethics, and symbiotic technology—the work emphasizes that non-human entities possess agency and the ability to interact meaningfully. It envisions a future where plants and humans can engage in mutual, empathetic, and reciprocal interactions beyond traditional human-centered paradigms.`,
       photos  : ['water (2).jpg','water (3).jpg','water.jpg','water (4).jpg','water (5).jpg','water (6).jpg']
@@ -178,7 +178,7 @@ To highlight the tension in such an extreme scenario, we borrow from cyberpunk a
 
 In this virtual metropolis, elevated highways have morphed into floating docks, subway tunnels into tidal-energy conduits, and the glass curtain walls of the financial district are now draped in seaweed and barnacles, their only glow the flicker of neon adverts through murky water. We layer in a narrative of scarcity and conflict—resource shortages, a legal vacuum, oxygen-monopolizing cartels, and competing underwater syndicates—so the city evolves into an underwater dystopia teeming with crime.  
 
-Through an immersive VR experience, viewers descend from the surface’s refracted glare to sea-floor wreckage, witnessing firsthand the rupture of social strata and the unfolding ecological crisis. By doing so, we hope to spark public reflection on climate risk, urban governance, and tech ethics: when technology can reshape the environment yet fails to mend social fractures, will future cities become sanctuaries—or deeper abysses?`,
+Through an immersive VR experience, viewers descend from the surface's refracted glare to sea-floor wreckage, witnessing firsthand the rupture of social strata and the unfolding ecological crisis. By doing so, we hope to spark public reflection on climate risk, urban governance, and tech ethics: when technology can reshape the environment yet fails to mend social fractures, will future cities become sanctuaries—or deeper abysses?`,
       photos   : ['city (2).jpg','city (4).jpg','city (3).jpg','city (5).jpg','city (6).jpg','city (7).jpg','city (8).jpg','city.jpg']
     }
   };
@@ -293,6 +293,16 @@ Through an immersive VR experience, viewers descend from the surface’s refract
     /* preload YouTube */
     loadYouTubeAPI();
   })();
+  </script>
+
+  <!-- 粒子特效脚本 -->
+  <script>
+    // 确保DOM完全加载后再执行粒子特效
+    document.addEventListener('DOMContentLoaded', function() {
+      const script = document.createElement('script');
+      script.src = 'cursorParticles.js';
+      document.body.appendChild(script);
+    });
   </script>
 
 </body>

@@ -157,7 +157,7 @@
         </div>
       </article>
       <!-- ▶ Unity Mini‑Game (video) -->
-      <article class="work-card" data-text="A small‑scale game exploring Unity Visual Scripting and some basic Unity C#."
+      <article class="work-card" data-text="A small‑scale game exploring Unity Visual Scripting and some basic Unity C#."
                data-video="https://www.youtube.com/embed/Xo-ZtWO-TLs">
         <!-- use local cover instead of YouTube thumbnail -->
         <img class="work-cover" src="assets/photo/game.png" alt="Unity Mini‑Game Cover">
@@ -176,7 +176,7 @@
         <div class="overlay">
           <div>
             <h2 class="work-title">JavaScript Pattern Study</h2>
-            <p class="work-desc"> JavaScript ·  simple pattern</p>
+            <p class="work-desc"> JavaScript ·  simple pattern</p>
           </div>
         </div>
       </article>
@@ -276,7 +276,7 @@
       </article>
       
        <!-- ▶ Practice 12 -->
-      <article class="work-card" data-text="A collaborative workshop with Chinese dancers where we explored both the differences and overlaps between Chinese classical dance and street dance, while also examining the current state of China’s street-dance culture and its potential future development."
+      <article class="work-card" data-text="A collaborative workshop with Chinese dancers where we explored both the differences and overlaps between Chinese classical dance and street dance, while also examining the current state of China's street-dance culture and its potential future development."
       data-video="https://youtu.be/QIeOg0z5iVs">
         <img class="work-cover" src="assets/photo/workshop.png" alt="Hiphop dance workshop">
         <div class="overlay">
@@ -379,6 +379,16 @@
       });
     },{passive:true});
   })();
+  </script>
+  
+  <!-- 粒子特效脚本 -->
+  <script>
+    // 确保DOM完全加载后再执行粒子特效
+    document.addEventListener('DOMContentLoaded', function() {
+      const script = document.createElement('script');
+      script.src = 'cursorParticles.js';
+      document.body.appendChild(script);
+    });
   </script>
 </body>
 </html>

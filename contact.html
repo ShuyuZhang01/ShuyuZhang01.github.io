@@ -149,5 +149,15 @@
     </div>
   </main>
 
+  <!-- 粒子特效脚本 -->
+  <script>
+    // 确保DOM完全加载后再执行粒子特效
+    document.addEventListener('DOMContentLoaded', function() {
+      const script = document.createElement('script');
+      script.src = 'cursorParticles.js';
+      document.body.appendChild(script);
+    });
+  </script>
+
 </body>
 </html>
