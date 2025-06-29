@@ -443,9 +443,10 @@ body {
   }
   .brand {                /* SHUYU ZHANG */
     flex: 0 0 100%;       /* 占满整行，自动把后面链接推到下一行 */
-    margin-bottom: 0.25rem;   /* 可按需微调上下间距 */
+    margin-bottom: 0.25rem; 
+    text-align: center;   /* 可按需微调上下间距 */
   }
-  
+
   .hero-sub {
   font-size: 1.25 rem;
   color: #e5e7eb;
@@ -477,7 +478,8 @@ body {
   }
   .brand {                /* SHUYU ZHANG */
     flex: 0 0 100%;       /* 占满整行，自动把后面链接推到下一行 */
-    margin-bottom: 0.25rem;   /* 可按需微调上下间距 */
+    margin-bottom: 0.25rem; 
+    text-align: center;   /* 可按需微调上下间距 */
   }
   
    .hero-sub {
