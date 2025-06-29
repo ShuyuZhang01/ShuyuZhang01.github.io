@@ -72,7 +72,20 @@
       padding:2rem;
       font-size:clamp(1.2rem,2.4vw,1.6rem);
       line-height:1.5;
+      animation: cardExpand 0.4s ease-out;
     }
+    
+    @keyframes cardExpand {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
     /* hide thumbnail + overlay inside modal so避免看到两个框 */
     .practice-page .work-card.expanded .work-cover,
     .practice-page .work-card.expanded .overlay{display:none;}
@@ -86,6 +99,7 @@
       border-radius:.75rem;
       max-height:60vh;
       margin-bottom:1.5rem;
+      animation: contentFadeIn 0.6s ease 0.2s both;
     }
 
     /* ───────── Image gallery for JS patterns ───────── */
@@ -97,7 +111,20 @@
       margin-bottom:1.5rem;
       max-height:60vh;
       overflow:auto;
+      animation: contentFadeIn 0.6s ease 0.2s both;
     }
+    
+    @keyframes contentFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .practice-page .gallery img{
       height:18vh;
       flex:0 0 auto;
@@ -113,17 +140,33 @@
       font-size:2rem;
       border:none;
       cursor:pointer;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .practice-page .close-btn:hover {
+      background: rgba(255,255,255,0.1);
+      transform: rotate(90deg) scale(1.1);
+      color: #7dd3fc;
     }
 
-    /* typing text */
+    /* typing text - 删除打字机效果，改为简洁的渐入动画 */
     .typing-text{
-      border-right:2px solid #fff;
-      white-space:normal; /* allow line wrap so全文可见 */
-      overflow:hidden;
-      width:0;
-      animation:typing 3s steps(60,end) forwards;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease forwards;
     }
-    @keyframes typing{from{width:0;}to{width:100%;}}
+    @keyframes fadeInUp{
+      to{
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     /* 技能标签动画 */
     .work-desc {
@@ -163,26 +206,15 @@
       }
     }
     
-    /* 标题打字机效果 */
+    /* 标题简洁效果 - 删除打字机光标 */
     .work-title {
       position: relative;
-      overflow: hidden;
+      transition: all 0.3s ease;
     }
     
-    .work-title::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 2px;
-      height: 100%;
-      background: #7dd3fc;
-      animation: blink 1s infinite;
-    }
-    
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0; }
+    .work-title:hover {
+      color: #7dd3fc;
+      transform: translateX(5px);
     }
   </style>
 </head>
