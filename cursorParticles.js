@@ -2,8 +2,8 @@
 (() => {
   console.log('粒子特效脚本已加载'); // 调试信息
   
-  // 使用主色调的变体
-  const colors = ['#7dd3fc', '#38bdf8', '#0ea5e9', '#0284c7', '#0369a1']; // 蓝色主色调
+  // 使用白色系配色
+  const colors = ['#ffffff', '#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1']; // 白色主色调
   let lastX = -100, lastY = -100;
 
   document.addEventListener('mousemove', e => {
@@ -18,7 +18,7 @@
       const p = document.createElement('span');
       p.className = 'particle';
 
-      // 尺寸 & 颜色 - 使用主色调
+      // 尺寸 & 颜色 - 使用白色系
       const size = 4 + Math.random() * 4;
       p.style.width = p.style.height = `${size}px`;
       p.style.background = colors[Math.floor(Math.random() * colors.length)];
