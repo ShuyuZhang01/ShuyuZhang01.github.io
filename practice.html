@@ -51,7 +51,7 @@
       transition:transform .3s ease;
       background:#000; /* avoids white gap before image loads */
     }
-    .practice-page .work-card:hover .work-cover{transform:scale(1.05);}
+    .practice-page .work-card:hover .work-cover{transform:scale(1.05);}   
 
     /* ───────── Expanded (lightbox) ───────── */
     .practice-page .work-card.expanded{
@@ -73,7 +73,7 @@
       font-size:clamp(1.2rem,2.4vw,1.6rem);
       line-height:1.5;
     }
-    /* hide thumbnail + overlay inside modal so不会看到"两个框" */
+    /* hide thumbnail + overlay inside modal so避免看到两个框 */
     .practice-page .work-card.expanded .work-cover,
     .practice-page .work-card.expanded .overlay{display:none;}
 
@@ -86,6 +86,22 @@
       border-radius:.75rem;
       max-height:60vh;
       margin-bottom:1.5rem;
+    }
+
+    /* ───────── Image gallery for JS patterns ───────── */
+    .practice-page .gallery{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.5rem;
+      justify-content:center;
+      margin-bottom:1.5rem;
+      max-height:60vh;
+      overflow:auto;
+    }
+    .practice-page .gallery img{
+      height:18vh;
+      flex:0 0 auto;
+      border-radius:.5rem;
     }
 
     .practice-page .close-btn{
@@ -102,7 +118,7 @@
     /* typing text */
     .typing-text{
       border-right:2px solid #fff;
-      white-space:normal; /* allow line wrap so 全文可见 */
+      white-space:normal; /* allow line wrap so全文可见 */
       overflow:hidden;
       width:0;
       animation:typing 3s steps(60,end) forwards;
@@ -142,13 +158,14 @@
         </div>
       </article>
 
-      <!-- ▶ Practice 2 -->
-      <article class="work-card" data-text="Lines grow using Perlin noise in Processing.">
-        <img class="work-cover" src="assets/img/practice2.jpg" alt="Generative Line Art">
+      <!-- ▶ JavaScript Pattern Study (PHOTO GALLERY) -->
+      <article class="work-card" data-text="new to javascript，made some patterns"
+               data-gallery="assets/photo/js1.jpg,assets/photo/js1 (2).jpg,assets/photo/js1 (3).jpg,assets/photo/js1 (4).jpg,assets/photo/js1 (5).jpg,assets/photo/js1 (6).jpg,assets/photo/js1 (7).jpg">
+        <img class="work-cover" src="assets/photo/js1 (5).jpg" alt="JavaScript Pattern practice">
         <div class="overlay">
           <div>
-            <h2 class="work-title">Generative Line Art</h2>
-            <p class="work-desc">Coded in Processing; lines grow based on Perlin noise.</p>
+            <h2 class="work-title">JavaScript Pattern Study</h2>
+            <p class="work-desc"> JavaScript ·  simple pattern</p>
           </div>
         </div>
       </article>
@@ -238,6 +255,18 @@
         iframe.allowFullscreen=true;
         card.appendChild(iframe);
       }
+      /* gallery? */
+      else if(card.dataset.gallery){
+        const gallery=document.createElement('div');
+        gallery.className='gallery';
+        card.dataset.gallery.split(',').forEach(p=>{
+          const img=document.createElement('img');
+          img.src=p.trim();
+          img.alt='JS Pattern';
+          gallery.appendChild(img);
+        });
+        card.appendChild(gallery);
+      }
 
       card.appendChild(textElem);
 
@@ -255,6 +284,8 @@
       btn.remove();
       const iframe=card.querySelector('iframe');
       if(iframe)iframe.remove();
+      const gallery=card.querySelector('.gallery');
+      if(gallery)gallery.remove();
       if(textElem)textElem.remove();
       if(keyHandler)document.removeEventListener('keydown',keyHandler);
     }
