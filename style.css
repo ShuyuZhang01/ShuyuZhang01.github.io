@@ -9,10 +9,12 @@
   --z-index-nav: 100;
   --z-index-modal: 200;
   --z-index-expanded-card: 150;
-  --primary-color: #7dd3fc;
+  --primary-color: #fbbf24;
   --text-color: #fff;
   --bg-color: #000;
   --overlay-bg: rgba(0, 0, 0, 0.55);
+  --accent-color: #f59e0b;
+  --light-accent: #fde68a;
 }
 
 html {
@@ -85,7 +87,7 @@ body {
 }
 
 .nav a:hover {
-  color: #9ca3af;
+  color: var(--primary-color);
 }
 
 .brand {
