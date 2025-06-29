@@ -123,29 +123,8 @@ body {
 }
 
 /* ========== Works 页面特定样式 ========== */
-.works-page .page-title {
-  font-family: "Open Sans", sans-serif;
-  font-weight: 600;
-  font-size: 2.5rem;
-  color: var(--text-light);
-  margin: 0 0 3rem; /* 上方间距为0（由.works-page的padding-top控制），下方3rem */
-  padding: 0 0 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  width: 100%;
-}
-
-/* 手机端适配 */
-@media (max-width: 768px) {
-  .works-page .page-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    padding-bottom: 0.8rem;
-  }
-}
-
-/* ========== 你原有的代码保持不变 ========== */
 .works-page {
-  padding-top: 7rem; /* 标题实际间距由这个值和page-title的margin共同控制 */
+  padding-top: 0rem;
 }
 
 .work-grid {
