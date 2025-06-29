@@ -15,64 +15,34 @@
 
   <!-- Inline tweaks for Works page -->
   <style>
-    /* -------------- Works grid test -------------- */
+    /* -------------- Works grid -------------- */
     .works-page .work-grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(500px,1fr));
       gap:5rem 4rem;
     }
-
-    /* -------------- Card hover overlay -------------- */
+    /* -------------- Card overlay -------------- */
     .work-card .overlay{
-      font-weight:600;
-      line-height:1.35;
-      white-space:normal;
-      pointer-events:none;
-      flex-direction:column;
+      font-weight:600;line-height:1.35;white-space:normal;
+      pointer-events:none;flex-direction:column;
     }
     .work-card .overlay small{
-      display:block;
-      font-size:.8rem;
-      font-weight:400;
-      margin-top:.25rem;
-      opacity:.85;
+      display:block;font-size:.8rem;font-weight:400;margin-top:.25rem;opacity:.85;
     }
-
     /* -------------- Modal -------------- */
-    .modal-overlay{
-      position:fixed;inset:0;display:flex;justify-content:center;align-items:center;
-      background:rgba(0,0,0,.6);z-index:999;
-    }
+    .modal-overlay{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,.6);z-index:999}
     .hidden{display:none}
     .modal{
-      width:96%;
-      max-width:1100px;
-      max-height:93vh;
-      overflow-y:auto;
-      background:#111;color:#eee;
-      padding:36px 36px 48px;
-      border-radius:20px;
-      position:relative;
+      width:96%;max-width:1100px;max-height:93vh;overflow-y:auto;
+      background:#111;color:#eee;padding:36px 36px 48px;border-radius:20px;position:relative;
     }
-    .modal .close{
-      position:absolute;top:22px;right:26px;font-size:34px;line-height:1;
-      background:none;border:none;color:#ddd;cursor:pointer;z-index:10;
-    }
+    .modal .close{position:absolute;top:22px;right:26px;font-size:34px;background:none;border:none;color:#ddd;cursor:pointer;z-index:10}
     .modal .close:hover{color:#fff}
-
     .videoWrap{position:relative;width:100%;padding-top:56.25%}
     .videoWrap iframe{position:absolute;inset:0;width:100%;height:100%}
-
     .intro{margin:30px 0;line-height:1.65;font-size:1rem}
-
-    .photos{
-      display:grid;gap:16px;
-      grid-template-columns:repeat(auto-fill,minmax(47%,1fr));
-    }
-    .photos img{
-      width:100%;height:auto;
-      border-radius:10px;
-    }
+    .photos{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(47%,1fr))}
+    .photos img{width:100%;height:auto;border-radius:10px}
   </style>
 </head>
 <body class="page-dark works-page">
@@ -110,38 +80,38 @@
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
-      <!-- Card: Flower -->
-      <article id="flower" class="work-card" data-sign="-1" data-project="flower">
-        <img class="work-cover" src="assets/img/works/mycelium.jpg" alt="flower day and night">
-        <div class="overlay">flower day and night<small>JavaScript · 2024</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
       <!-- Card: Mocap -->
       <article id="mocap" class="work-card" data-sign="1" data-project="mocap">
-        <img class="work-cover" src="assets/img/works/digitalbloom.jpg" alt="Mocap">
-        <div class="overlay">mocap<small>MotionCapture Unity VR · 2023</small></div>
+        <img class="work-cover" src="assets/photo/mocap.jpg" alt="Dancing in here and there">
+        <div class="overlay">Dancing in here and there<small>MotionCapture & Unity VR · 2025</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
-      <!-- Card: Liquid Memory -->
+      <!-- Card: Flower -->
+      <article id="flower" class="work-card" data-sign="-1" data-project="flower">
+        <img class="work-cover" src="assets/photo/flower (5).jpg" alt="Piano Piece of Day and Night">
+        <div class="overlay">Piano Piece of Day and Night<small>JavaScript · 2024</small></div>
+        <button class="close-btn" aria-label="Close">&times;</button>
+      </article>
+
+      <!-- Card: Water -->
       <article id="water" class="work-card" data-sign="-1" data-project="water">
-        <img class="work-cover" src="assets/img/works/liquidmemory.jpg" alt="Liquid Memory">
-        <div class="overlay">Liquid Memory<small>Installation Arduino · 2024</small></div>
+        <img class="work-cover" src="assets/photo/water (7).jpg" alt="Can you please give me some water...">
+        <div class="overlay">Can you please give me some water...<small>Arduino Installation · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
-      <!-- Card: AI -->
-      <article id="AI" class="work-card" data-sign="1" data-project="ai">
-        <img class="work-cover" src="assets/img/works/mechanicalgarden.jpg" alt="Mechanical Garden">
-        <div class="overlay">TogAIther<small>Unreal Engine 4 · 2023</small></div>
+      <!-- Card: City -->
+      <article id="city" class="work-card" data-sign="1" data-project="ai">
+        <img class="work-cover" src="assets/photo/city (8).jpg" alt="CXC sleepless city">
+        <div class="overlay">CXC sleepless city<small>360-degree photography · 2021</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
     </div>
   </main>
 
-  <!-- ===== Modal (空壳，内容由 JS 注入) ===== -->
+  <!-- ===== Modal (empty; JS fills) ===== -->
   <div id="modalOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal">
       <button id="closeModal" class="close" aria-label="Close">&times;</button>
@@ -153,11 +123,11 @@
 
   <!-- ===== Scripts ===== -->
   <script>
-  /* ====== 项目配置表 ====== */
+  /* ===== 项目数据 ===== */
   const projectData = {
     yu: {
       videoId: 'fQroMDVXbRU',
-      intro: `Centered around the author-artist's favorite game <strong>Don't Starve Together</strong>, this work blends her coming-of-age story with the realities of China's street-dance scene. It tells the story of a young woman (the artist herself) living in a university dorm, torn between abandoning her passion for dance and the pressures of everyday life. When she is once again tormented by her own mediocrity in dance, the game's antagonist—Maxwell—appears, promising that entering "the Constant" (the game world) will make her a dance master. Tempted, she enters the Constant full of hope, only to discover it was all a trick: in this world, she is the only one who can dance, making her the dance master by default. In reality, she hasn't truly become a master, and must now rely on her limited dance skills to survive in the perilous, shadowy world. The project unfolds in two intertwined formats: an installation and live performance—the real world—and a custom game mod—the virtual world. This project marks the artist's first attempt at exploring the interaction between the virtual and the real, though she was not aware of it at the time. She tried to use the game to connect her real life and the virtual world, which, at that time, was simply a place for her to escape. After all, at least in the virtual world, she could become a dance master.`,
+      intro: `Centered around the author-artist's favorite game <strong>Don't Starve Together</strong>, this work blends her coming-of-age story with the realities of China's street-dance scene …`,
       photos: [
         'dancer.png','dancer (2).png','dancer (3).png','dancer (4).png',
         'dancer (5).png','dancer (6).png','dancer (7).png','dancer (8).png',
@@ -166,33 +136,36 @@
       ]
     },
     dream: {
-      videoId: '2m7fuvJwC5M ',
-      intro: 'Redemption is a moving-image work born of the artist s own brush with death. Rooted in an authentic resuscitation experience, the piece revolves around the intertwined themes of depression, suicide, and rebirth. It blends academic research, personal testimony, and digital world-building to trace a psychological journey that moves from hospital bed and psychiatric ward into a dreamscape—only to return to reality. Dedicated to everyone teetering on the edge of darkness, the film invites you to discover the still-blazing creativity within vulnerability and to believe in your power to bring color back into the real world. Created with MAYA, Substance Painter, and Unreal Engine 4.',
+      videoId: '2m7fuvJwC5M',
+      intro: `Redemption is a moving-image work born of the artist's own brush with death …`,
       photos: ['dream (2).png','dream.png','dream (3).png','dream6.jpg','dream7.jpg','dream8.jpg','dream9.jpg']
     },
-    flower: {
-      videoId: '2m7fuvJwC5M',
-      intro: '《flower day and night》以 JavaScript 纯代码方式模拟太阳与花朵的昼夜律动，探索时间、生命与数字自然之间的互动关系。',
-      photos: ['flower1.jpg','flower2.jpg','flower3.jpg']
-    },
     mocap: {
-      videoId: '',
-      intro: '《mocap》——实时光学动捕 × Unity VR，舞者与虚拟化身同台共舞的沉浸式表演。',
-      photos: []
+      videoId: '4ZLSETJkSJ8',
+      intro : 'Have you ever tried dancing at the same moment with both your past self and your present self …',
+      photos: ['mocap.jpg','mocap (2).jpg','mocap (3).jpg','mocap (4).jpg','mocap (5).jpg','mocap (6).jpg','mocap (7).jpg']
+    },
+    flower: {
+      platform: 'vimeo',
+      videoId : '1046253775',
+      intro   : 'Using pure JavaScript, the piece simulates the sun-flower diurnal rhythm …',
+      photos  : ['flower.jpg','flower (2).jpg','flower (3).jpg','flower (4).jpg']
     },
     water: {
-      videoId: '',
-      intro: '《Liquid Memory》是一件 Arduino-驱动的交互装置，通过水的流动与灯光变化隐喻记忆的可塑性。',
-      photos: []
+      platform: 'vimeo',
+      videoId : '1037983368',
+      intro   : `This project explores the concept of post-humanism by examining relationships between humans and non-human entities such as plants and water. It challenges anthropocentric perspectives by creating an interactive installation …`,
+      photos  : ['water (2).jpg','water (3).jpg','water.jpg','water (4).jpg','water (5).jpg','water (6).jpg']
     },
-    ai: {
-      videoId: '',
-      intro: '《TogAIther》：在 Unreal Engine 4 中构建的机械花园，与 AI 伙伴共同成长。',
-      photos: []
+    ai: {                            /* 最后一张卡片：只放大图 */
+      heroImage: 'city (8).jpg',     /* 16:9 主图 */
+      videoId  : '',
+      intro    : `From the lens of speculative design, we start with a near-future premise: if global sea levels keep climbing until an entire city is swallowed by water, what new form will it assume? …`,
+      photos   : ['city (2).jpg','city (4).jpg','city (3).jpg','city (5).jpg','city (6).jpg','city (7).jpg','city (8).jpg','city.jpg']
     }
   };
 
-  /* ====== YouTube API 载入 ====== */
+  /* ===== YouTube API ===== */
   let player;
   function loadYouTubeAPI () {
     if (window.YT) return;
@@ -200,43 +173,55 @@
     tag.src = 'https://www.youtube.com/iframe_api';
     document.head.appendChild(tag);
   }
-  function onYouTubeIframeAPIReady () { /* 首次由 openModal 创建播放器 */ }
+  function onYouTubeIframeAPIReady () { /* player 创建由 openModal 触发 */ }
 
-  /* ====== 通用模态框 ====== */
+  /* ===== Modal Logic ===== */
   function openModal (projectId) {
     const data = projectData[projectId];
-    if (!data) return console.warn('未找到 projectData:', projectId);
+    if (!data) return console.warn('Missing projectData:', projectId);
 
     const { videoId, intro, photos } = data;
-    const modal     = document.getElementById('modalOverlay');
-    const videoBox  = modal.querySelector('.videoWrap');
-    const introBox  = modal.querySelector('.intro');
-    const photoBox  = modal.querySelector('.photos');
+    const modal    = document.getElementById('modalOverlay');
+    const videoBox = modal.querySelector('.videoWrap');
+    const introBox = modal.querySelector('.intro');
+    const photoBox = modal.querySelector('.photos');
 
-    /* --- 塞入 iframe --- */
-    videoBox.innerHTML = videoId
-      ? `<iframe id="youtubeVideo"
-                 src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1"
-                 title="${projectId}"
-                 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                 allowfullscreen></iframe>`
-      : '';
+    /* --- media (hero img / video) --- */
+    let mediaHTML = '';
+    if (data.heroImage) {                       /* 仅图片 */
+      mediaHTML = `<img src="assets/photo/${data.heroImage}"
+                         alt="${projectId} main visual"
+                         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
+    } else if (data.platform === 'vimeo' && videoId) {
+      mediaHTML = `<iframe src="https://player.vimeo.com/video/${videoId}?autoplay=1&title=0&byline=0&portrait=0"
+                           frameborder="0"
+                           allow="autoplay; fullscreen; picture-in-picture"
+                           allowfullscreen></iframe>`;
+    } else if (videoId) {                       /* 默认 YouTube */
+      mediaHTML = `<iframe id="youtubeVideo"
+                           src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1"
+                           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                           allowfullscreen></iframe>`;
+    }
+    videoBox.innerHTML = mediaHTML;
 
-    /* --- 简介 & 图片 --- */
+    /* --- intro & gallery --- */
     introBox.innerHTML = intro;
     photoBox.innerHTML = photos.map(f =>
-        `<img src="assets/photo/${f}" alt="${f}" class="gallery-img" loading="lazy">`
-      ).join('');
+      `<img src="assets/photo/${f}" alt="${f}" class="gallery-img" loading="lazy">`
+    ).join('');
 
-    /* --- 显示模态框 --- */
+    /* --- show modal --- */
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
-    /* --- 首次调用时创建播放器 --- */
-    if (videoId && window.YT && !player) {
-      player = new YT.Player('youtubeVideo');
-    } else if (videoId && !window.YT) {
-      loadYouTubeAPI();
+    /* --- create YouTube player if needed --- */
+    if (!data.heroImage && videoId) {
+      if (window.YT && !player) {
+        player = new YT.Player('youtubeVideo');
+      } else if (!window.YT) {
+        loadYouTubeAPI();
+      }
     }
   }
   function closeModal () {
@@ -244,52 +229,50 @@
     modal.classList.add('hidden');
     document.body.style.overflow = '';
     modal.querySelector('.videoWrap').innerHTML = '';
-    if (player) { player.destroy(); player = null; }   /* 关键补充：彻底销毁 */
+    if (player) { player.destroy(); player = null; }
   }
 
-  /* ====== 进场动画 & 滚动视差 & 事件绑定 ====== */
+  /* ===== Anim & Bindings ===== */
   (() => {
-    const cards        = document.querySelectorAll('.work-card');
+    const cards = document.querySelectorAll('.work-card');
     const modalOverlay = document.getElementById('modalOverlay');
-    const closeBtn     = document.getElementById('closeModal');
+    const closeBtn = document.getElementById('closeModal');
 
-    /* --- IntersectionObserver 淡入 --- */
+    /* fade-in on scroll */
     const reveal = el => el.classList.add('in-view');
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver(es => {
-        es.forEach(e => { if (e.isIntersecting) { reveal(e.target); io.unobserve(e.target); } });
-      }, { threshold: 0.3 });
-      cards.forEach(c => io.observe(c));
+        es.forEach(e => { if (e.isIntersecting){ reveal(e.target); io.unobserve(e.target);} });
+      },{threshold:.3});
+      cards.forEach(c=>io.observe(c));
     } else { cards.forEach(reveal); }
 
-    /* --- 滚动视差 --- */
-    function updateParallax () {
+    /* parallax */
+    function updateParallax(){
       const vh = innerHeight;
-      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card => {
+      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card=>{
         const rect = card.getBoundingClientRect();
-        const percent = (rect.top + rect.height / 2) / vh;
-        const sign = parseInt(card.dataset.sign, 10) || 1;
-        card.style.setProperty('--parallax', ((percent - 0.5) * 80 * sign).toFixed(1) + 'px');
+        const percent = (rect.top + rect.height/2)/vh;
+        const sign = parseInt(card.dataset.sign,10)||1;
+        card.style.setProperty('--parallax',((percent-.5)*80*sign).toFixed(1)+'px');
       });
     }
-    addEventListener('scroll', updateParallax, { passive: true });
-    addEventListener('resize', updateParallax);
-    addEventListener('load',  updateParallax);
+    addEventListener('scroll',updateParallax,{passive:true});
+    addEventListener('resize',updateParallax);
+    addEventListener('load', updateParallax);
 
-    /* --- 卡片点击：打开模态框 --- */
-    cards.forEach(card => card.addEventListener('click', () => {
+    /* click card */
+    cards.forEach(card=>card.addEventListener('click',()=>{
       const pid = card.dataset.project;
-      if (pid) openModal(pid);
+      if(pid) openModal(pid);
     }));
 
-    /* --- 关闭逻辑（按钮 / 空白 / ESC） --- */
-    closeBtn .addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) closeModal();
-    });
+    /* close */
+    closeBtn.addEventListener('click',closeModal);
+    modalOverlay.addEventListener('click',e=>{ if(e.target===modalOverlay) closeModal(); });
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!modalOverlay.classList.contains('hidden')) closeModal(); });
 
-    /* --- 预加载 API，避免首点延迟 --- */
+    /* preload YouTube */
     loadYouTubeAPI();
   })();
   </script>
