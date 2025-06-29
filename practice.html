@@ -66,6 +66,19 @@
       flex-direction: column;
       color: #fff;
       padding: 2rem;
+      font-size: clamp(1.2rem, 2.4vw, 1.6rem); /* Bigger text inside expanded card */
+      line-height: 1.5;
+    }
+
+    /* ── YouTube iframe inside expanded card ── */
+    .practice-page .work-card.expanded iframe{
+      width: 100%;
+      height: 100%;
+      flex: 1 1 auto;
+      border: none;
+      border-radius: 0.75rem;
+      max-height: 60vh;         /* leaves space for description & close button */
+      margin-bottom: 1.5rem;
     }
 
     .practice-page .close-btn {
@@ -112,13 +125,21 @@
     <h1 class="page-title">Self&nbsp;Practice</h1>
 
     <div class="work-grid">
-      <!-- ▶ Practice 1 -->
-      <article class="work-card" data-text="Exploring lighting and texture in Blender.">
-        <img class="work-cover" src="assets/img/practice1.jpg" alt="3D Typography Study">
+      <!-- ▶ Practice - Unity Mini-Game (YouTube) -->
+      <article
+        class="work-card"
+        data-text="A small-scale game exploring Unity Visual Scripting and some basic Unity C# programming."
+        data-video="https://www.youtube.com/embed/Xo-ZtWO-TLs"
+      >
+        <img
+          class="work-cover"
+          src="https://img.youtube.com/vi/Xo-ZtWO-TLs/hqdefault.jpg"
+          alt="Unity Mini-Game"
+        >
         <div class="overlay">
           <div>
-            <h2 class="work-title">3D Typography Study</h2>
-            <p class="work-desc">Exploring lighting and texture in Blender.</p>
+            <h2 class="work-title">Unity Mini-Game</h2>
+            <p class="work-desc">Unity Visual Script &amp; C# basics</p>
           </div>
         </div>
       </article>
@@ -134,16 +155,16 @@
         </div>
       </article>
       <!-- ▶ Practice 3 -->
-        <article class="work-card" data-text="Play with particle systems in TouchDesigner.">
+      <article class="work-card" data-text="Play with particle systems in TouchDesigner.">
         <img class="work-cover" src="assets/img/practice3.jpg" alt="Particle Field">
         <div class="overlay">
-        <div>
-        <h2 class="work-title">Particle Field</h2>
-        <p class="work-desc">TouchDesigner particle system experiment.</p>
-      </div>
-    </div>
-  </article>
-  <!-- ▶ Practice 4 -->
+          <div>
+            <h2 class="work-title">Particle Field</h2>
+            <p class="work-desc">TouchDesigner particle system experiment.</p>
+          </div>
+        </div>
+      </article>
+      <!-- ▶ Practice 4 -->
       <article class="work-card" data-text="Exploring lighting and texture in Blender.">
         <img class="work-cover" src="assets/img/practice1.jpg" alt="3D Typography Study">
         <div class="overlay">
@@ -165,15 +186,15 @@
         </div>
       </article>
       <!-- ▶ Practice 6 -->
-        <article class="work-card" data-text="Play with particle systems in TouchDesigner.">
+      <article class="work-card" data-text="Play with particle systems in TouchDesigner.">
         <img class="work-cover" src="assets/img/practice3.jpg" alt="Particle Field">
         <div class="overlay">
-        <div>
-        <h2 class="work-title">Particle Field</h2>
-        <p class="work-desc">TouchDesigner particle system experiment.</p>
-      </div>
-    </div>
-  </article>
+          <div>
+            <h2 class="work-title">Particle Field</h2>
+            <p class="work-desc">TouchDesigner particle system experiment.</p>
+          </div>
+        </div>
+      </article>
     </div>
   </main>
 
@@ -214,6 +235,16 @@
       const textElem = document.createElement('p');
       textElem.className = 'typing-text';
       textElem.textContent = text;
+
+      // ── Embed video if provided ──
+      if (card.dataset.video){
+        const iframe = document.createElement('iframe');
+        iframe.src = card.dataset.video + '?autoplay=1&rel=0';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        card.appendChild(iframe); // video on top
+      }
+
       card.appendChild(textElem);
 
       // Escape key support
@@ -237,6 +268,9 @@
       body.style.overflow = '';
       btn.remove();
       if (textElem) textElem.remove();
+      // Remove iframe if exists to stop video & free memory
+      const iframe = card.querySelector('iframe');
+      if (iframe) iframe.remove();
       if (keyHandler) document.removeEventListener('keydown', keyHandler);
     }
 
