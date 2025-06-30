@@ -121,6 +121,10 @@ const translations = {
       core_skills: "核心技能与影响",
       professional_experience: "专业经验",
       selected_projects: "精选项目",
+      technical_toolkit: "技术工具包",
+      languages_interests: "语言与兴趣",
+      referees: "推荐人",
+      download_pdf: "下载PDF",
       education_items: {
         ma: "计算艺术硕士（在读） — 伦敦大学金史密斯学院，英国 | 2024年9月 – 2026年9月",
         ba: "艺术、技术与娱乐学士（一等荣誉） — 西交利物浦大学，中国 | 2019年9月 – 2024年6月"
@@ -134,6 +138,19 @@ const translations = {
       experience_items: {
         assistant1: "设计助理 — 苏州瑞深教育科技集团有限公司 | 2024年1月 – 9月。将研究洞察转化为提案，指导学生，提供双语翻译。",
         assistant2: "设计助理 — 江苏景天成文化旅游开发有限公司 | 2023年6月 – 7月。将访客反馈整合到新的导览路线中，用于试点启动。"
+      },
+      projects_items: {
+        vr_dance: "2025 — 现场VR舞蹈表演 — 动作捕捉技术负责人 / VFX设计师",
+        piano_piece: "2024 — 《昼夜钢琴曲》 — 独立创作者",
+        water_installation: "2024 — 《能给我一些水吗？》 — 硬件集成师",
+        hiphop_dancer: "2024 — 《嘻哈舞者Yu》 — 游戏模组与装置",
+        caged_bird: "2023 — 《笼中鸟》短片 — 艺术总监 / 制作助理"
+      },
+      technical_toolkit_text: "Unity (高级) · TouchDesigner (中级) · JavaScript · Lua · Arduino C/C++ · Python · OptiTrack<br>Procreate · Photoshop · Figma · Maya | Git · Notion · Miro",
+      languages_text: "英语 (雅思6.5) | 中文 (母语)<br>街舞 (popping/hip-hop) · 艺术博物馆 · 音乐",
+      referees_items: {
+        jessica: "Jessica Wolpert — 高级讲师，伦敦大学金史密斯学院<br>邮箱: J.Wolpert@gold.ac.uk | 电话: +44 7813 035 494",
+        kim: "Kim Lau — 副教授，西交利物浦大学<br>邮箱: kim.lau02@xjtlu.edu.cn | 电话: +86 188 6269 1160"
       }
     },
     
@@ -281,6 +298,10 @@ const translations = {
       core_skills: "CORE SKILLS & IMPACT",
       professional_experience: "PROFESSIONAL EXPERIENCE",
       selected_projects: "SELECTED PROJECTS",
+      technical_toolkit: "TECHNICAL TOOLKIT",
+      languages_interests: "LANGUAGES & INTERESTS",
+      referees: "REFEREES",
+      download_pdf: "DOWNLOAD PDF",
       education_items: {
         ma: "MA Computational Arts (in progress) — Goldsmiths, University of London, UK | Sep 2024 – Sep 2026",
         ba: "BA Arts, Technology & Entertainment (First Class Honours) — Xi'an Jiaotong-Liverpool University, China | Sep 2019 – Jun 2024"
@@ -294,6 +315,19 @@ const translations = {
       experience_items: {
         assistant1: "Design Assistant — Suzhou Ruishen Education Tech Group Co. Ltd. | Jan – Sep 2024. Converted research insights into proposals, mentored students, provided bilingual translation.",
         assistant2: "Design Assistant — Jiangsu Jingtiancheng Cultural Tourism Dev. Co. Ltd. | Jun – Jul 2023. Integrated visitor feedback into new tour-map routes adopted for pilot launch."
+      },
+      projects_items: {
+        vr_dance: "2025 — Live VR Dance Performance — Motion Capture Tech Lead / VFX Designer",
+        piano_piece: "2024 — Piano Piece of Day and Night — Independent Creator",
+        water_installation: "2024 — Can I Have Some Water? — Hardware Integrator",
+        hiphop_dancer: "2024 — Hiphop Dancer Yu — Game Modding & Installation",
+        caged_bird: "2023 — Caged Bird Short Film — Art Director / Production Assistant"
+      },
+      technical_toolkit_text: "Unity (Advanced) · TouchDesigner (Intermediate) · JavaScript · Lua · Arduino C/C++ · Python · OptiTrack<br>Procreate · Photoshop · Figma · Maya | Git · Notion · Miro",
+      languages_text: "English (IELTS 6.5) | Chinese (Native)<br>Popping/Hip-Hop Dance · Art Museums · Music",
+      referees_items: {
+        jessica: "Jessica Wolpert — Senior Lecturer, Goldsmiths, University of London<br>Email: J.Wolpert@gold.ac.uk | Phone: +44 7813 035 494",
+        kim: "Kim Lau — Associate Professor, Xi'an Jiaotong-Liverpool University<br>Email: kim.lau02@xjtlu.edu.cn | Phone: +86 188 6269 1160"
       }
     },
     

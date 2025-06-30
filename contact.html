@@ -282,6 +282,115 @@
   
   <script src="webgl-background.js"></script>
   <script src="translations.js"></script>
+  <script>
+    // 语言管理
+    class LanguageManager {
+      constructor() {
+        this.currentLang = localStorage.getItem('language') || 'en';
+        this.init();
+      }
+
+      init() {
+        this.updateLanguage();
+        this.addLanguageToggle();
+      }
+
+      updateLanguage() {
+        const lang = this.currentLang;
+        const translations = window.translations[lang];
+
+        // 更新页面标题
+        document.title = translations.contact.title;
+
+        // 更新导航栏
+        const navLinks = document.querySelectorAll('.nav-list a');
+        navLinks[0].textContent = translations.nav.about;
+        navLinks[1].textContent = translations.nav.works;
+        navLinks[2].textContent = translations.nav.practice;
+        navLinks[3].textContent = translations.nav.cv;
+        navLinks[4].textContent = translations.nav.contact;
+
+        // 更新主标题
+        document.querySelector('.page-title').textContent = translations.contact.title;
+
+        // 更新表单标签
+        const emailLabel = document.querySelector('.form-label:first-of-type');
+        emailLabel.innerHTML = `${translations.contact.email_label}:<br><input name="email" type="email" class="contact-field" required>`;
+
+        const messageLabel = document.querySelector('.form-label:nth-of-type(2)');
+        messageLabel.innerHTML = `${translations.contact.message_label}:<br><textarea name="message" rows="4" class="contact-field" required></textarea>`;
+
+        // 更新按钮
+        document.querySelector('.contact-btn').textContent = translations.contact.send_button;
+
+        // 更新额外联系方式
+        const emailAlt = document.querySelector('.email-alt');
+        emailAlt.innerHTML = `${translations.contact.alt_contact}<br><a href="mailto:zayaismyname@163.com">zayaismyname@163.com</a><br>Instagram: <a href="https://www.instagram.com/dancingparentheses/" target="_blank">@dancingparentheses</a> &nbsp;|&nbsp; WeChat: <span style="font-weight:600;">mh2584617059</span>`;
+      }
+
+      addLanguageToggle() {
+        const nav = document.querySelector('.nav-inner');
+        const languageToggle = document.createElement('div');
+        languageToggle.className = 'language-toggle';
+        languageToggle.innerHTML = `
+          <button class="lang-btn ${this.currentLang === 'zh' ? 'active' : ''}" data-lang="zh">中文</button>
+          <button class="lang-btn ${this.currentLang === 'en' ? 'active' : ''}" data-lang="en">EN</button>
+        `;
+        
+        // 添加样式
+        const style = document.createElement('style');
+        style.textContent = `
+          .language-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: auto;
+          }
+          .lang-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.7);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+          }
+          .lang-btn:hover {
+            border-color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.9);
+          }
+          .lang-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+          }
+        `;
+        document.head.appendChild(style);
+        
+        nav.appendChild(languageToggle);
+
+        // 添加事件监听器
+        languageToggle.addEventListener('click', (e) => {
+          if (e.target.classList.contains('lang-btn')) {
+            this.currentLang = e.target.dataset.lang;
+            localStorage.setItem('language', this.currentLang);
+            this.updateLanguage();
+            
+            // 更新按钮状态
+            languageToggle.querySelectorAll('.lang-btn').forEach(btn => {
+              btn.classList.remove('active');
+            });
+            e.target.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // 初始化语言管理
+    document.addEventListener('DOMContentLoaded', function() {
+      new LanguageManager();
+    });
+  </script>
 
 </body>
 </html>

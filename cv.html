@@ -248,6 +248,167 @@
   
   <script src="webgl-background.js"></script>
   <script src="translations.js"></script>
+  <script>
+    // 语言管理
+    class LanguageManager {
+      constructor() {
+        this.currentLang = localStorage.getItem('language') || 'en';
+        this.init();
+      }
+
+      init() {
+        this.updateLanguage();
+        this.addLanguageToggle();
+      }
+
+      updateLanguage() {
+        const lang = this.currentLang;
+        const translations = window.translations[lang];
+
+        // 更新页面标题
+        document.title = translations.cv.title;
+
+        // 更新导航栏
+        const navLinks = document.querySelectorAll('.nav-list a');
+        navLinks[0].textContent = translations.nav.about;
+        navLinks[1].textContent = translations.nav.works;
+        navLinks[2].textContent = translations.nav.practice;
+        navLinks[3].textContent = translations.nav.cv;
+        navLinks[4].textContent = translations.nav.contact;
+
+        // 更新主标题
+        document.querySelector('.page-title').textContent = translations.cv.title;
+
+        // 更新个人信息
+        const nameElement = document.querySelector('.cv-center-block h1');
+        nameElement.textContent = translations.cv.name;
+
+        const titleDesc = document.querySelector('.cv-center-block p:first-of-type em');
+        titleDesc.textContent = translations.cv.title_desc;
+
+        const contactInfo = document.querySelector('.cv-center-block p:nth-of-type(2)');
+        contactInfo.innerHTML = `${translations.cv.location} | ${translations.cv.phone} | ${translations.cv.email}`;
+
+        const website = document.querySelector('.cv-center-block p:nth-of-type(3)');
+        website.textContent = translations.cv.website;
+
+        // 更新各个章节标题
+        const sectionTitles = document.querySelectorAll('.cv-section-title');
+        sectionTitles[0].textContent = translations.cv.education;
+        sectionTitles[1].textContent = translations.cv.core_skills;
+        sectionTitles[2].textContent = translations.cv.professional_experience;
+        sectionTitles[3].textContent = translations.cv.selected_projects;
+        sectionTitles[4].textContent = translations.cv.technical_toolkit;
+        sectionTitles[5].textContent = translations.cv.languages_interests;
+        sectionTitles[6].textContent = translations.cv.referees;
+
+        // 更新教育背景
+        const educationList = document.querySelectorAll('.cv-list');
+        const educationItems = educationList[0].querySelectorAll('li');
+        educationItems[0].innerHTML = `<strong>${translations.cv.education_items.ma.split(' — ')[0]}</strong> — ${translations.cv.education_items.ma.split(' — ')[1]}`;
+        educationItems[1].innerHTML = `<strong>${translations.cv.education_items.ba.split(' — ')[0]}</strong> — ${translations.cv.education_items.ba.split(' — ')[1]}`;
+
+        // 更新核心技能
+        const skillsItems = educationList[1].querySelectorAll('li');
+        skillsItems[0].innerHTML = `<strong>${translations.cv.skills_items.interactive.split(' — ')[0]}</strong> — ${translations.cv.skills_items.interactive.split(' — ')[1]}<br>${translations.cv.skills_items.interactive.split(' — ')[2]}`;
+        skillsItems[1].innerHTML = `<strong>${translations.cv.skills_items.coding.split(' — ')[0]}</strong> — ${translations.cv.skills_items.coding.split(' — ')[1]}<br>${translations.cv.skills_items.coding.split(' — ')[2]}`;
+        skillsItems[2].innerHTML = `<strong>${translations.cv.skills_items.physical.split(' — ')[0]}</strong> — ${translations.cv.skills_items.physical.split(' — ')[1]}<br>${translations.cv.skills_items.physical.split(' — ')[2]}`;
+        skillsItems[3].innerHTML = `<strong>${translations.cv.skills_items.game.split(' — ')[0]}</strong> — ${translations.cv.skills_items.game.split(' — ')[1]}<br>${translations.cv.skills_items.game.split(' — ')[2]}`;
+
+        // 更新专业经验
+        const experienceItems = educationList[2].querySelectorAll('li');
+        experienceItems[0].innerHTML = `<strong>${translations.cv.experience_items.assistant1.split(' — ')[0]}</strong> — ${translations.cv.experience_items.assistant1.split(' — ')[1]}<br>${translations.cv.experience_items.assistant1.split(' — ')[2]}`;
+        experienceItems[1].innerHTML = `<strong>${translations.cv.experience_items.assistant2.split(' — ')[0]}</strong> — ${translations.cv.experience_items.assistant2.split(' — ')[1]}<br>${translations.cv.experience_items.assistant2.split(' — ')[2]}`;
+
+        // 更新精选项目
+        const projectsItems = educationList[3].querySelectorAll('li');
+        projectsItems[0].innerHTML = translations.cv.projects_items.vr_dance;
+        projectsItems[1].innerHTML = translations.cv.projects_items.piano_piece;
+        projectsItems[2].innerHTML = translations.cv.projects_items.water_installation;
+        projectsItems[3].innerHTML = translations.cv.projects_items.hiphop_dancer;
+        projectsItems[4].innerHTML = translations.cv.projects_items.caged_bird;
+
+        // 更新技术工具包
+        const technicalToolkit = document.querySelector('.cv-content-background:nth-of-type(6) p');
+        technicalToolkit.innerHTML = translations.cv.technical_toolkit_text;
+
+        // 更新语言与兴趣
+        const languagesInterests = document.querySelector('.cv-content-background:nth-of-type(7) p');
+        languagesInterests.innerHTML = translations.cv.languages_text;
+
+        // 更新推荐人
+        const refereesItems = educationList[6].querySelectorAll('li');
+        refereesItems[0].innerHTML = translations.cv.referees_items.jessica;
+        refereesItems[1].innerHTML = translations.cv.referees_items.kim;
+
+        // 更新下载PDF链接
+        const downloadLink = document.querySelector('footer a');
+        downloadLink.textContent = translations.cv.download_pdf;
+      }
+
+      addLanguageToggle() {
+        const nav = document.querySelector('.nav-inner');
+        const languageToggle = document.createElement('div');
+        languageToggle.className = 'language-toggle';
+        languageToggle.innerHTML = `
+          <button class="lang-btn ${this.currentLang === 'zh' ? 'active' : ''}" data-lang="zh">中文</button>
+          <button class="lang-btn ${this.currentLang === 'en' ? 'active' : ''}" data-lang="en">EN</button>
+        `;
+        
+        // 添加样式
+        const style = document.createElement('style');
+        style.textContent = `
+          .language-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: auto;
+          }
+          .lang-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.7);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+          }
+          .lang-btn:hover {
+            border-color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.9);
+          }
+          .lang-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+          }
+        `;
+        document.head.appendChild(style);
+        
+        nav.appendChild(languageToggle);
+
+        // 添加事件监听器
+        languageToggle.addEventListener('click', (e) => {
+          if (e.target.classList.contains('lang-btn')) {
+            this.currentLang = e.target.dataset.lang;
+            localStorage.setItem('language', this.currentLang);
+            this.updateLanguage();
+            
+            // 更新按钮状态
+            languageToggle.querySelectorAll('.lang-btn').forEach(btn => {
+              btn.classList.remove('active');
+            });
+            e.target.classList.add('active');
+          }
+        });
+      }
+    }
+
+    // 初始化语言管理
+    document.addEventListener('DOMContentLoaded', function() {
+      new LanguageManager();
+    });
+  </script>
 
 </body>
 </html>
