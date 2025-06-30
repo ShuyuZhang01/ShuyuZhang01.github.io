@@ -5,10 +5,14 @@ class WebGLBackground {
     this.camera = null;
     this.renderer = null;
     this.geometries = [];
+    this.particles = [];
     this.animationId = null;
     this.time = 0;
     this.mouseX = 0;
     this.mouseY = 0;
+    this.scrollY = 0;
+    this.isHovering = false;
+    this.hoverTarget = null;
     
     console.log('WebGLBackground: 初始化开始');
     this.init();
@@ -46,10 +50,11 @@ class WebGLBackground {
       
       // 创建3D效果
       this.createGeometries();
+      this.createParticles();
       this.createLights();
       
-      // 添加鼠标交互
-      this.addMouseInteraction();
+      // 添加交互
+      this.addInteractions();
       
       // 开始动画
       this.animate();
@@ -110,8 +115,8 @@ class WebGLBackground {
     cssContainer.style.overflow = 'hidden';
     cssContainer.style.background = 'linear-gradient(45deg, #000 0%, #1a1a1a 100%)';
     
-    // 创建动态几何体
-    for (let i = 0; i < 8; i++) {
+    // 创建动态几何体 - 分布在整个页面
+    for (let i = 0; i < 20; i++) {
       const geometry = document.createElement('div');
       geometry.style.position = 'absolute';
       geometry.style.border = '1px solid #9ca3af';
@@ -119,24 +124,30 @@ class WebGLBackground {
       geometry.style.animation = `float3D ${8 + Math.random() * 6}s infinite ease-in-out`;
       geometry.style.animationDelay = Math.random() * 4 + 's';
       
-      if (i % 3 === 0) {
+      if (i % 4 === 0) {
         // 正方形
-        geometry.style.width = '60px';
-        geometry.style.height = '60px';
-        geometry.style.transform = 'rotate(45deg)';
-      } else if (i % 3 === 1) {
-        // 圆形
-        geometry.style.width = '80px';
-        geometry.style.height = '80px';
-        geometry.style.borderRadius = '50%';
-      } else {
-        // 矩形
-        geometry.style.width = '100px';
+        geometry.style.width = '40px';
         geometry.style.height = '40px';
+        geometry.style.transform = 'rotate(45deg)';
+      } else if (i % 4 === 1) {
+        // 圆形
+        geometry.style.width = '50px';
+        geometry.style.height = '50px';
+        geometry.style.borderRadius = '50%';
+      } else if (i % 4 === 2) {
+        // 矩形
+        geometry.style.width = '60px';
+        geometry.style.height = '25px';
+      } else {
+        // 菱形
+        geometry.style.width = '35px';
+        geometry.style.height = '35px';
+        geometry.style.transform = 'rotate(45deg)';
       }
       
-      geometry.style.left = Math.random() * 80 + 10 + '%';
-      geometry.style.top = Math.random() * 80 + 10 + '%';
+      // 分布在整个页面
+      geometry.style.left = Math.random() * 90 + 5 + '%';
+      geometry.style.top = Math.random() * 90 + 5 + '%';
       
       cssContainer.appendChild(geometry);
     }
@@ -146,23 +157,23 @@ class WebGLBackground {
     style.textContent = `
       @keyframes float3D {
         0% {
-          transform: translateZ(0px) rotateX(0deg) rotateY(0deg);
+          transform: translateZ(0px) rotateX(0deg) rotateY(0deg) scale(1);
           opacity: 0.2;
         }
         25% {
-          transform: translateZ(20px) rotateX(90deg) rotateY(45deg);
+          transform: translateZ(20px) rotateX(90deg) rotateY(45deg) scale(1.1);
           opacity: 0.4;
         }
         50% {
-          transform: translateZ(40px) rotateX(180deg) rotateY(90deg);
+          transform: translateZ(40px) rotateX(180deg) rotateY(90deg) scale(1);
           opacity: 0.2;
         }
         75% {
-          transform: translateZ(20px) rotateX(270deg) rotateY(135deg);
+          transform: translateZ(20px) rotateX(270deg) rotateY(135deg) scale(0.9);
           opacity: 0.4;
         }
         100% {
-          transform: translateZ(0px) rotateX(360deg) rotateY(180deg);
+          transform: translateZ(0px) rotateX(360deg) rotateY(180deg) scale(1);
           opacity: 0.2;
         }
       }
@@ -229,13 +240,40 @@ class WebGLBackground {
   createGeometries() {
     console.log('WebGLBackground: 开始创建几何体');
     
-    // 创建多种几何体
+    // 创建多种几何体 - 分布在整个页面
     const geometries = [
+      // 中心区域
       { type: 'box', size: 0.8, position: [2, 1, 0], rotation: [0, 0, 0] },
       { type: 'sphere', size: 0.6, position: [-2, -1, 0], rotation: [0, 0, 0] },
       { type: 'cylinder', size: 0.5, position: [1, -2, 0], rotation: [0, 0, 0] },
       { type: 'torus', size: 0.4, position: [-1, 2, 0], rotation: [0, 0, 0] },
-      { type: 'octahedron', size: 0.7, position: [0, 0, 0], rotation: [0, 0, 0] }
+      { type: 'octahedron', size: 0.7, position: [0, 0, 0], rotation: [0, 0, 0] },
+      
+      // 左上区域
+      { type: 'tetrahedron', size: 0.4, position: [-4, 3, 0], rotation: [0, 0, 0] },
+      { type: 'icosahedron', size: 0.3, position: [-5, 2, 0], rotation: [0, 0, 0] },
+      { type: 'dodecahedron', size: 0.5, position: [-3, 4, 0], rotation: [0, 0, 0] },
+      
+      // 右上区域
+      { type: 'box', size: 0.6, position: [4, 3, 0], rotation: [0, 0, 0] },
+      { type: 'sphere', size: 0.4, position: [5, 2, 0], rotation: [0, 0, 0] },
+      { type: 'cylinder', size: 0.35, position: [3, 4, 0], rotation: [0, 0, 0] },
+      
+      // 左下区域
+      { type: 'torus', size: 0.3, position: [-4, -3, 0], rotation: [0, 0, 0] },
+      { type: 'octahedron', size: 0.5, position: [-5, -2, 0], rotation: [0, 0, 0] },
+      { type: 'tetrahedron', size: 0.4, position: [-3, -4, 0], rotation: [0, 0, 0] },
+      
+      // 右下区域
+      { type: 'icosahedron', size: 0.3, position: [4, -3, 0], rotation: [0, 0, 0] },
+      { type: 'dodecahedron', size: 0.4, position: [5, -2, 0], rotation: [0, 0, 0] },
+      { type: 'box', size: 0.5, position: [3, -4, 0], rotation: [0, 0, 0] },
+      
+      // 边缘区域
+      { type: 'sphere', size: 0.3, position: [-6, 0, 0], rotation: [0, 0, 0] },
+      { type: 'cylinder', size: 0.25, position: [6, 0, 0], rotation: [0, 0, 0] },
+      { type: 'torus', size: 0.2, position: [0, -5, 0], rotation: [0, 0, 0] },
+      { type: 'octahedron', size: 0.4, position: [0, 5, 0], rotation: [0, 0, 0] }
     ];
     
     geometries.forEach((geo, index) => {
@@ -256,6 +294,15 @@ class WebGLBackground {
           break;
         case 'octahedron':
           geometry = new THREE.OctahedronGeometry(geo.size);
+          break;
+        case 'tetrahedron':
+          geometry = new THREE.TetrahedronGeometry(geo.size);
+          break;
+        case 'icosahedron':
+          geometry = new THREE.IcosahedronGeometry(geo.size);
+          break;
+        case 'dodecahedron':
+          geometry = new THREE.DodecahedronGeometry(geo.size);
           break;
       }
       
@@ -278,7 +325,11 @@ class WebGLBackground {
           y: (Math.random() - 0.5) * 0.02,
           z: (Math.random() - 0.5) * 0.02
         },
-        floatSpeed: Math.random() * 0.01 + 0.005
+        floatSpeed: Math.random() * 0.01 + 0.005,
+        flowSpeed: Math.random() * 0.008 + 0.003,
+        scaleSpeed: Math.random() * 0.002 + 0.001,
+        hoverScale: 1,
+        isHovered: false
       };
       
       this.geometries.push(mesh);
@@ -286,6 +337,47 @@ class WebGLBackground {
     });
     
     console.log('WebGLBackground: 几何体创建成功，数量:', this.geometries.length);
+  }
+
+  createParticles() {
+    console.log('WebGLBackground: 开始创建粒子系统');
+    
+    // 创建粒子几何体
+    const particleCount = 100;
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount; i++) {
+      // 分布在整个页面
+      positions[i * 3] = (Math.random() - 0.5) * 20; // x
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 20; // y
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z
+      
+      // 颜色渐变
+      const color = new THREE.Color();
+      color.setHSL(0.6, 0.5, 0.5 + Math.random() * 0.3);
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
+    }
+    
+    const particleGeometry = new THREE.BufferGeometry();
+    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.05,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.6,
+      blending: THREE.AdditiveBlending
+    });
+    
+    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+    this.particles.push(particleSystem);
+    this.scene.add(particleSystem);
+    
+    console.log('WebGLBackground: 粒子系统创建成功');
   }
 
   createLights() {
@@ -303,11 +395,59 @@ class WebGLBackground {
     console.log('WebGLBackground: 灯光创建成功');
   }
 
-  addMouseInteraction() {
+  addInteractions() {
     // 鼠标移动事件
     document.addEventListener('mousemove', (event) => {
       this.mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       this.mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+    });
+    
+    // 滚动事件
+    window.addEventListener('scroll', () => {
+      this.scrollY = window.scrollY;
+    });
+    
+    // 页面元素悬停事件
+    this.addPageElementInteractions();
+  }
+
+  addPageElementInteractions() {
+    // 为页面元素添加悬停效果
+    const interactiveElements = document.querySelectorAll('a, button, .card, .project-item, .skill-tag, .timeline-item');
+    
+    interactiveElements.forEach((element, index) => {
+      element.addEventListener('mouseenter', () => {
+        this.isHovering = true;
+        this.hoverTarget = element;
+        
+        // 找到最近的几何体并放大
+        const rect = element.getBoundingClientRect();
+        const centerX = (rect.left + rect.right) / 2 / window.innerWidth * 2 - 1;
+        const centerY = -(rect.top + rect.bottom) / 2 / window.innerHeight * 2 + 1;
+        
+        this.geometries.forEach((mesh, meshIndex) => {
+          const distance = Math.sqrt(
+            Math.pow(mesh.position.x - centerX * 3, 2) + 
+            Math.pow(mesh.position.y - centerY * 3, 2)
+          );
+          
+          if (distance < 2) {
+            mesh.userData.isHovered = true;
+            mesh.userData.hoverScale = 1.5;
+          }
+        });
+      });
+      
+      element.addEventListener('mouseleave', () => {
+        this.isHovering = false;
+        this.hoverTarget = null;
+        
+        // 恢复几何体大小
+        this.geometries.forEach((mesh) => {
+          mesh.userData.isHovered = false;
+          mesh.userData.hoverScale = 1;
+        });
+      });
     });
   }
 
@@ -315,30 +455,61 @@ class WebGLBackground {
     console.log('WebGLBackground: 开始动画循环');
     
     this.animationId = requestAnimationFrame(() => this.animate());
-    this.time += 0.01;
+    this.time += 0.008;
     
-    // 几何体动画
+    // 几何体动画 - 慢慢流动
     this.geometries.forEach((mesh, index) => {
       // 旋转动画
       mesh.rotation.x += mesh.userData.rotationSpeed.x;
       mesh.rotation.y += mesh.userData.rotationSpeed.y;
       mesh.rotation.z += mesh.userData.rotationSpeed.z;
       
-      // 浮动动画
-      const floatOffset = Math.sin(this.time + index) * 0.5;
-      mesh.position.y = mesh.userData.originalPosition[1] + floatOffset;
+      // 流动动画 - 更复杂的路径
+      const flowX = Math.sin(this.time * mesh.userData.flowSpeed + index * 0.5) * 1.2;
+      const flowY = Math.cos(this.time * mesh.userData.flowSpeed * 0.7 + index * 0.3) * 0.8;
+      const flowZ = Math.sin(this.time * mesh.userData.flowSpeed * 0.3 + index * 0.2) * 0.5;
       
-      // 鼠标交互
-      mesh.position.x = mesh.userData.originalPosition[0] + this.mouseX * 0.5;
-      mesh.position.z = mesh.userData.originalPosition[2] + this.mouseY * 0.5;
+      // 基础位置 + 流动 + 鼠标交互 + 滚动效果
+      mesh.position.x = mesh.userData.originalPosition[0] + flowX + this.mouseX * 0.3;
+      mesh.position.y = mesh.userData.originalPosition[1] + flowY + this.mouseY * 0.3 + this.scrollY * 0.001;
+      mesh.position.z = mesh.userData.originalPosition[2] + flowZ;
+      
+      // 悬停缩放效果
+      if (mesh.userData.isHovered) {
+        mesh.scale.lerp(new THREE.Vector3(mesh.userData.hoverScale, mesh.userData.hoverScale, mesh.userData.hoverScale), 0.1);
+      } else {
+        mesh.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
+      }
       
       // 透明度动画
-      mesh.material.opacity = 0.2 + Math.sin(this.time * 2 + index) * 0.1;
+      mesh.material.opacity = 0.2 + Math.sin(this.time * 1.5 + index) * 0.1;
     });
     
-    // 相机动画
-    this.camera.position.x = Math.sin(this.time * 0.5) * 0.5;
-    this.camera.position.y = Math.cos(this.time * 0.3) * 0.3;
+    // 粒子动画
+    this.particles.forEach((particleSystem) => {
+      const positions = particleSystem.geometry.attributes.position.array;
+      
+      for (let i = 0; i < positions.length; i += 3) {
+        // 粒子流动
+        positions[i] += Math.sin(this.time + i) * 0.001;
+        positions[i + 1] += Math.cos(this.time + i) * 0.001;
+        positions[i + 2] += Math.sin(this.time * 0.5 + i) * 0.001;
+        
+        // 边界检查
+        if (positions[i] > 10) positions[i] = -10;
+        if (positions[i] < -10) positions[i] = 10;
+        if (positions[i + 1] > 10) positions[i + 1] = -10;
+        if (positions[i + 1] < -10) positions[i + 1] = 10;
+        if (positions[i + 2] > 5) positions[i + 2] = -5;
+        if (positions[i + 2] < -5) positions[i + 2] = 5;
+      }
+      
+      particleSystem.geometry.attributes.position.needsUpdate = true;
+    });
+    
+    // 相机动画 - 响应滚动和鼠标
+    this.camera.position.x = Math.sin(this.time * 0.3) * 0.3 + this.mouseX * 0.2;
+    this.camera.position.y = Math.cos(this.time * 0.2) * 0.2 + this.mouseY * 0.1 + this.scrollY * 0.0005;
     this.camera.lookAt(0, 0, 0);
     
     // 渲染场景
