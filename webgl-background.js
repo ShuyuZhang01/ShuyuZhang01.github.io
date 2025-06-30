@@ -32,6 +32,8 @@ class WebGLBackground {
     this.waveSpeed = 0.1;              // 减慢波浪速度
     this.grid = new Map();
     this.gridSize = 6;                 // 增大网格尺寸以适应更缓和的互动
+    this.sceneDepth = 50;              // 场景深度，方便在多个函数中使用
+    this.boundaryDepth = 40;           // Z轴边界限制，防止粒子被雾效吞掉
     // =================================================================
     this.particlePositions = new Float32Array(this.particleCount * 3);
     this.particleVelocities = new Float32Array(this.particleCount * 3);
@@ -254,11 +256,10 @@ class WebGLBackground {
 
   initParticleSystem() {
     const sceneWidth = 120; // 场景范围再扩大
-    const sceneDepth = 50;
     for (let i = 0; i < this.particleCount; i++) {
         const i3 = i * 3;
         const x = (Math.random() - 0.5) * sceneWidth * 2;
-        const z = (Math.random() - 0.5) * sceneDepth;
+        const z = (Math.random() - 0.5) * this.sceneDepth;
         const pathY = this.pathAmplitude * Math.sin(x * this.pathFrequency);
         const y = pathY + (Math.random() - 0.5) * 20;
         this.particlePositions[i3] = x;
@@ -270,7 +271,7 @@ class WebGLBackground {
         // --- 核心修改：基于深度的视觉初始化 ---
         // Z值范围从 -sceneDepth/2 到 +sceneDepth/2
         // depthFactor 范围从 0 (最远) 到 1 (最近)
-        const depthFactor = (z / sceneDepth) + 0.5;
+        const depthFactor = (z / this.sceneDepth) + 0.5;
         // 越远的粒子越暗，但整体亮度调高
         const brightness = 0.4 + depthFactor * 0.6; // 亮度范围：0.4 (最远) 到 1.0 (最近)
         this.particleColors[i3] = brightness;
@@ -434,13 +435,25 @@ class WebGLBackground {
         this.particlePositions[i3] += this.particleVelocities[i3] * dt;
         this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1] * dt;
         this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2] * dt;
+        
+        // X轴边界循环
         if (this.particlePositions[i3] > boundaryWidth && this.flowDirection === 1) {
             this.particlePositions[i3] = -boundaryWidth;
         } else if (this.particlePositions[i3] < -boundaryWidth && this.flowDirection === -1) {
             this.particlePositions[i3] = boundaryWidth;
         }
-        // 颜色随速度微调
-        const finalBrightness = this.particleColors[i3] * (1 + vLen * 2.0);
+        
+        // Z轴边界限制，防止粒子被雾效吞掉
+        if (this.particlePositions[i3 + 2] > this.boundaryDepth) {
+            this.particlePositions[i3 + 2] = -this.boundaryDepth;
+        } else if (this.particlePositions[i3 + 2] < -this.boundaryDepth) {
+            this.particlePositions[i3 + 2] = this.boundaryDepth;
+        }
+        
+        // 颜色随速度微调，限制亮度范围避免闪烁
+        const baseBrightness = this.particleColors[i3];     // 初始常量
+        const finalBrightness = Math.min(1.0,               // 限制 0-1
+            baseBrightness * (1.0 + vLen * 2.0));
         this.particleSystem.geometry.attributes.color.setX(i, finalBrightness);
         this.particleSystem.geometry.attributes.color.setY(i, finalBrightness);
         this.particleSystem.geometry.attributes.color.setZ(i, finalBrightness);
