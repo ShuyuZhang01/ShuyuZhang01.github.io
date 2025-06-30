@@ -58,27 +58,27 @@
       position: relative;
       background: #1a1a1a;
       
+      /* The key fix: create a new rendering layer for the card */
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      
       /* Animation */
       opacity: 0;
-      transform: translateY(20px);
       animation: cardSlideIn 0.6s ease-out forwards;
       animation-delay: calc(var(--card-index, 0) * 0.08s);
       
       /* Transitions */
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      
-      /* The key fix: create a new rendering layer for the card */
-      transform: translateZ(0);
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
     }
     @keyframes cardSlideIn {
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px) translateZ(0); }
+      to { opacity: 1; transform: translateY(0) translateZ(0); }
     }
 
     /* Card Hover State */
     .practice-page .work-card:hover {
-      transform: translateY(-5px); /* Move the whole card */
+      transform: translateY(-5px) translateZ(0); /* Move the whole card */
       box-shadow: 0 10px 35px rgba(156, 163, 175, 0.2);
     }
     
