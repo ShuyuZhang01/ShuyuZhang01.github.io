@@ -23,13 +23,12 @@
   <style>
     /* -------------- Works grid -------------- */
     .works-page .work-grid{
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 2rem;
+      display: grid;
+      /* 一行 3 列，列宽不够时自动换行 */
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 0;          /* 刻意取消行/列间距，之后用 transform 做位移 */
       margin-top: 2rem;
-      justify-content: center;
-      align-items: flex-start;
+      justify-items: center;   /* 居中看起来更像拼贴 */
     }
 
     /* -------------- Enhanced Card Styling (修正版) -------------- */
@@ -44,9 +43,28 @@
       width: 100%;
       max-width: 400px;
       flex: 0 1 400px;
+      margin: 0;                 /* 先把多余 margin 清掉 */
+      transition: transform .4s, box-shadow .4s;
+      z-index: 1;                /* 让 hover 的卡片能盖在上面 */
 
       /* 移除CSS变量定义，让JS直接控制transform */
       transform: translate(0, 0); 
+    }
+
+    .work-card:hover{ 
+      z-index: 2; 
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      /* 悬停时的位移可以保留，但要注意它会和JS的transform叠加 */
+      transform: translateY(-8px); 
+    }
+
+    /* 第 2 张卡往右上偏 & 稍往下叠 */
+    .work-card:nth-child(3n+2){
+      transform: translate(-20px, 40px);
+    }
+    /* 第 3 张卡再多偏一点，制造更明显的层次 */
+    .work-card:nth-child(3n+3){
+      transform: translate(-40px, 80px);
     }
 
     /* 移除偶数卡片的初始偏移，由JS处理 */
@@ -55,12 +73,6 @@
     } */
 
     /* 鼠标悬停效果也需要调整，因为transform现在由JS动态设置 */
-    .work-card:hover {
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      /* 悬停时的位移可以保留，但要注意它会和JS的transform叠加 */
-      transform: translateY(-8px); 
-    }
-
     /* 移除这些复杂的悬停规则，因为JS在不断地重写transform */
     /* .work-card:nth-child(odd):hover {
       transform: translateX(var(--parallax-x)) translateY(calc(var(--parallax-y) - 8px));
@@ -307,6 +319,17 @@
 
     .modal::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* 保证小屏时不重叠，免得手机可读性差 */
+    @media (max-width: 768px){
+      .work-card{ 
+        transform: none !important; 
+        margin-bottom: 2rem;
+      }
+      .works-page .work-grid{
+        gap: 2rem;
+      }
     }
   </style>
 </head>
@@ -557,12 +580,17 @@ Through an immersive VR experience, viewers descend from the surface's refracted
         const parallaxY = (distanceFromCenter * 0.1).toFixed(1); // 调整了强度
         const parallaxX = ((index % 2 === 0 ? 1 : -1) * distanceFromCenter * 0.05).toFixed(1); // 调整了强度
 
-        // 直接通过transform来更新，更流畅
-        if (index % 2 === 0) { // 偶数卡片
-            card.style.transform = `translateX(${parallaxX}px) translateY(calc(${parallaxY}px + 2rem))`;
-        } else { // 奇数卡片
-            card.style.transform = `translateX(${parallaxX}px) translateY(${parallaxY}px)`;
+        // 结合CSS错位效果和JavaScript视差效果
+        let baseTransform = '';
+        if (index % 3 === 1) { // 第2张卡 (3n+2)
+          baseTransform = 'translate(-20px, 40px)';
+        } else if (index % 3 === 2) { // 第3张卡 (3n+3)
+          baseTransform = 'translate(-40px, 80px)';
         }
+
+        // 在基础错位基础上添加视差效果
+        const finalTransform = `${baseTransform} translateX(${parallaxX}px) translateY(${parallaxY}px)`;
+        card.style.transform = finalTransform;
       });
     }
 
