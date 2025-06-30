@@ -13,12 +13,6 @@ class WebGLBackground {
     this.mouseX = 0;
     this.mouseY = 0;
     
-    // --- NEW: Properties for interactive object ---
-    this.interactiveObject = null;
-    this.raycaster = null;
-    this.mouse = null;
-    this.isHovering = false;
-    
     // =================================================================
     // 【核心参数调整】: 为了实现平缓的左右流动
     // =================================================================
@@ -67,14 +61,22 @@ class WebGLBackground {
   }
 
   init() {
+    // 检查是否为主页
+    if (this.isHomePage()) {
+      console.log('WebGLBackground: 主页检测到，跳过WebGL背景初始化');
+      return;
+    }
+    
     console.log('WebGLBackground: 开始初始化检查');
     
+    // 检查是否支持WebGL
     if (!this.isWebGLAvailable()) {
       console.log('WebGLBackground: WebGL not supported, 使用CSS备选方案');
       this.createCSSFallback();
       return;
     }
 
+    // 检查Three.js是否可用
     if (typeof THREE === 'undefined') {
       console.log('WebGLBackground: Three.js not loaded, 使用CSS备选方案');
       this.createCSSFallback();
@@ -84,17 +86,23 @@ class WebGLBackground {
     console.log('WebGLBackground: Three.js版本', THREE.REVISION);
 
     try {
+      // 初始化Three.js
       this.initThreeJS();
+      
+      // 初始化粒子位置和速度
       this.initParticleSystem();
       
-      // --- NEW: Create the interactive object for the homepage ---
-      this.createInteractiveObject();
-
+      // 创建新的背景效果
       this.createFluidParticleSystem();
       this.createLights();
+      
+      // 添加鼠标交互
       this.addMouseInteraction();
+      
+      // 开始动画
       this.animate();
       
+      // 响应窗口大小变化
       window.addEventListener('resize', () => this.onWindowResize());
       
       console.log('WebGLBackground: 初始化成功');
@@ -105,10 +113,11 @@ class WebGLBackground {
     }
   }
 
-  // --- NEW: Method to check if on the homepage ---
-  _isHomePage() {
+  isHomePage() {
     const currentPath = window.location.pathname;
-    return currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath === '';
+    const isIndex = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath === '';
+    console.log('WebGLBackground: 当前页面路径:', currentPath, '是否为主页:', isIndex);
+    return isIndex;
   }
 
   isWebGLAvailable() {
@@ -503,65 +512,19 @@ class WebGLBackground {
   }
 
   addMouseInteraction() {
-    // This is the updated interaction handler
-    const eventTarget = this.renderer.domElement.parentElement;
-    eventTarget.style.pointerEvents = 'auto'; // Make the container receive mouse events
-
-    window.addEventListener('mousemove', (event) => {
+    document.addEventListener('mousemove', (event) => {
       this.mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       this.mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-      // Update mouse vector for raycasting if it exists
-      if (this.mouse) {
-        this.mouse.x = this.mouseX;
-        this.mouse.y = this.mouseY;
-      }
-    }, false);
-
-    // --- NEW: Click listener for the interactive object ---
-    window.addEventListener('click', () => {
-        if (this.isHovering) {
-            // Animate and navigate
-            this.interactiveObject.scale.set(1.1, 1.1, 1.1); // Click feedback
-            setTimeout(() => {
-                window.location.href = 'works.html';
-            }, 150);
-        }
-    }, false);
+    });
   }
 
   animate() {
     this.animationId = requestAnimationFrame(() => this.animate());
     const now = performance.now();
-    const dt = (now - this.lastFrameTime) * 0.001;
+    const dt = (now - this.lastFrameTime) * 0.001;  // 秒
     this.lastFrameTime = now;
-    this.time += dt;
-
-    // --- NEW: Animate and check for interaction on the homepage object ---
-    if (this.interactiveObject) {
-      // Gentle rotation
-      this.interactiveObject.rotation.x += 0.0005;
-      this.interactiveObject.rotation.y += 0.001;
-
-      // Raycasting for hover
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-      const intersects = this.raycaster.intersectObject(this.interactiveObject);
-
-      if (intersects.length > 0) {
-        if (!this.isHovering) {
-          this.isHovering = true;
-          document.body.style.cursor = 'pointer';
-          this.interactiveObject.scale.set(1.2, 1.2, 1.2); // Scale up on hover
-        }
-      } else {
-        if (this.isHovering) {
-          this.isHovering = false;
-          document.body.style.cursor = 'default';
-          this.interactiveObject.scale.set(1, 1, 1); // Return to normal scale
-        }
-      }
-    }
-    
-    this.updateFluidDynamics(dt);
+    this.time += dt;                  // 用 dt 而不是固定 +0.01
+    this.updateFluidDynamics(dt);     // 把 dt 传进去
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -583,37 +546,6 @@ class WebGLBackground {
         container.remove();
       }
     }
-  }
-
-  // --- NEW: Function to create the clickable object ---
-  createInteractiveObject() {
-    if (!this._isHomePage()) return; // Only run on the homepage
-
-    const geometry = new THREE.DodecahedronGeometry(6, 0); // Radius 6
-    const material = new THREE.MeshStandardMaterial({
-        color: 0x9ca3af, // A neutral metallic color
-        metalness: 0.9,
-        roughness: 0.2,
-        flatShading: true,
-    });
-    this.interactiveObject = new THREE.Mesh(geometry, material);
-    this.interactiveObject.name = "works-link-object";
-    
-    // Position it slightly behind the main text
-    this.interactiveObject.position.z = -10; 
-    
-    this.scene.add(this.interactiveObject);
-
-    // Add lights to make the object visible
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-    this.scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xffffff, 0.8, 200);
-    pointLight.position.set(10, 20, 30);
-    this.scene.add(pointLight);
-
-    // Initialize raycaster and mouse vector
-    this.raycaster = new THREE.Raycaster();
-    this.mouse = new THREE.Vector2();
   }
 }
 
