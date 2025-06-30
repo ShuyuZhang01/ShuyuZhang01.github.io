@@ -21,10 +21,12 @@
     /* -------------- Works grid -------------- */
     .works-page .work-grid{
       display: flex;
-      flex-direction: column;
-      gap: 4rem;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 2rem;
       margin-top: 2rem;
-      align-items: center;
+      justify-content: center;
+      align-items: flex-start;
     }
 
     /* -------------- Enhanced Card Styling -------------- */
@@ -38,18 +40,17 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       transform: translateY(var(--parallax-y, 0)) translateX(var(--parallax-x, 0));
       width: 100%;
-      max-width: 600px;
+      max-width: 400px;
+      flex: 0 1 400px;
     }
 
-    /* 左右交错布局 - 减小差距 */
+    /* 左右两个有上下差距 */
     .work-card:nth-child(odd) {
-      align-self: flex-start;
-      margin-left: 2rem;
+      transform: translateY(0) translateX(var(--parallax-x, 0));
     }
 
     .work-card:nth-child(even) {
-      align-self: flex-end;
-      margin-right: 2rem;
+      transform: translateY(2rem) translateX(var(--parallax-x, 0));
     }
 
     .work-card:hover {
@@ -259,14 +260,18 @@
     /* -------------- Responsive Design -------------- */
     @media (max-width: 768px) {
       .works-page .work-grid {
+        flex-direction: column;
         gap: 2rem;
+      }
+      
+      .work-card {
+        max-width: 100%;
+        flex: none;
       }
       
       .work-card:nth-child(odd),
       .work-card:nth-child(even) {
-        align-self: center;
-        margin-left: auto;
-        margin-right: auto;
+        transform: translateY(0) translateX(var(--parallax-x, 0));
       }
       
       .modal {
