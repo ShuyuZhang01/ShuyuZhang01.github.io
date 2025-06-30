@@ -5,7 +5,10 @@ class WebGLBackground {
     this.camera = null;
     this.renderer = null;
     this.particles = null;
+    this.stars = null;
+    this.waves = null;
     this.animationId = null;
+    this.time = 0;
     
     console.log('WebGLBackground: 初始化开始');
     this.init();
@@ -41,8 +44,10 @@ class WebGLBackground {
       // 初始化Three.js
       this.initThreeJS();
       
-      // 创建粒子
+      // 创建多种粒子效果
       this.createParticles();
+      this.createStars();
+      this.createWaves();
       
       // 开始动画
       this.animate();
@@ -98,22 +103,41 @@ class WebGLBackground {
     cssContainer.style.width = '100%';
     cssContainer.style.height = '100%';
     cssContainer.style.zIndex = '-1';
-    cssContainer.style.opacity = '0.3';
+    cssContainer.style.opacity = '0.15';
     cssContainer.style.pointerEvents = 'none';
     cssContainer.style.overflow = 'hidden';
     
-    // 创建多个CSS粒子
-    for (let i = 0; i < 50; i++) {
+    // 创建多种类型的CSS粒子
+    for (let i = 0; i < 80; i++) {
       const particle = document.createElement('div');
       particle.style.position = 'absolute';
-      particle.style.width = '2px';
-      particle.style.height = '2px';
-      particle.style.backgroundColor = '#9ca3af';
+      
+      // 随机选择粒子类型
+      const particleType = Math.random();
+      if (particleType < 0.4) {
+        // 小粒子
+        particle.style.width = '1px';
+        particle.style.height = '1px';
+        particle.style.backgroundColor = '#9ca3af';
+        particle.style.animation = `float ${4 + Math.random() * 6}s infinite linear`;
+      } else if (particleType < 0.7) {
+        // 中等粒子
+        particle.style.width = '2px';
+        particle.style.height = '2px';
+        particle.style.backgroundColor = '#6b7280';
+        particle.style.animation = `float ${3 + Math.random() * 4}s infinite linear`;
+      } else {
+        // 大粒子
+        particle.style.width = '3px';
+        particle.style.height = '3px';
+        particle.style.backgroundColor = '#4b5563';
+        particle.style.animation = `float ${5 + Math.random() * 3}s infinite linear`;
+      }
+      
       particle.style.borderRadius = '50%';
       particle.style.left = Math.random() * 100 + '%';
       particle.style.top = Math.random() * 100 + '%';
-      particle.style.animation = `float ${3 + Math.random() * 4}s infinite linear`;
-      particle.style.animationDelay = Math.random() * 2 + 's';
+      particle.style.animationDelay = Math.random() * 3 + 's';
       
       cssContainer.appendChild(particle);
     }
@@ -124,23 +148,23 @@ class WebGLBackground {
       @keyframes float {
         0% {
           transform: translateY(0px) translateX(0px) rotate(0deg);
-          opacity: 0.8;
+          opacity: 0.3;
         }
         25% {
-          transform: translateY(-20px) translateX(10px) rotate(90deg);
+          transform: translateY(-30px) translateX(15px) rotate(90deg);
           opacity: 0.6;
         }
         50% {
-          transform: translateY(-40px) translateX(-10px) rotate(180deg);
-          opacity: 0.8;
+          transform: translateY(-60px) translateX(-15px) rotate(180deg);
+          opacity: 0.3;
         }
         75% {
-          transform: translateY(-20px) translateX(-20px) rotate(270deg);
+          transform: translateY(-30px) translateX(-30px) rotate(270deg);
           opacity: 0.6;
         }
         100% {
           transform: translateY(0px) translateX(0px) rotate(360deg);
-          opacity: 0.8;
+          opacity: 0.3;
         }
       }
     `;
@@ -201,23 +225,27 @@ class WebGLBackground {
   }
 
   createParticles() {
-    console.log('WebGLBackground: 开始创建粒子系统');
+    console.log('WebGLBackground: 开始创建主粒子系统');
     
-    const particleCount = 100; // 进一步减少粒子数量
+    const particleCount = 150;
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
     
-    // 生成随机位置和颜色
+    // 生成随机位置、颜色和大小
     for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 4;     // x
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 4; // y
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 4; // z
+      positions[i * 3] = (Math.random() - 0.5) * 6;     // x
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 6; // y
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 6; // z
       
-      // 灰色系颜色
-      const gray = 0.6 + Math.random() * 0.4; // 0.6-1.0 的灰色
+      // 灰色系颜色，不同亮度
+      const gray = 0.4 + Math.random() * 0.6; // 0.4-1.0 的灰色
       colors[i * 3] = gray;     // r
       colors[i * 3 + 1] = gray; // g
       colors[i * 3 + 2] = gray; // b
+      
+      // 随机大小
+      sizes[i] = 0.02 + Math.random() * 0.08;
     }
     
     console.log('WebGLBackground: 粒子数据生成完成');
@@ -226,33 +254,142 @@ class WebGLBackground {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
     console.log('WebGLBackground: 几何体创建完成');
     
     // 创建材质
     const material = new THREE.PointsMaterial({
-      size: 0.1,
+      size: 1,
       vertexColors: true,
       transparent: true,
-      opacity: 0.8,
-      sizeAttenuation: true
+      opacity: 0.4,
+      sizeAttenuation: true,
+      map: this.createParticleTexture()
     });
     console.log('WebGLBackground: 材质创建完成');
     
     // 创建粒子系统
     this.particles = new THREE.Points(geometry, material);
     this.scene.add(this.particles);
-    console.log('WebGLBackground: 粒子系统创建成功，粒子数量:', particleCount);
+    console.log('WebGLBackground: 主粒子系统创建成功，粒子数量:', particleCount);
+  }
+
+  createStars() {
+    console.log('WebGLBackground: 开始创建星星系统');
+    
+    const starCount = 50;
+    const positions = new Float32Array(starCount * 3);
+    const colors = new Float32Array(starCount * 3);
+    
+    // 生成星星位置和颜色
+    for (let i = 0; i < starCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 8;     // x
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 8; // y
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 8; // z
+      
+      // 星星颜色 - 白色到淡蓝色
+      const brightness = 0.7 + Math.random() * 0.3;
+      colors[i * 3] = brightness;     // r
+      colors[i * 3 + 1] = brightness; // g
+      colors[i * 3 + 2] = brightness + 0.1; // b (稍微偏蓝)
+    }
+    
+    // 创建几何体
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    
+    // 创建材质
+    const material = new THREE.PointsMaterial({
+      size: 0.05,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.6,
+      sizeAttenuation: true
+    });
+    
+    // 创建星星系统
+    this.stars = new THREE.Points(geometry, material);
+    this.scene.add(this.stars);
+    console.log('WebGLBackground: 星星系统创建成功，星星数量:', starCount);
+  }
+
+  createWaves() {
+    console.log('WebGLBackground: 开始创建波浪效果');
+    
+    // 创建波浪几何体
+    const geometry = new THREE.PlaneGeometry(4, 4, 32, 32);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x9ca3af,
+      transparent: true,
+      opacity: 0.1,
+      wireframe: true
+    });
+    
+    this.waves = new THREE.Mesh(geometry, material);
+    this.waves.position.z = -2;
+    this.scene.add(this.waves);
+    console.log('WebGLBackground: 波浪效果创建成功');
+  }
+
+  createParticleTexture() {
+    // 创建粒子纹理
+    const canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 32;
+    const ctx = canvas.getContext('2d');
+    
+    // 创建径向渐变
+    const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    gradient.addColorStop(0, 'rgba(255,255,255,1)');
+    gradient.addColorStop(0.5, 'rgba(255,255,255,0.5)');
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 32, 32);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    return texture;
   }
 
   animate() {
     console.log('WebGLBackground: 开始动画循环');
     
     this.animationId = requestAnimationFrame(() => this.animate());
+    this.time += 0.01;
     
-    // 旋转粒子
+    // 主粒子动画
     if (this.particles) {
-      this.particles.rotation.x += 0.001;
-      this.particles.rotation.y += 0.0015;
+      this.particles.rotation.x += 0.0005;
+      this.particles.rotation.y += 0.0008;
+      
+      // 粒子位置动画
+      const positions = this.particles.geometry.attributes.position.array;
+      for (let i = 0; i < positions.length; i += 3) {
+        positions[i + 1] += Math.sin(this.time + i * 0.1) * 0.001;
+      }
+      this.particles.geometry.attributes.position.needsUpdate = true;
+    }
+    
+    // 星星动画
+    if (this.stars) {
+      this.stars.rotation.z += 0.0003;
+      
+      // 星星闪烁效果
+      const colors = this.stars.geometry.attributes.color.array;
+      for (let i = 0; i < colors.length; i += 3) {
+        const brightness = 0.7 + Math.sin(this.time * 2 + i) * 0.3;
+        colors[i] = brightness;
+        colors[i + 1] = brightness;
+        colors[i + 2] = brightness + 0.1;
+      }
+      this.stars.geometry.attributes.color.needsUpdate = true;
+    }
+    
+    // 波浪动画
+    if (this.waves) {
+      this.waves.rotation.z += 0.001;
+      this.waves.material.opacity = 0.05 + Math.sin(this.time) * 0.05;
     }
     
     // 渲染场景
