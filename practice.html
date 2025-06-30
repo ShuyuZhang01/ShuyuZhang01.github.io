@@ -732,10 +732,11 @@
 
     // 图片放大功能（事件委托）
     document.addEventListener('click', function(e) {
-      // 只处理expanded卡片里的图片点击
+      // 只处理expanded卡片里的图片点击，排除cover图片
       var expanded = document.querySelector('.work-card.expanded');
       if (expanded && e.target.tagName === 'IMG' && expanded.contains(e.target)) {
-        if (!e.target.closest('.image-modal')) {
+        // 排除cover图片和模态框里的图片
+        if (!e.target.classList.contains('work-cover') && !e.target.closest('.image-modal')) {
           var imgSrc = e.target.src;
           var imageModal = document.getElementById('imageModal');
           var modalImg = document.getElementById('modalImage');
