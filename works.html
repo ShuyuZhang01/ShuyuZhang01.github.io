@@ -20,32 +20,252 @@
   <style>
     /* -------------- Works grid -------------- */
     .works-page .work-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(500px,1fr));
-      gap:5rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 3rem 2.5rem;
+      margin-top: 2rem;
     }
-    /* -------------- Card overlay -------------- */
-    .work-card .overlay{
-      font-weight:600;line-height:1.35;white-space:normal;
-      pointer-events:none;flex-direction:column;
+
+    /* -------------- Enhanced Card Styling -------------- */
+    .work-card {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #000;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transform: translateY(0);
     }
-    .work-card .overlay small{
-      display:block;font-size:.8rem;font-weight:400;margin-top:.25rem;opacity:.85;
+
+    .work-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     }
-    /* -------------- Modal -------------- */
-    .modal-overlay{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,.6);z-index:999}
-    .hidden{display:none}
-    .modal{
-      width:96%;max-width:1100px;max-height:93vh;overflow-y:auto;
-      background:#111;color:#eee;padding:36px 36px 48px;border-radius:20px;position:relative;
+
+    .work-card .work-cover {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .modal .close{position:absolute;top:22px;right:26px;font-size:34px;background:none;border:none;color:#ddd;cursor:pointer;z-index:10}
-    .modal .close:hover{color:#fff}
-    .videoWrap{position:relative;width:100%;padding-top:56.25%}
-    .videoWrap iframe{position:absolute;inset:0;width:100%;height:100%}
-    .intro{margin:30px 0;line-height:1.65;font-size:1rem}
-    .photos{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(47%,1fr))}
-    .photos img{width:100%;height:auto;border-radius:10px}
+
+    .work-card:hover .work-cover {
+      transform: scale(1.05);
+    }
+
+    /* -------------- Enhanced Overlay -------------- */
+    .work-card .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: #fff;
+      padding: 2rem 1.5rem 1.5rem;
+      transform: translateY(0);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .work-card:hover .overlay {
+      transform: translateY(-5px);
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    }
+
+    .work-card .overlay small {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 400;
+      margin-top: 0.5rem;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    .work-card:hover .overlay small {
+      opacity: 1;
+    }
+
+    /* -------------- Enhanced Modal -------------- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 999;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .modal {
+      width: 95%;
+      max-width: 1200px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+      color: #eee;
+      padding: 0;
+      border-radius: 24px;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal.show {
+      transform: scale(1);
+    }
+
+    .modal .close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 32px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      z-index: 10;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .modal .close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    .modal-content {
+      padding: 3rem 2.5rem 2.5rem;
+    }
+
+    .videoWrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .videoWrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+    }
+
+    .videoWrap img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .intro {
+      margin: 0 0 2rem 0;
+      line-height: 1.7;
+      font-size: 1.1rem;
+      color: #e0e0e0;
+      font-weight: 400;
+    }
+
+    .photos {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    .photos img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .photos img:hover {
+      transform: scale(1.02);
+    }
+
+    /* -------------- Loading Animation -------------- */
+    .work-card {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: cardFadeIn 0.8s ease forwards;
+      animation-delay: calc(var(--card-index, 0) * 0.1s);
+    }
+
+    @keyframes cardFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* -------------- Responsive Design -------------- */
+    @media (max-width: 768px) {
+      .works-page .work-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .modal {
+        width: 98%;
+        max-height: 95vh;
+        border-radius: 16px;
+      }
+      
+      .modal-content {
+        padding: 2rem 1.5rem 1.5rem;
+      }
+      
+      .photos {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    /* -------------- Scrollbar Styling -------------- */
+    .modal::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .modal::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    .modal::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
   </style>
 </head>
 <body class="page-dark works-page">
@@ -70,42 +290,42 @@
     <div class="work-grid">
 
       <!-- Card: Yu -->
-      <article id="yu" class="work-card" data-sign="1" data-project="yu">
+      <article id="yu" class="work-card" data-sign="1" data-project="yu" style="--card-index: 0;">
         <img class="work-cover" src="assets/photo/dancer15.jpg" alt="Hiphop dancer Yu">
         <div class="overlay">Hiphop dancer Yu<small>installation performance &amp; game · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
       <!-- Card: Dream -->
-      <article id="Dream" class="work-card" data-sign="-1" data-project="dream">
+      <article id="Dream" class="work-card" data-sign="-1" data-project="dream" style="--card-index: 1;">
         <img class="work-cover" src="assets/photo/dream (4).png" alt="Redemption">
         <div class="overlay">Redemption<small>Moving image · 2023</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
       <!-- Card: Mocap -->
-      <article id="mocap" class="work-card" data-sign="1" data-project="mocap">
+      <article id="mocap" class="work-card" data-sign="1" data-project="mocap" style="--card-index: 2;">
         <img class="work-cover" src="assets/photo/mocap.jpg" alt="Dancing in here and there">
         <div class="overlay">Dancing in here and there<small>MotionCapture & Unity VR · 2025</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
       <!-- Card: Flower -->
-      <article id="flower" class="work-card" data-sign="-1" data-project="flower">
+      <article id="flower" class="work-card" data-sign="-1" data-project="flower" style="--card-index: 3;">
         <img class="work-cover" src="assets/photo/flower (5).jpg" alt="Piano Piece of Day and Night">
         <div class="overlay">Piano Piece of Day and Night<small>JavaScript · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
       <!-- Card: Water -->
-      <article id="water" class="work-card" data-sign="-1" data-project="water">
+      <article id="water" class="work-card" data-sign="-1" data-project="water" style="--card-index: 4;">
         <img class="work-cover" src="assets/photo/water (7).jpg" alt="Can you please give me some water...">
         <div class="overlay">Can you please give me some water...<small>Arduino Installation · 2024</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
       </article>
 
       <!-- Card: City -->
-      <article id="city" class="work-card" data-sign="1" data-project="ai">
+      <article id="city" class="work-card" data-sign="1" data-project="ai" style="--card-index: 5;">
         <img class="work-cover" src="assets/photo/city (8).jpg" alt="CXC sleepless city">
         <div class="overlay">CXC sleepless city<small>360-degree photography · 2021</small></div>
         <button class="close-btn" aria-label="Close">&times;</button>
@@ -118,9 +338,11 @@
   <div id="modalOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal">
       <button id="closeModal" class="close" aria-label="Close">&times;</button>
-      <div class="videoWrap"></div>
-      <p class="intro"></p>
-      <div class="photos"></div>
+      <div class="modal-content">
+        <div class="videoWrap"></div>
+        <p class="intro"></p>
+        <div class="photos"></div>
+      </div>
     </div>
   </div>
 
@@ -196,7 +418,7 @@ Through an immersive VR experience, viewers descend from the surface's refracted
   }
   function onYouTubeIframeAPIReady () { /* player 创建由 openModal 触发 */ }
 
-  /* ===== Modal Logic ===== */
+  /* ===== Enhanced Modal Logic ===== */
   function openModal (projectId) {
     const data = projectData[projectId];
     if (!data) return console.warn('Missing projectData:', projectId);
@@ -211,8 +433,7 @@ Through an immersive VR experience, viewers descend from the surface's refracted
     let mediaHTML = '';
     if (data.heroImage) {                       /* 仅图片 */
       mediaHTML = `<img src="assets/photo/${data.heroImage}"
-                         alt="${projectId} main visual"
-                         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
+                         alt="${projectId} main visual">`;
     } else if (data.platform === 'vimeo' && videoId) {
       mediaHTML = `<iframe src="https://player.vimeo.com/video/${videoId}?autoplay=1&title=0&byline=0&portrait=0"
                            frameborder="0"
@@ -232,9 +453,15 @@ Through an immersive VR experience, viewers descend from the surface's refracted
       `<img src="assets/photo/${f}" alt="${f}" class="gallery-img" loading="lazy">`
     ).join('');
 
-    /* --- show modal --- */
+    /* --- show modal with animation --- */
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    
+    // 触发动画
+    setTimeout(() => {
+      modal.classList.add('show');
+      modal.querySelector('.modal').classList.add('show');
+    }, 10);
 
     /* --- create YouTube player if needed --- */
     if (!data.heroImage && videoId) {
@@ -245,15 +472,24 @@ Through an immersive VR experience, viewers descend from the surface's refracted
       }
     }
   }
+  
   function closeModal () {
     const modal = document.getElementById('modalOverlay');
-    modal.classList.add('hidden');
-    document.body.style.overflow = '';
-    modal.querySelector('.videoWrap').innerHTML = '';
-    if (player) { player.destroy(); player = null; }
+    const modalContent = modal.querySelector('.modal');
+    
+    // 触发关闭动画
+    modal.classList.remove('show');
+    modalContent.classList.remove('show');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      modal.querySelector('.videoWrap').innerHTML = '';
+      if (player) { player.destroy(); player = null; }
+    }, 300);
   }
 
-  /* ===== Anim & Bindings ===== */
+  /* ===== Enhanced Anim & Bindings ===== */
   (() => {
     const cards = document.querySelectorAll('.work-card');
     const modalOverlay = document.getElementById('modalOverlay');
@@ -268,14 +504,14 @@ Through an immersive VR experience, viewers descend from the surface's refracted
       cards.forEach(c=>io.observe(c));
     } else { cards.forEach(reveal); }
 
-    /* parallax */
+    /* enhanced parallax */
     function updateParallax(){
       const vh = innerHeight;
       document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card=>{
         const rect = card.getBoundingClientRect();
         const percent = (rect.top + rect.height/2)/vh;
         const sign = parseInt(card.dataset.sign,10)||1;
-        card.style.setProperty('--parallax',((percent-.5)*80*sign).toFixed(1)+'px');
+        card.style.setProperty('--parallax',((percent-.5)*60*sign).toFixed(1)+'px');
       });
     }
     addEventListener('scroll',updateParallax,{passive:true});
