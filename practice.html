@@ -31,7 +31,7 @@
     /* Enhanced 3‑column grid on desktop */
     .practice-page .work-grid{
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 2.5rem 2rem;
       margin-top: 1rem;
     }
@@ -309,7 +309,7 @@
     /* Responsive Design */
     @media (max-width: 768px) {
       .practice-page .work-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
       }
       
