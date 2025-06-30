@@ -105,6 +105,9 @@ class WebGLBackground {
       // 响应窗口大小变化
       window.addEventListener('resize', () => this.onWindowResize());
       
+      // 触发WebGL背景加载完成事件
+      window.dispatchEvent(new CustomEvent('webglBackgroundLoaded'));
+      
       console.log('WebGLBackground: 初始化成功');
     } catch (error) {
       console.error('WebGLBackground: 初始化失败', error);
