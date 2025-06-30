@@ -20,9 +20,9 @@
   <style>
     /* -------------- Works grid -------------- */
     .works-page .work-grid{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
-      gap: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
       margin-top: 2rem;
     }
 
@@ -35,7 +35,20 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       background: #000;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      transform: translateY(0);
+      transform: translateY(var(--parallax-y, 0)) translateX(var(--parallax-x, 0));
+      width: 100%;
+      max-width: 600px;
+    }
+
+    /* 左右交错布局 */
+    .work-card:nth-child(odd) {
+      align-self: flex-start;
+      margin-left: 0;
+    }
+
+    .work-card:nth-child(even) {
+      align-self: flex-end;
+      margin-right: 0;
     }
 
     .work-card:hover {
@@ -48,6 +61,7 @@
       height: 320px;
       object-fit: cover;
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      display: block;
     }
 
     .work-card:hover .work-cover {
@@ -60,7 +74,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
       color: #fff;
       padding: 2.5rem 2rem 2rem;
       transform: translateY(0);
@@ -68,11 +82,12 @@
       font-weight: 600;
       line-height: 1.4;
       font-size: 1.1rem;
+      z-index: 2;
     }
 
     .work-card:hover .overlay {
       transform: translateY(-5px);
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
     }
 
     .work-card .overlay small {
@@ -86,6 +101,22 @@
 
     .work-card:hover .overlay small {
       opacity: 1;
+    }
+
+    /* 视差效果 */
+    .work-card {
+      transform: translateY(var(--parallax-y, 0)) translateX(var(--parallax-x, 0));
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .work-card:nth-child(odd) {
+      align-self: flex-start;
+      margin-left: 0;
+    }
+
+    .work-card:nth-child(even) {
+      align-self: flex-end;
+      margin-right: 0;
     }
 
     /* -------------- Enhanced Modal -------------- */
@@ -229,8 +260,14 @@
     /* -------------- Responsive Design -------------- */
     @media (max-width: 768px) {
       .works-page .work-grid {
-        grid-template-columns: 1fr;
         gap: 2rem;
+      }
+      
+      .work-card:nth-child(odd),
+      .work-card:nth-child(even) {
+        align-self: center;
+        margin-left: auto;
+        margin-right: auto;
       }
       
       .modal {
@@ -508,11 +545,14 @@ Through an immersive VR experience, viewers descend from the surface's refracted
     /* enhanced parallax */
     function updateParallax(){
       const vh = innerHeight;
-      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach(card=>{
+      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach((card, index) => {
         const rect = card.getBoundingClientRect();
         const percent = (rect.top + rect.height/2)/vh;
-        const sign = parseInt(card.dataset.sign,10)||1;
-        card.style.setProperty('--parallax',((percent-.5)*60*sign).toFixed(1)+'px');
+        const sign = index % 2 === 0 ? 1 : -1; // 左右交错
+        const parallaxX = ((percent - 0.5) * 100 * sign).toFixed(1) + 'px';
+        const parallaxY = ((percent - 0.5) * 50).toFixed(1) + 'px';
+        card.style.setProperty('--parallax-x', parallaxX);
+        card.style.setProperty('--parallax-y', parallaxY);
       });
     }
     addEventListener('scroll',updateParallax,{passive:true});
