@@ -91,7 +91,6 @@ class WebGLBackground {
       
       // 创建新的背景效果
       this.createFluidParticleSystem();
-      this.createFlowingGeometries();
       this.createLights();
       
       // 添加鼠标交互
@@ -423,49 +422,6 @@ class WebGLBackground {
     this.particleSystem.geometry.attributes.color.needsUpdate = true;
   }
 
-  createFlowingGeometries() {
-    // 创建流动的几何形状
-    const geometries = [
-      new THREE.TorusGeometry(10, 3, 16, 100),
-      new THREE.OctahedronGeometry(8),
-      new THREE.TetrahedronGeometry(6),
-      new THREE.IcosahedronGeometry(5)
-    ];
-    
-    geometries.forEach((geometry, index) => {
-      const material = new THREE.MeshBasicMaterial({
-        color: 0x4a90e2,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.1
-      });
-      
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(
-        (Math.random() - 0.5) * 100,
-        (Math.random() - 0.5) * 100,
-        (Math.random() - 0.5) * 100
-      );
-      mesh.rotation.set(
-        Math.random() * Math.PI,
-        Math.random() * Math.PI,
-        Math.random() * Math.PI
-      );
-      
-      this.geometries.push({
-        mesh: mesh,
-        speed: 0.001 + Math.random() * 0.002,
-        rotationSpeed: {
-          x: (Math.random() - 0.5) * 0.02,
-          y: (Math.random() - 0.5) * 0.02,
-          z: (Math.random() - 0.5) * 0.02
-        }
-      });
-      
-      this.scene.add(mesh);
-    });
-  }
-
   createLights() {
     // 添加环境光
     const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
@@ -491,16 +447,6 @@ class WebGLBackground {
     
     // 更新流体动力学
     this.updateFluidDynamics();
-    
-    // 更新几何形状
-    this.geometries.forEach((geo) => {
-      geo.mesh.rotation.x += geo.rotationSpeed.x;
-      geo.mesh.rotation.y += geo.rotationSpeed.y;
-      geo.mesh.rotation.z += geo.rotationSpeed.z;
-      
-      // 添加轻微的浮动效果
-      geo.mesh.position.y += Math.sin(this.time * geo.speed) * 0.1;
-    });
     
     // 相机轻微跟随鼠标
     this.camera.position.x += (this.mouseX * 10 - this.camera.position.x) * 0.01;
