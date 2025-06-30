@@ -28,11 +28,6 @@ class WebGLBackground {
     this.boundaryForce = 0.15; // 增加边界力
     this.flowSpeed = 0.25; // 稍微增加流速
     
-    // 水流方向控制
-    this.flowDirection = 1; // 1: 向右, -1: 向左
-    this.directionChangeTime = 0;
-    this.directionChangeInterval = 8000; // 8秒改变一次方向
-    
     console.log('WebGLBackground: 初始化开始');
     this.init();
   }
@@ -124,64 +119,83 @@ class WebGLBackground {
     cssContainer.style.overflow = 'hidden';
     cssContainer.style.background = 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)';
     
-    // 创建一股在屏幕下半部分来回流动的水流
-    const stream = document.createElement('div');
-    stream.style.position = 'absolute';
-    stream.style.width = '100%';
-    stream.style.height = '3px'; // 更细的水流
-    stream.style.left = '0';
-    stream.style.top = '70%'; // 在屏幕下半部分
-    stream.style.transform = 'translateY(-50%)';
-    stream.style.animation = 'waterFlowBackAndForth 16s infinite ease-in-out';
-    
-    // 在水流中创建更多更小的圆形粒子
-    for (let i = 0; i < 60; i++) {
-      const particle = document.createElement('div');
-      particle.style.position = 'absolute';
-      particle.style.width = '1.5px'; // 更小的粒子
-      particle.style.height = '1.5px';
-      particle.style.backgroundColor = 'rgba(179, 179, 179, 0.8)';
-      particle.style.borderRadius = '50%'; // 确保是圆形
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.top = (Math.random() - 0.5) * 6 + 'px'; // 更窄的范围
-      particle.style.opacity = '0.7';
-      particle.style.animation = `particleFlow ${12 + Math.random() * 8}s infinite ease-in-out`;
-      particle.style.animationDelay = Math.random() * 12 + 's';
-      stream.appendChild(particle);
+    // 创建多股在屏幕下半部分自然流动的水流，覆盖整个宽度
+    for (let streamIndex = 0; streamIndex < 3; streamIndex++) {
+      const stream = document.createElement('div');
+      stream.style.position = 'absolute';
+      stream.style.width = '100%';
+      stream.style.height = '2px'; // 更细的水流
+      stream.style.left = '0';
+      stream.style.top = `${65 + streamIndex * 3}%`; // 在屏幕下半部分，稍微错开
+      stream.style.transform = 'translateY(-50%)';
+      stream.style.animation = `waterFlowSmooth ${20 + streamIndex * 3}s infinite ease-in-out`;
+      stream.style.animationDelay = `${streamIndex * 2}s`;
+      
+      // 在水流中创建更多更小的圆形粒子
+      for (let i = 0; i < 40; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '1.2px'; // 更小的粒子
+        particle.style.height = '1.2px';
+        particle.style.backgroundColor = 'rgba(179, 179, 179, 0.8)';
+        particle.style.borderRadius = '50%'; // 确保是圆形
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = (Math.random() - 0.5) * 4 + 'px'; // 更窄的范围
+        particle.style.opacity = '0.7';
+        particle.style.animation = `particleFlowSmooth ${15 + Math.random() * 10}s infinite ease-in-out`;
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        stream.appendChild(particle);
+      }
+      
+      cssContainer.appendChild(stream);
     }
     
-    cssContainer.appendChild(stream);
-    
-    // 添加CSS动画
+    // 添加CSS动画 - 使用更自然的sin流动
     const style = document.createElement('style');
     style.textContent = `
-      @keyframes waterFlowBackAndForth {
+      @keyframes waterFlowSmooth {
         0%, 100% {
           transform: translateY(-50%) translateX(0);
           opacity: 0.6;
         }
-        25% {
-          transform: translateY(-50%) translateX(30px);
+        16.67% {
+          transform: translateY(-50%) translateX(20px);
           opacity: 0.8;
         }
-        50% {
+        33.33% {
           transform: translateY(-50%) translateX(0);
           opacity: 0.6;
         }
-        75% {
-          transform: translateY(-50%) translateX(-30px);
+        50% {
+          transform: translateY(-50%) translateX(-20px);
+          opacity: 0.8;
+        }
+        66.67% {
+          transform: translateY(-50%) translateX(0);
+          opacity: 0.6;
+        }
+        83.33% {
+          transform: translateY(-50%) translateX(20px);
           opacity: 0.8;
         }
       }
       
-      @keyframes particleFlow {
+      @keyframes particleFlowSmooth {
         0%, 100% {
           transform: translateX(0) scale(1);
           opacity: 0.6;
         }
+        25% {
+          transform: translateX(8px) scale(1.1);
+          opacity: 0.8;
+        }
         50% {
-          transform: translateX(15px) scale(1.2);
-          opacity: 0.9;
+          transform: translateX(0) scale(1);
+          opacity: 0.6;
+        }
+        75% {
+          transform: translateX(-8px) scale(1.1);
+          opacity: 0.8;
         }
       }
     `;
@@ -223,10 +237,10 @@ class WebGLBackground {
   }
 
   initParticleSystem() {
-    // 初始化粒子位置 - 在屏幕下半部分形成水流
+    // 初始化粒子位置 - 在整个屏幕下半部分均匀分布
     for (let i = 0; i < this.particleCount; i++) {
-      // 在屏幕下半部分形成水流
-      const x = (Math.random() - 0.5) * 80; // x: -40~40
+      // 在整个屏幕宽度上均匀分布
+      const x = (Math.random() - 0.5) * 120; // x: -60~60 (覆盖整个屏幕宽度)
       const y = (Math.random() - 0.5) * 15 - 10; // y: -17.5~-2.5 (下半部分)
       const z = (Math.random() - 0.5) * 8; // z: -4~4 (更薄)
       
@@ -234,10 +248,11 @@ class WebGLBackground {
       this.particlePositions[i * 3 + 1] = y;
       this.particlePositions[i * 3 + 2] = z;
       
-      // 初始速度 - 统一方向
-      this.particleVelocities[i * 3] = this.flowSpeed * this.flowDirection;
-      this.particleVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.03; // 减少垂直运动
-      this.particleVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.01; // 减少深度运动
+      // 初始速度 - 根据位置设置不同方向，形成自然的流动
+      const direction = Math.random() > 0.5 ? 1 : -1;
+      this.particleVelocities[i * 3] = this.flowSpeed * direction;
+      this.particleVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.03;
+      this.particleVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.01;
       
       // 灰色
       this.particleColors[i * 3] = 0.7;
@@ -286,11 +301,8 @@ class WebGLBackground {
   }
 
   updateFluidDynamics() {
-    // 定时改变方向
-    if (this.time - this.directionChangeTime > this.directionChangeInterval) {
-      this.flowDirection *= -1;
-      this.directionChangeTime = this.time;
-    }
+    // 0.3 可以调节摆动速度，sin 结果范围 -1 ~ 1
+    const globalFlow = Math.sin(this.time * 0.3);
     
     // 重置力
     for (let i = 0; i < this.particleCount * 3; i++) {
@@ -338,14 +350,16 @@ class WebGLBackground {
         }
       }
       
-      // 添加流动方向力
-      this.particleForces[i3] += this.flowSpeed * this.flowDirection;
+      // 添加流动方向力 - 使用全局sin流动
+      this.particleForces[i3] += this.flowSpeed * globalFlow;
       
-      // 边界处理 - 软边界，让粒子在边界处减速
-      if (posI.x > 50) {
-        this.particleForces[i3] -= this.boundaryForce * (posI.x - 50);
-      } else if (posI.x < -50) {
-        this.particleForces[i3] += this.boundaryForce * (-50 - posI.x);
+      // 边界处理 - 软边界，让粒子在边界处减速并改变方向
+      if (posI.x > 55) {
+        this.particleForces[i3] -= this.boundaryForce * (posI.x - 55);
+        this.particleVelocities[i3] *= 0.8; // 在边界处减速
+      } else if (posI.x < -55) {
+        this.particleForces[i3] += this.boundaryForce * (-55 - posI.x);
+        this.particleVelocities[i3] *= 0.8; // 在边界处减速
       }
       
       // Y轴边界 - 限制在下半部分
@@ -377,9 +391,9 @@ class WebGLBackground {
       this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1];
       this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2];
       
-      // 限制在可视范围内
-      this.particlePositions[i3] = Math.max(-60, Math.min(60, this.particlePositions[i3]));
-      this.particlePositions[i3 + 1] = Math.max(-25, Math.min(-5, this.particlePositions[i3 + 1])); // 限制在下半部分
+      // 限制在可视范围内，但允许更宽的分布
+      this.particlePositions[i3] = Math.max(-70, Math.min(70, this.particlePositions[i3]));
+      this.particlePositions[i3 + 1] = Math.max(-25, Math.min(-5, this.particlePositions[i3 + 1]));
       this.particlePositions[i3 + 2] = Math.max(-12, Math.min(12, this.particlePositions[i3 + 2]));
     }
     
