@@ -608,8 +608,8 @@ Through an immersive VR experience, viewers descend from the surface's refracted
     // 根据列数给每张卡写一个静态 offset
     function setFanLayout(){
       const cards = document.querySelectorAll('.work-card');
-      const angleStep = 6;          // 相邻两张牌之间夹角（度）- 从8减少到6，让扇得更紧凑
-      const radius    = 200;        // 圆弧半径：从260减少到200，让排列更紧凑
+      const angleStep = 5;          // 相邻两张牌之间夹角（度）- 从6减少到5，让卡片更靠近
+      const radius    = 160;        // 圆弧半径：从200减少到160，让排列更紧凑
       const midIndex  = (cards.length - 1) / 2;
 
       cards.forEach((card, i) => {
@@ -619,7 +619,7 @@ Through an immersive VR experience, viewers descend from the surface's refracted
 
         // 极坐标 → 直角坐标，把圆心放在(0,0)
         const offsetX = Math.sin(rad) * radius;
-        const offsetY = Math.cos(rad) * radius * -0.25; // 从-0.35减少到-0.25，减少垂直高度
+        const offsetY = Math.cos(rad) * radius * -0.15 + 40; // 从-0.25改为-0.15，并整体下移40px
 
         // 添加随机旋转角度，但不超过左右40°
         const randomRotation = (Math.random() - 0.5) * 80; // -40° 到 +40°
