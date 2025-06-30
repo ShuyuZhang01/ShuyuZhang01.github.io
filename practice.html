@@ -65,6 +65,15 @@
       transform: translateY(-5px);
       box-shadow: 0 10px 35px rgba(156, 163, 175, 0.2);
     }
+    
+    /* 确保hover时图片不会消失 */
+    .practice-page .work-card:hover .work-cover {
+      transform: scale(1.05) !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      display: block !important;
+      z-index: 10 !important;
+    }
     .practice-page .work-cover {
       width: 100% !important;
       height: auto !important;
@@ -97,9 +106,7 @@
       color: white;
       font-size: 14px;
     }
-    .practice-page .work-card:hover .work-cover {
-      transform: scale(1.05);
-    }
+
     .practice-page .overlay {
       position: absolute;
       bottom: 0; left: 0; right: 0;
@@ -367,6 +374,25 @@
           }, 100);
         });
       }
+
+      // 确保hover时图片不会消失
+      workCards.forEach(card => {
+        const cover = card.querySelector('.work-cover');
+        if (cover) {
+          card.addEventListener('mouseenter', () => {
+            cover.style.opacity = '1';
+            cover.style.visibility = 'visible';
+            cover.style.display = 'block';
+            cover.style.zIndex = '10';
+          });
+          card.addEventListener('mouseleave', () => {
+            cover.style.opacity = '1';
+            cover.style.visibility = 'visible';
+            cover.style.display = 'block';
+            cover.style.zIndex = '1';
+          });
+        }
+      });
 
       const workCards = document.querySelectorAll('.work-card');
       const lightboxOverlay = document.getElementById('lightbox-overlay');
