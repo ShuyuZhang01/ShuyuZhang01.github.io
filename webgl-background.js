@@ -516,6 +516,14 @@ class WebGLBackground {
       this.mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       this.mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
     });
+    // 新增：移动端触摸支持
+    document.addEventListener('touchmove', (event) => {
+      if (event.touches.length > 0) {
+        const touch = event.touches[0];
+        this.mouseX = (touch.clientX / window.innerWidth) * 2 - 1;
+        this.mouseY = -(touch.clientY / window.innerHeight) * 2 + 1;
+      }
+    }, {passive: false});
   }
 
   animate() {

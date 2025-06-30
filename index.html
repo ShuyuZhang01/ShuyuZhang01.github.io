@@ -139,6 +139,16 @@
         spotlight.style.setProperty('--mouse-y', mouseY + 'px');
       });
       
+      // 新增：移动端触摸支持
+      document.addEventListener('touchmove', (e) => {
+        if (e.touches.length > 0) {
+          mouseX = e.touches[0].clientX;
+          mouseY = e.touches[0].clientY;
+          spotlight.style.setProperty('--mouse-x', mouseX + 'px');
+          spotlight.style.setProperty('--mouse-y', mouseY + 'px');
+        }
+      }, {passive: false});
+      
       // 页面加载时初始化聚光灯位置到屏幕中心
       window.addEventListener('load', () => {
         mouseX = window.innerWidth / 2;

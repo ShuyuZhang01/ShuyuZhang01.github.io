@@ -38,5 +38,31 @@
     }
   });
   
+  // 新增：移动端触摸支持
+  document.addEventListener('touchmove', e => {
+    if (e.touches.length > 0) {
+      const touch = e.touches[0];
+      const dx = touch.clientX - lastX;
+      const dy = touch.clientY - lastY;
+      if (Math.hypot(dx, dy) < 4) return;
+      lastX = touch.clientX; lastY = touch.clientY;
+      for (let i = 0; i < 3; i++) {
+        const p = document.createElement('span');
+        p.className = 'particle';
+        const size = 4 + Math.random() * 4;
+        p.style.width = p.style.height = `${size}px`;
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.left = `${touch.clientX}px`;
+        p.style.top  = `${touch.clientY}px`;
+        const angle  = Math.random() * Math.PI * 2;
+        const speed  = 40 + Math.random() * 80;
+        p.style.setProperty('--dx', `${Math.cos(angle) * speed}px`);
+        p.style.setProperty('--dy', `${Math.sin(angle) * speed}px`);
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 800);
+      }
+    }
+  }, {passive: false});
+  
   console.log('鼠标事件监听器已添加'); // 调试信息
 })();
