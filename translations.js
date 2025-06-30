@@ -25,7 +25,6 @@ const translations = {
     // 作品页面
     works: {
       title: "作品",
-      // 作品项目描述
       projects: {
         "yu": {
           title: "嘻哈舞者Yu",
@@ -111,12 +110,45 @@ const translations = {
     
     // CV页面
     cv: {
-      title: "简历"
+      title: "简历",
+      name: "张书语",
+      title_desc: "互动与空间体验设计师 | 数字艺术家",
+      location: "英国伦敦",
+      phone: "+44 (0)7468 438 097",
+      email: "zayaismyname@163.com",
+      website: "https://shuyuzhang01.github.io/",
+      education: "教育背景",
+      core_skills: "核心技能与影响",
+      professional_experience: "专业经验",
+      selected_projects: "精选项目",
+      education_items: {
+        ma: "计算艺术硕士（在读） — 伦敦大学金史密斯学院，英国 | 2024年9月 – 2026年9月",
+        ba: "艺术、技术与娱乐学士（一等荣誉） — 西交利物浦大学，中国 | 2019年9月 – 2024年6月"
+      },
+      skills_items: {
+        interactive: "互动与空间体验设计 — Unity (C#, VFX Graph, VR), Unreal, OptiTrack。领导2025年现场VR舞蹈表演的动作捕捉和VFX。",
+        coding: "创意编程与生成艺术 — JavaScript, TouchDesigner, Processing。创作《昼夜钢琴曲》(2024)，一个时间驱动的花朵生命周期动画。",
+        physical: "物理计算 — Arduino C/C++, 焊接。构建《能给我一些水吗？》(2024) 检测土壤湿度的互动植物装置。",
+        game: "游戏模组 — Lua, 绑定, Spriter, 叙事。创作《饥荒联机版》模组\"嘻哈舞者Yu\"。"
+      },
+      experience_items: {
+        assistant1: "设计助理 — 苏州瑞深教育科技集团有限公司 | 2024年1月 – 9月。将研究洞察转化为提案，指导学生，提供双语翻译。",
+        assistant2: "设计助理 — 江苏景天成文化旅游开发有限公司 | 2023年6月 – 7月。将访客反馈整合到新的导览路线中，用于试点启动。"
+      }
     },
     
     // 联系页面
     contact: {
-      title: "联系"
+      title: "联系",
+      subtitle: "让我们一起创造一些有趣的东西",
+      name_label: "姓名",
+      email_label: "邮箱",
+      message_label: "消息",
+      send_button: "发送消息",
+      alt_contact: "或者直接发邮件给我：",
+      name_placeholder: "你的姓名",
+      email_placeholder: "你的邮箱地址",
+      message_placeholder: "告诉我你的想法..."
     },
     
     // 通用
@@ -238,12 +270,45 @@ const translations = {
     
     // CV页面
     cv: {
-      title: "CV"
+      title: "CV",
+      name: "SHUYU ZHANG",
+      title_desc: "Interactive & Spatial Experience Designer | Digital Artist",
+      location: "London, UK",
+      phone: "+44 (0)7468 438 097",
+      email: "zayaismyname@163.com",
+      website: "https://shuyuzhang01.github.io/",
+      education: "EDUCATION",
+      core_skills: "CORE SKILLS & IMPACT",
+      professional_experience: "PROFESSIONAL EXPERIENCE",
+      selected_projects: "SELECTED PROJECTS",
+      education_items: {
+        ma: "MA Computational Arts (in progress) — Goldsmiths, University of London, UK | Sep 2024 – Sep 2026",
+        ba: "BA Arts, Technology & Entertainment (First Class Honours) — Xi'an Jiaotong-Liverpool University, China | Sep 2019 – Jun 2024"
+      },
+      skills_items: {
+        interactive: "Interactive & Spatial Experience Design — Unity (C#, VFX Graph, VR), Unreal, OptiTrack. Led motion-capture and VFX for 2025 live VR-dance performance.",
+        coding: "Creative Coding & Generative Art — JavaScript, TouchDesigner, Processing. Created Piano Piece of Day and Night (2024), a time-driven flower lifecycle animation.",
+        physical: "Physical Computing — Arduino C/C++, welding. Built Can I Have Some Water? (2024) interactive plant installation detecting soil moisture.",
+        game: "Game Modding — Lua, rigging, Spriter, narrative. Authored Don't Starve Together mod \"The Hiphop Dancer Yu\"."
+      },
+      experience_items: {
+        assistant1: "Design Assistant — Suzhou Ruishen Education Tech Group Co. Ltd. | Jan – Sep 2024. Converted research insights into proposals, mentored students, provided bilingual translation.",
+        assistant2: "Design Assistant — Jiangsu Jingtiancheng Cultural Tourism Dev. Co. Ltd. | Jun – Jul 2023. Integrated visitor feedback into new tour-map routes adopted for pilot launch."
+      }
     },
     
     // 联系页面
     contact: {
-      title: "Contact"
+      title: "Contact",
+      subtitle: "Let's create something interesting together",
+      name_label: "Name",
+      email_label: "Email",
+      message_label: "Message",
+      send_button: "Send Message",
+      alt_contact: "Or email me directly at:",
+      name_placeholder: "Your name",
+      email_placeholder: "Your email address",
+      message_placeholder: "Tell me your thoughts..."
     },
     
     // 通用
@@ -264,8 +329,16 @@ class LanguageManager {
   }
   
   init() {
-    this.updateLanguage();
-    this.createLanguageToggle();
+    // 确保DOM加载完成后再初始化
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        this.updateLanguage();
+        this.createLanguageToggle();
+      });
+    } else {
+      this.updateLanguage();
+      this.createLanguageToggle();
+    }
   }
   
   setLanguage(lang) {
@@ -335,6 +408,12 @@ class LanguageManager {
     
     // 更新练习页面项目
     this.updatePracticeProjects();
+    
+    // 更新CV页面内容
+    this.updateCVContent();
+    
+    // 更新联系页面内容
+    this.updateContactContent();
   }
   
   updateWorksProjects() {
@@ -376,6 +455,71 @@ class LanguageManager {
     });
   }
   
+  updateCVContent() {
+    const cvPage = document.querySelector('.cv-page');
+    if (!cvPage) return;
+    
+    // 更新CV页面内容
+    const nameElement = cvPage.querySelector('h1');
+    if (nameElement) {
+      nameElement.textContent = this.getText('cv.name');
+    }
+    
+    const titleDesc = cvPage.querySelector('p em');
+    if (titleDesc) {
+      titleDesc.textContent = this.getText('cv.title_desc');
+    }
+    
+    const sectionTitles = cvPage.querySelectorAll('.cv-section-title');
+    sectionTitles.forEach(title => {
+      const text = title.textContent.toLowerCase();
+      if (text.includes('education')) {
+        title.textContent = this.getText('cv.education');
+      } else if (text.includes('core skills') || text.includes('核心技能')) {
+        title.textContent = this.getText('cv.core_skills');
+      } else if (text.includes('professional experience') || text.includes('专业经验')) {
+        title.textContent = this.getText('cv.professional_experience');
+      } else if (text.includes('selected projects') || text.includes('精选项目')) {
+        title.textContent = this.getText('cv.selected_projects');
+      }
+    });
+  }
+  
+  updateContactContent() {
+    const contactPage = document.querySelector('.contact-page');
+    if (!contactPage) return;
+    
+    // 更新联系页面内容
+    const labels = contactPage.querySelectorAll('label');
+    labels.forEach(label => {
+      const text = label.textContent.toLowerCase();
+      if (text.includes('name') || text.includes('姓名')) {
+        label.textContent = this.getText('contact.name_label');
+      } else if (text.includes('email') || text.includes('邮箱')) {
+        label.textContent = this.getText('contact.email_label');
+      } else if (text.includes('message') || text.includes('消息')) {
+        label.textContent = this.getText('contact.message_label');
+      }
+    });
+    
+    const sendButton = contactPage.querySelector('.contact-btn');
+    if (sendButton) {
+      sendButton.textContent = this.getText('contact.send_button');
+    }
+    
+    const placeholders = contactPage.querySelectorAll('input[placeholder], textarea[placeholder]');
+    placeholders.forEach(input => {
+      const placeholder = input.getAttribute('placeholder');
+      if (placeholder.includes('name') || placeholder.includes('姓名')) {
+        input.placeholder = this.getText('contact.name_placeholder');
+      } else if (placeholder.includes('email') || placeholder.includes('邮箱')) {
+        input.placeholder = this.getText('contact.email_placeholder');
+      } else if (placeholder.includes('message') || placeholder.includes('消息')) {
+        input.placeholder = this.getText('contact.message_placeholder');
+      }
+    });
+  }
+  
   getProjectId(card) {
     // 根据卡片内容推断项目ID
     const title = card.querySelector('.work-title')?.textContent.toLowerCase();
@@ -395,6 +539,11 @@ class LanguageManager {
   }
   
   createLanguageToggle() {
+    // 检查是否已经存在语言切换按钮
+    if (document.querySelector('.lang-toggle')) {
+      return;
+    }
+    
     // 创建语言切换按钮
     const nav = document.querySelector('.nav-inner');
     if (!nav) return;
@@ -408,65 +557,69 @@ class LanguageManager {
     `;
     
     // 添加样式
-    const style = document.createElement('style');
-    style.textContent = `
-      .lang-toggle {
-        margin-left: 2rem;
-        display: flex;
-        align-items: center;
-      }
-      
-      .lang-btn {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #fff;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        white-space: nowrap;
-      }
-      
-      .lang-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.3);
-        transform: translateY(-1px);
-      }
-      
-      .lang-text {
-        font-weight: 500;
-      }
-      
-      @media (max-width: 768px) {
+    if (!document.querySelector('#lang-toggle-styles')) {
+      const style = document.createElement('style');
+      style.id = 'lang-toggle-styles';
+      style.textContent = `
         .lang-toggle {
-          margin-left: 1rem;
+          margin-left: 2rem;
+          display: flex;
+          align-items: center;
         }
         
         .lang-btn {
-          padding: 0.4rem 0.8rem;
-          font-size: 0.8rem;
-        }
-      }
-      
-      @media (max-width: 600px) {
-        .nav-inner {
-          flex-wrap: wrap;
-          gap: 0.5rem;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #fff;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          cursor: pointer;
+          font-size: 0.9rem;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(10px);
+          white-space: nowrap;
         }
         
-        .lang-toggle {
-          margin-left: 0;
-          order: 3;
-          width: 100%;
-          justify-content: center;
-          margin-top: 0.5rem;
+        .lang-btn:hover {
+          background: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.3);
+          transform: translateY(-1px);
         }
-      }
-    `;
+        
+        .lang-text {
+          font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+          .lang-toggle {
+            margin-left: 1rem;
+          }
+          
+          .lang-btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+          }
+        }
+        
+        @media (max-width: 600px) {
+          .nav-inner {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+          }
+          
+          .lang-toggle {
+            margin-left: 0;
+            order: 3;
+            width: 100%;
+            justify-content: center;
+            margin-top: 0.5rem;
+          }
+        }
+      `;
+      
+      document.head.appendChild(style);
+    }
     
-    document.head.appendChild(style);
     nav.appendChild(langToggle);
     
     // 添加点击事件
