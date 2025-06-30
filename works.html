@@ -709,14 +709,13 @@ Through an immersive VR experience, viewers descend from the surface's refracted
         // 更新作品卡片内容
         const workCards = document.querySelectorAll('.work-card');
         workCards.forEach((card, index) => {
-          const titleElement = card.querySelector('.work-title');
-          const descElement = card.querySelector('.work-desc');
+          const overlayElement = card.querySelector('.overlay');
           
-          if (titleElement && descElement) {
+          if (overlayElement) {
             const projectKey = Object.keys(translations.works.projects)[index];
             if (projectKey && translations.works.projects[projectKey]) {
-              titleElement.textContent = translations.works.projects[projectKey].title;
-              descElement.textContent = translations.works.projects[projectKey].description;
+              const project = translations.works.projects[projectKey];
+              overlayElement.innerHTML = `${project.title}<small>${project.description}</small>`;
             }
           }
         });

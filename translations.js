@@ -12,6 +12,7 @@ window.translations = {
     
     // 主页
     home: {
+      title: "张书语",
       subtitle: "一个探索现实与虚拟交互的猫妈妈。",
       spotlight: "加载效果中..."
     },
@@ -190,6 +191,7 @@ window.translations = {
     
     // 主页
     home: {
+      title: "Shuyu Zhang",
       subtitle: "A cat mom who is exploring the interaction between the real and virtual.",
       spotlight: "Loading effects..."
     },
