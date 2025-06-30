@@ -11,6 +11,9 @@
 
   <!-- Global styles -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 
 <body class="home page-dark">
@@ -45,14 +48,8 @@
     <div class="hero-mask"></div>
   </section>
   
-  <script>
-    // 确保DOM完全加载后再执行粒子特效
-    document.addEventListener('DOMContentLoaded', function() {
-      const script = document.createElement('script');
-      script.src = 'cursorParticles.js';
-      document.body.appendChild(script);
-    });
-  </script>
+  <script src="cursorParticles.js"></script>
+  <script src="webgl-background.js"></script>
 
   <!-- React App Root -->
   <div id="root"></div>
