@@ -15,6 +15,9 @@
   --overlay-bg: rgba(0, 0, 0, 0.55);
   --accent-color: #6b7280;
   --light-accent: #d1d5db;
+  --nebula-color1: #1a33b8;
+  --nebula-color2: #d13be7;
+  --nebula-color3: #2ed6d6;
 }
 
 html {
@@ -538,8 +541,6 @@ body {
   .modal { padding: 24px; width: 95%; }
 }
 
-
-
 /* ========== Modal 样式 ========== */
 .modal-overlay {
   position: fixed;
@@ -610,4 +611,14 @@ transition: transform 0.6s ease-out;
     transform:translate(var(--dx),var(--dy)) scale(0);
     opacity:0;
   }
+}
+
+/* 通用悬停字体渐变色 */
+a:hover, .work-title:hover, .page-title:hover, .subsection-title:hover, .nav-list a:hover {
+  background: linear-gradient(90deg, var(--nebula-color1), var(--nebula-color2), var(--nebula-color3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  transition: background 0.4s, color 0.4s;
 }
