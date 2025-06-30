@@ -13,20 +13,20 @@ class WebGLBackground {
     this.mouseY = 0;
     
     // 流体粒子参数
-    this.particleCount = 500;
+    this.particleCount = 600; // 增加粒子数量
     this.particlePositions = new Float32Array(this.particleCount * 3);
     this.particleVelocities = new Float32Array(this.particleCount * 3);
     this.particleForces = new Float32Array(this.particleCount * 3);
     this.particleColors = new Float32Array(this.particleCount * 3);
     
-    // 水流参数
-    this.attractionRadius = 8;
-    this.repulsionRadius = 3;
-    this.attractionStrength = 0.01;
-    this.repulsionStrength = 0.05;
-    this.damping = 0.99;
-    this.boundaryForce = 0.1;
-    this.flowSpeed = 0.2;
+    // 水流参数 - 调整让粒子更靠近
+    this.attractionRadius = 6; // 减小吸引半径
+    this.repulsionRadius = 2; // 减小排斥半径
+    this.attractionStrength = 0.015; // 增加吸引力
+    this.repulsionStrength = 0.08; // 增加排斥力
+    this.damping = 0.98; // 稍微减少阻尼
+    this.boundaryForce = 0.15; // 增加边界力
+    this.flowSpeed = 0.25; // 稍微增加流速
     
     // 水流方向控制
     this.flowDirection = 1; // 1: 向右, -1: 向左
@@ -124,27 +124,27 @@ class WebGLBackground {
     cssContainer.style.overflow = 'hidden';
     cssContainer.style.background = 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)';
     
-    // 创建一股来回流动的水流
+    // 创建一股在屏幕下半部分来回流动的水流
     const stream = document.createElement('div');
     stream.style.position = 'absolute';
     stream.style.width = '100%';
-    stream.style.height = '4px';
+    stream.style.height = '3px'; // 更细的水流
     stream.style.left = '0';
-    stream.style.top = '50%';
+    stream.style.top = '70%'; // 在屏幕下半部分
     stream.style.transform = 'translateY(-50%)';
     stream.style.animation = 'waterFlowBackAndForth 16s infinite ease-in-out';
     
-    // 在水流中创建多个小粒子
-    for (let i = 0; i < 40; i++) {
+    // 在水流中创建更多更小的圆形粒子
+    for (let i = 0; i < 60; i++) {
       const particle = document.createElement('div');
       particle.style.position = 'absolute';
-      particle.style.width = '2px';
-      particle.style.height = '2px';
+      particle.style.width = '1.5px'; // 更小的粒子
+      particle.style.height = '1.5px';
       particle.style.backgroundColor = 'rgba(179, 179, 179, 0.8)';
-      particle.style.borderRadius = '50%';
+      particle.style.borderRadius = '50%'; // 确保是圆形
       particle.style.left = Math.random() * 100 + '%';
-      particle.style.top = (Math.random() - 0.5) * 8 + 'px';
-      particle.style.opacity = '0.6';
+      particle.style.top = (Math.random() - 0.5) * 6 + 'px'; // 更窄的范围
+      particle.style.opacity = '0.7';
       particle.style.animation = `particleFlow ${12 + Math.random() * 8}s infinite ease-in-out`;
       particle.style.animationDelay = Math.random() * 12 + 's';
       stream.appendChild(particle);
@@ -223,12 +223,12 @@ class WebGLBackground {
   }
 
   initParticleSystem() {
-    // 初始化粒子位置 - 形成一股水平水流
+    // 初始化粒子位置 - 在屏幕下半部分形成水流
     for (let i = 0; i < this.particleCount; i++) {
-      // 在屏幕中央形成一股水流
+      // 在屏幕下半部分形成水流
       const x = (Math.random() - 0.5) * 80; // x: -40~40
-      const y = (Math.random() - 0.5) * 20; // y: -10~10
-      const z = (Math.random() - 0.5) * 10; // z: -5~5
+      const y = (Math.random() - 0.5) * 15 - 10; // y: -17.5~-2.5 (下半部分)
+      const z = (Math.random() - 0.5) * 8; // z: -4~4 (更薄)
       
       this.particlePositions[i * 3] = x;
       this.particlePositions[i * 3 + 1] = y;
@@ -236,8 +236,8 @@ class WebGLBackground {
       
       // 初始速度 - 统一方向
       this.particleVelocities[i * 3] = this.flowSpeed * this.flowDirection;
-      this.particleVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.05;
-      this.particleVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.02;
+      this.particleVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.03; // 减少垂直运动
+      this.particleVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.01; // 减少深度运动
       
       // 灰色
       this.particleColors[i * 3] = 0.7;
@@ -252,15 +252,37 @@ class WebGLBackground {
     geometry.setAttribute('position', new THREE.BufferAttribute(this.particlePositions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(this.particleColors, 3));
     const material = new THREE.PointsMaterial({
-      size: 1.2,
+      size: 0.8, // 更小的粒子
       vertexColors: true,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.7, // 稍微增加透明度
       blending: THREE.AdditiveBlending,
-      sizeAttenuation: true
+      sizeAttenuation: true,
+      map: this.createCircularParticleTexture() // 使用圆形纹理
     });
     this.particleSystem = new THREE.Points(geometry, material);
     this.scene.add(this.particleSystem);
+  }
+
+  createCircularParticleTexture() {
+    // 创建圆形粒子纹理
+    const canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 32;
+    const ctx = canvas.getContext('2d');
+    
+    // 创建径向渐变
+    const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    gradient.addColorStop(0, 'rgba(179, 179, 179, 1)');
+    gradient.addColorStop(0.7, 'rgba(179, 179, 179, 0.8)');
+    gradient.addColorStop(1, 'rgba(179, 179, 179, 0)');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 32, 32);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.needsUpdate = true;
+    return texture;
   }
 
   updateFluidDynamics() {
@@ -326,13 +348,15 @@ class WebGLBackground {
         this.particleForces[i3] += this.boundaryForce * (-50 - posI.x);
       }
       
-      // Y轴边界
-      if (Math.abs(posI.y) > 20) {
-        this.particleForces[i3 + 1] -= Math.sign(posI.y) * this.boundaryForce;
+      // Y轴边界 - 限制在下半部分
+      if (posI.y > -2.5) {
+        this.particleForces[i3 + 1] -= this.boundaryForce * (posI.y + 2.5);
+      } else if (posI.y < -17.5) {
+        this.particleForces[i3 + 1] += this.boundaryForce * (-17.5 - posI.y);
       }
       
       // Z轴边界
-      if (Math.abs(posI.z) > 10) {
+      if (Math.abs(posI.z) > 8) {
         this.particleForces[i3 + 2] -= Math.sign(posI.z) * this.boundaryForce;
       }
     }
@@ -355,8 +379,8 @@ class WebGLBackground {
       
       // 限制在可视范围内
       this.particlePositions[i3] = Math.max(-60, Math.min(60, this.particlePositions[i3]));
-      this.particlePositions[i3 + 1] = Math.max(-25, Math.min(25, this.particlePositions[i3 + 1]));
-      this.particlePositions[i3 + 2] = Math.max(-15, Math.min(15, this.particlePositions[i3 + 2]));
+      this.particlePositions[i3 + 1] = Math.max(-25, Math.min(-5, this.particlePositions[i3 + 1])); // 限制在下半部分
+      this.particlePositions[i3 + 2] = Math.max(-12, Math.min(12, this.particlePositions[i3 + 2]));
     }
     
     this.particleSystem.geometry.attributes.position.needsUpdate = true;
