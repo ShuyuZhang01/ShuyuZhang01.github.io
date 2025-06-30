@@ -200,12 +200,81 @@
       width: 100%;
       object-fit: cover;
       border-radius: 12px;
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
       cursor: pointer;
     }
     
     .practice-page .gallery img:hover {
       transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 图片放大模态框样式 */
+    .image-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .image-modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .image-modal-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image-modal img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .image-modal-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    /* 让卡片图片可点击 */
+    .practice-page .work-cover {
+      cursor: pointer;
     }
 
     /* Enhanced Close Button */
@@ -550,6 +619,13 @@
     </div>
   </main>
   
+  <!-- 图片放大模态框 -->
+  <div class="image-modal" id="imageModal">
+    <div class="image-modal-content">
+      <img id="modalImage" src="" alt="放大图片">
+      <button class="image-modal-close" id="imageModalClose">&times;</button>
+    </div>
+  </div>
 
   <script>
   (function(){
@@ -653,6 +729,56 @@
         card.style.setProperty('--parallax',`${Math.max(d,0)}px`);
       });
     },{passive:true});
+
+    // 图片点击放大功能
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const imageModalClose = document.getElementById('imageModalClose');
+
+    // 为所有卡片图片添加点击事件
+    cards.forEach(card => {
+      const coverImage = card.querySelector('.work-cover');
+      if (coverImage) {
+        coverImage.addEventListener('click', (e) => {
+          e.stopPropagation(); // 阻止事件冒泡到卡片
+          const imgSrc = coverImage.src;
+          modalImage.src = imgSrc;
+          imageModal.classList.add('show');
+          document.body.style.overflow = 'hidden'; // 防止背景滚动
+        });
+      }
+    });
+
+    // 为图集中的图片添加点击事件
+    document.addEventListener('click', (e) => {
+      if (e.target.matches('.gallery img')) {
+        e.stopPropagation(); // 阻止事件冒泡
+        const imgSrc = e.target.src;
+        modalImage.src = imgSrc;
+        imageModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+
+    // 关闭图片模态框
+    function closeImageModal() {
+      imageModal.classList.remove('show');
+      document.body.style.overflow = ''; // 恢复滚动
+    }
+
+    imageModalClose.addEventListener('click', closeImageModal);
+    imageModal.addEventListener('click', (e) => {
+      if (e.target === imageModal) {
+        closeImageModal();
+      }
+    });
+
+    // ESC键关闭图片模态框
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && imageModal.classList.contains('show')) {
+        closeImageModal();
+      }
+    });
   })();
   </script>
   
