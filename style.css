@@ -9,12 +9,12 @@
   --z-index-nav: 100;
   --z-index-modal: 200;
   --z-index-expanded-card: 150;
-  --primary-color: #fbbf24;
+  --primary-color: #9ca3af;
   --text-color: #fff;
   --bg-color: #000;
   --overlay-bg: rgba(0, 0, 0, 0.55);
-  --accent-color: #f59e0b;
-  --light-accent: #fde68a;
+  --accent-color: #6b7280;
+  --light-accent: #d1d5db;
 }
 
 html {

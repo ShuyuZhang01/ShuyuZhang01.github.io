@@ -16,7 +16,7 @@ export default function WebGLBackground({ children }) {
         opacity: 0.3
       }}>
         <Canvas camera={{ position: [0, 0, 1] }}>
-          <BackgroundEffect count={2000} size={0.01} color="#fbbf24" />
+          <BackgroundEffect count={2000} size={0.01} color="#9ca3af" />
         </Canvas>
       </div>
       

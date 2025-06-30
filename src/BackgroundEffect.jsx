@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { Points, PointMaterial } from '@react-three/drei'
 import * as random from 'maath/random'
 
-export default function BackgroundEffect({ count = 1000, size = 0.02, color = '#fbbf24' }) {
+export default function BackgroundEffect({ count = 1000, size = 0.02, color = '#9ca3af' }) {
   const ref = useRef()
   
   const positions = useMemo(() => {
