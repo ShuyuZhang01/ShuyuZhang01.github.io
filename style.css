@@ -90,7 +90,7 @@ body {
 }
 
 .nav a:hover {
-  color: var(--primary-color);
+  color: #d1d5db;
 }
 
 .brand {
@@ -102,7 +102,7 @@ body {
 }
 
 .brand:hover {
-  color: #9ca3af;
+  color: #d1d5db;
 }
 
 /* ========== 页面通用样式 ========== */
@@ -613,9 +613,9 @@ transition: transform 0.6s ease-out;
   }
 }
 
-/* 通用悬停字体渐变色 */
+/* 通用悬停字体渐变色 - 更淡雅的颜色 */
 a:hover, .work-title:hover, .page-title:hover, .subsection-title:hover, .nav-list a:hover {
-  background: linear-gradient(90deg, var(--nebula-color1), var(--nebula-color2), var(--nebula-color3));
+  background: linear-gradient(90deg, #d1d5db, #9ca3af, #d1d5db);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

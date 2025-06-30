@@ -38,7 +38,7 @@
     
     /* 为文字内容区域添加灰色背景 */
     .cv-content-background {
-      background: rgba(40, 40, 40, 0.8);
+      background: rgba(40, 40, 40, 0.3);
       backdrop-filter: blur(10px);
       border-radius: 15px;
       padding: 2rem;
@@ -57,7 +57,7 @@
       overflow: hidden;
     }
     
-    /* 标题下划线动画 */
+    /* 标题下划线动画 - 更淡雅的颜色 */
     .cv-section-title::after {
       content: '';
       position: absolute;
@@ -65,7 +65,7 @@
       left: -100%;
       width: 100%;
       height: 2px;
-      background: linear-gradient(90deg, #9ca3af, #6b7280);
+      background: linear-gradient(90deg, #d1d5db, #9ca3af);
       transition: left 0.6s ease;
     }
     
@@ -129,13 +129,13 @@
     
     a:hover {
       text-decoration: underline;
-      color: var(--accent-color);
+      color: #d1d5db;
       transform: translateX(5px);
     }
 
     /* 若有类似 .cv-content-background 或 main.container 的 background 样式，改为 transparent */
     .cv-content-background, main.container {
-      background: rgba(40, 40, 40, 0.5) !important;
+      background: rgba(40, 40, 40, 0.3) !important;
     }
   </style>
 </head>
