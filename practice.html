@@ -19,63 +19,117 @@
   <style>
     /* ───────── Self‑Practice page tweaks ───────── */
     .practice-page .container{
-      padding-left:clamp(1.5rem,6vw,5rem);
+      padding-left: clamp(1.5rem, 6vw, 5rem);
     }
     .practice-page .page-title{
-      font-family:"Open Sans",sans-serif;
-      font-weight:600;
-      text-align:left;
-      margin-bottom:2.5rem;
+      font-family: "Open Sans", sans-serif;
+      font-weight: 600;
+      text-align: left;
+      margin-bottom: 3rem;
     }
 
-    /* 3‑column grid on desktop */
+    /* Enhanced 3‑column grid on desktop */
     .practice-page .work-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:3rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem 2rem;
+      margin-top: 1rem;
     }
 
-    /* Card cover */
+    /* Enhanced Card cover */
     .practice-page .work-cover{
-      aspect-ratio:4/3;
-      transition:transform .4s ease;
-      width:100%;
-      height:auto;
-      object-fit:cover;
-      display:block;
+      aspect-ratio: 4/3;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
     }
 
     .practice-page .work-card{
-      box-shadow:0 12px 32px rgba(0,0,0,.38);
-      overflow:hidden;
-      position:relative;
-      cursor:pointer;
-      border-radius:1.25rem;
-      transition:transform .3s ease;
-      background:#000; /* avoids white gap before image loads */
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #000;
+      transform: translateY(0);
     }
-    .practice-page .work-card:hover .work-cover{transform:scale(1.05);}   
+    
+    .practice-page .work-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    
+    .practice-page .work-card:hover .work-cover {
+      transform: scale(1.05);
+    }
 
-    /* ───────── Expanded (lightbox) ───────── */
+    /* Enhanced Overlay */
+    .practice-page .work-card .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: #fff;
+      padding: 2rem 1.5rem 1.5rem;
+      transform: translateY(0);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .practice-page .work-card:hover .overlay {
+      transform: translateY(-5px);
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    }
+
+    /* Enhanced Work Title */
+    .practice-page .work-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .practice-page .work-card:hover .work-title {
+      color: var(--primary-color);
+    }
+
+    /* Enhanced Work Description */
+    .practice-page .work-desc {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      line-height: 1.4;
+      transition: all 0.3s ease;
+    }
+    
+    .practice-page .work-card:hover .work-desc {
+      opacity: 1;
+    }
+
+    /* ───────── Enhanced Expanded (lightbox) ───────── */
     .practice-page .work-card.expanded{
-      position:fixed;
-      z-index:999;
-      top:50%;
-      left:50%;
-      width:85vw;
-      height:85vh;
-      transform:translate(-50%,-50%);
-      background:#111;
-      box-shadow:0 0 80px rgba(0,0,0,.5);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      color:#fff;
-      padding:2rem;
-      font-size:clamp(1.2rem,2.4vw,1.6rem);
-      line-height:1.5;
-      animation: cardExpand 0.4s ease-out;
+      position: fixed;
+      z-index: 999;
+      top: 50%;
+      left: 50%;
+      width: 90vw;
+      height: 90vh;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+      box-shadow: 0 0 100px rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: #fff;
+      padding: 2.5rem;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      line-height: 1.6;
+      animation: cardExpand 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 24px;
+      backdrop-filter: blur(20px);
     }
     
     @keyframes cardExpand {
@@ -89,38 +143,44 @@
       }
     }
 
-    /* hide thumbnail + overlay inside modal so避免看到两个框 */
+    /* hide thumbnail + overlay inside modal */
     .practice-page .work-card.expanded .work-cover,
-    .practice-page .work-card.expanded .overlay{display:none;}
-
-    /* iframe (video) styling */
-    .practice-page .work-card.expanded iframe{
-      width:100%;
-      height:100%;
-      flex:1 1 auto;
-      border:none;
-      border-radius:.75rem;
-      max-height:60vh;
-      margin-bottom:1.5rem;
-      animation: contentFadeIn 0.6s ease 0.2s both;
+    .practice-page .work-card.expanded .overlay {
+      display: none;
     }
 
-    /* ───────── Image gallery for JS patterns ───────── */
-    .practice-page .gallery{
-      display:flex;
-      flex-wrap:wrap;
-      gap:.5rem;
-      justify-content:center;
-      margin-bottom:1.5rem;
-      max-height:60vh;
-      overflow:auto;
+    /* Enhanced iframe (video) styling */
+    .practice-page .work-card.expanded iframe{
+      width: 100%;
+      height: 100%;
+      flex: 1 1 auto;
+      border: none;
+      border-radius: 16px;
+      max-height: 65vh;
+      margin-bottom: 2rem;
       animation: contentFadeIn 0.6s ease 0.2s both;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ───────── Enhanced Image gallery ───────── */
+    .practice-page .gallery{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      max-height: 65vh;
+      overflow: auto;
+      animation: contentFadeIn 0.6s ease 0.2s both;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
     }
     
     @keyframes contentFadeIn {
       from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
       }
       to {
         opacity: 1;
@@ -129,41 +189,57 @@
     }
 
     .practice-page .gallery img{
-      height:18vh;
-      flex:0 0 auto;
-      border-radius:.5rem;
+      height: 20vh;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .practice-page .gallery img:hover {
+      transform: scale(1.05);
     }
 
+    /* Enhanced Close Button */
     .practice-page .close-btn{
-      position:absolute;
-      top:1rem;
-      right:1rem;
-      background:transparent;
-      color:#fff;
-      font-size:2rem;
-      border:none;
-      cursor:pointer;
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 2rem;
+      border: none;
+      cursor: pointer;
       transition: all 0.3s ease;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(10px);
     }
     
     .practice-page .close-btn:hover {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.2);
       transform: rotate(90deg) scale(1.1);
       color: var(--primary-color);
     }
 
-    /* typing text - 删除打字机效果，改为简洁的渐入动画 */
+    /* Enhanced typing text */
     .typing-text{
       opacity: 0;
       transform: translateY(20px);
       animation: fadeInUp 0.8s ease forwards;
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      line-height: 1.7;
+      font-size: 1rem;
     }
+    
     @keyframes fadeInUp{
       to{
         opacity: 1;
@@ -171,7 +247,7 @@
       }
     }
 
-    /* 技能标签动画 */
+    /* Enhanced skill tag animation */
     .work-desc {
       position: relative;
       overflow: hidden;
@@ -184,7 +260,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
       transition: left 0.6s ease;
     }
     
@@ -192,8 +268,10 @@
       left: 100%;
     }
     
-    /* 卡片加载动画 */
+    /* Enhanced card loading animation */
     .work-card {
+      opacity: 0;
+      transform: translateY(30px);
       animation: cardSlideIn 0.8s ease forwards;
       animation-delay: calc(var(--card-index, 0) * 0.1s);
     }
@@ -201,15 +279,15 @@
     @keyframes cardSlideIn {
       from {
         opacity: 0;
-        transform: translateX(-50px);
+        transform: translateY(30px);
       }
       to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
       }
     }
     
-    /* 标题简洁效果 - 删除打字机光标 */
+    /* Enhanced title hover effect */
     .work-title {
       position: relative;
       transition: all 0.3s ease;
@@ -218,6 +296,57 @@
     .work-title:hover {
       color: var(--primary-color);
       transform: translateX(5px);
+    }
+    
+    /* Enhanced PDF iframe styling */
+    .practice-page .work-card.expanded iframe[type="application/pdf"] {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .practice-page .work-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .practice-page .work-card.expanded {
+        width: 95vw;
+        height: 95vh;
+        padding: 1.5rem;
+        border-radius: 16px;
+      }
+      
+      .practice-page .gallery {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+      }
+      
+      .practice-page .gallery img {
+        height: 15vh;
+      }
+    }
+    
+    /* Scrollbar Styling */
+    .practice-page .gallery::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .practice-page .gallery::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .practice-page .gallery::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    .practice-page .gallery::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
     }
   </style>
 </head>
@@ -242,7 +371,7 @@
     <div class="work-grid">
       <!-- ▶ Practice 1 -->
       <article class="work-card" data-text="VR experience with installation."
-      data-pdf="assets/pdf/mind-uploading.pdf">
+      data-pdf="assets/pdf/mind-uploading.pdf" style="--card-index: 0;">
         <img class="work-cover" src="assets/photo/eyes.png" alt="VR experience & installation">
         <div class="overlay">
           <div>
@@ -251,10 +380,10 @@
           </div>
         </div>
       </article>
+      
       <!-- ▶ Unity Mini‑Game (video) -->
       <article class="work-card" data-text="A small‑scale game exploring Unity Visual Scripting and some basic Unity C#."
-               data-video="https://www.youtube.com/embed/Xo-ZtWO-TLs">
-        <!-- use local cover instead of YouTube thumbnail -->
+               data-video="https://www.youtube.com/embed/Xo-ZtWO-TLs" style="--card-index: 1;">
         <img class="work-cover" src="assets/photo/game.png" alt="Unity Mini‑Game Cover">
         <div class="overlay">
           <div>
@@ -266,7 +395,7 @@
 
       <!-- ▶ JavaScript Pattern Study (PHOTO GALLERY) -->
       <article class="work-card" data-text="new to JavaScript，made some patterns"
-               data-gallery="assets/photo/js1.jpg,assets/photo/js1 (2).jpg,assets/photo/js1 (3).jpg,assets/photo/js1 (4).jpg,assets/photo/js1 (5).jpg,assets/photo/js1 (6).jpg,assets/photo/js1 (7).jpg">
+               data-gallery="assets/photo/js1.jpg,assets/photo/js1 (2).jpg,assets/photo/js1 (3).jpg,assets/photo/js1 (4).jpg,assets/photo/js1 (5).jpg,assets/photo/js1 (6).jpg,assets/photo/js1 (7).jpg" style="--card-index: 2;">
         <img class="work-cover" src="assets/photo/js1 (5).jpg" alt="JavaScript Pattern practice">
         <div class="overlay">
           <div>
@@ -277,7 +406,7 @@
       </article>
 
       <!-- ▶ Practice 4 -->
-     <article class="work-card" data-text="First exploration combining Unity, TouchDesigner, and MediaPipe; camera controls particle effect in Unity." data-video="https://player.vimeo.com/video/1073393786">
+     <article class="work-card" data-text="First exploration combining Unity, TouchDesigner, and MediaPipe; camera controls particle effect in Unity." data-video="https://player.vimeo.com/video/1073393786" style="--card-index: 3;">
         <img class="work-cover" src="assets/photo/unity1.png" alt="Unity Interactive Practice Cover">
         <div class="overlay">
           <div>
@@ -289,7 +418,7 @@
 
       <!-- ▶ Practice 5-->
       <article class="work-card" data-text="using array, class addEventListener noise effect ."
-      data-video="https://www.youtube.com/embed/opP0ge4XanA">
+      data-video="https://www.youtube.com/embed/opP0ge4XanA" style="--card-index: 4;">
           
         <img class="work-cover" src="assets/photo/clock.jpg" alt="JavaScript practice">
         <div class="overlay">
@@ -301,7 +430,7 @@
       </article>
 
        <!-- ▶ Discoball — Dance Move Visualization (video) -->
-      <article class="work-card" data-text="Wearable garment interactive design using Arduino, soldered stretch sensors, and custom sewing; visualises dance moves as a discoball particle display." data-video="https://player.vimeo.com/video/1037119610">
+      <article class="work-card" data-text="Wearable garment interactive design using Arduino, soldered stretch sensors, and custom sewing; visualises dance moves as a discoball particle display." data-video="https://player.vimeo.com/video/1037119610" style="--card-index: 5;">
         <img class="work-cover" src="assets/photo/disco.jpg" alt="Discoball — Dance Move Visualization">
         <div class="overlay">
           <div>
@@ -313,7 +442,7 @@
 
       <!-- ▶ Practice 7 -->
       <article class="work-card" data-text="Play with particle systems in TouchDesigner."
-      data-video="https://www.youtube.com/embed/P2B5vbREz3k">
+      data-video="https://www.youtube.com/embed/P2B5vbREz3k" style="--card-index: 6;">
         <img class="work-cover" src="assets/photo/soup.jpg" alt="Here comes chicken soup">
         <div class="overlay">
           <div>
@@ -322,9 +451,10 @@
           </div>
         </div>
       </article>
+      
   <!-- ▶ Practice 8 -->
       <article class="work-card" data-text="exploring individuality and the relationship with one's body through AI and dance."
-        data-video="https://www.youtube.com/embed/9PJuvTLFxG0">
+        data-video="https://www.youtube.com/embed/9PJuvTLFxG0" style="--card-index: 7;">
         <img class="work-cover" src="assets/photo/aidance.png" alt="TogAIther">
         <div class="overlay">
           <div>
@@ -336,7 +466,7 @@
    
   <!-- ▶ Practice 9 -->
       <article class="work-card" data-text="Exploration of OBS ."
-      data-video="https://www.youtube.com/embed/_zDTDBreNEY">
+      data-video="https://www.youtube.com/embed/_zDTDBreNEY" style="--card-index: 8;">
         <img class="work-cover" src="assets/photo/obs.png" alt="OBS exploration">
         <div class="overlay">
           <div>
@@ -348,7 +478,7 @@
     
   <!-- ▶ Practice 10 -->
       <article class="work-card" data-text="An app for kids who have depression disorder."
-      data-pdf="assets/pdf/help.pdf">
+      data-pdf="assets/pdf/help.pdf" style="--card-index: 9;">
         <img class="work-cover" src="assets/photo/help.jpg" alt="Help me">
         <div class="overlay">
           <div>
@@ -360,7 +490,7 @@
 
   <!-- ▶ Practice 11 -->
       <article class="work-card" data-text="My Flappy Bird project is a pure-code mini-game inspired by Flappy Bird."
-      data-video="https://player.vimeo.com/video/1081948271">
+      data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 10;">
         <img class="work-cover" src="assets/photo/bird.png" alt="My Flappy Bird">
         <div class="overlay">
           <div>
@@ -372,7 +502,7 @@
       
        <!-- ▶ Practice 12 -->
       <article class="work-card" data-text="A collaborative workshop with Chinese dancers where we explored both the differences and overlaps between Chinese classical dance and street dance, while also examining the current state of China's street-dance culture and its potential future development."
-      data-video="https://www.youtube.com/embed/QIeOg0z5iVs">
+      data-video="https://www.youtube.com/embed/QIeOg0z5iVs" style="--card-index: 11;">
         <img class="work-cover" src="assets/photo/workshop.png" alt="Hiphop dance workshop">
         <div class="overlay">
           <div>
@@ -389,11 +519,6 @@
   (function(){
     const cards=document.querySelectorAll('.work-card');
     const body=document.body;
-
-    /* 为卡片添加索引用于动画延迟 */
-    cards.forEach((card, index) => {
-      card.style.setProperty('--card-index', index);
-    });
 
     /* fade‑in on scroll */
     const io=new IntersectionObserver(entries=>{
@@ -415,11 +540,12 @@
       card.classList.add('expanded');
       body.style.overflow='hidden';
 
-      /* build typing description */
+      /* build description */
       const text=card.dataset.text||'';
       const textElem=document.createElement('p');
       textElem.className='typing-text';
       textElem.textContent=text;
+      
       /* ① PDF 优先 */
      if (card.dataset.pdf){
     const iframe = document.createElement('iframe');
@@ -470,7 +596,7 @@
       if(keyHandler)document.removeEventListener('keydown',keyHandler);
     }
 
-    /* simple parallax */
+    /* enhanced parallax */
     window.addEventListener('scroll',()=>{
       cards.forEach(card=>{
         const rect=card.getBoundingClientRect();
