@@ -32,17 +32,29 @@
     /* ───────── Waterfall Grid ───────── */
     .practice-page .work-grid {
       display: block !important;
-      column-count: 1; /* Mobile-first: 1 column */
+      column-count: 2; /* Mobile-first: 2 columns */
       column-gap: 1.5rem;
     }
     @media (min-width: 500px) {
       .practice-page .work-grid {
-        column-count: 2; /* Small tablets / large phones */
+        column-count: 3; /* Small tablets / large phones */
       }
     }
-    @media (min-width: 992px) {
+    @media (min-width: 768px) {
       .practice-page .work-grid {
-        column-count: 3; /* Desktops and large tablets */
+        column-count: 3; /* iPad and medium tablets */
+      }
+      /* iPad specific fixes */
+      .practice-page .work-cover {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 4 / 3 !important;
+        object-fit: cover !important;
+        display: block !important;
+        background: #333 !important;
+        min-height: 200px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
       }
     }
 
@@ -127,6 +139,16 @@
     .gallery-container { width: 100%; height: 100%; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; padding-right: 10px; }
     .gallery-container img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; }
     .lightbox-text { line-height: 1.6; font-size: 1rem; color: #ccc; }
+    
+    /* iPad Safari specific fixes */
+    @supports (-webkit-touch-callout: none) {
+      .practice-page .work-cover {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+      }
+    }
   </style>
 </head>
 
