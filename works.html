@@ -24,6 +24,7 @@
       flex-direction: column;
       gap: 4rem;
       margin-top: 2rem;
+      align-items: center;
     }
 
     /* -------------- Enhanced Card Styling -------------- */
@@ -40,15 +41,15 @@
       max-width: 600px;
     }
 
-    /* 左右交错布局 */
+    /* 左右交错布局 - 减小差距 */
     .work-card:nth-child(odd) {
       align-self: flex-start;
-      margin-left: 0;
+      margin-left: 2rem;
     }
 
     .work-card:nth-child(even) {
       align-self: flex-end;
-      margin-right: 0;
+      margin-right: 2rem;
     }
 
     .work-card:hover {
