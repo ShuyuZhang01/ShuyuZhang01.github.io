@@ -32,7 +32,7 @@
       align-items: flex-start;
     }
 
-    /* -------------- Enhanced Card Styling -------------- */
+    /* -------------- Enhanced Card Styling (修正版) -------------- */
     .work-card {
       position: relative;
       border-radius: 20px;
@@ -44,21 +44,31 @@
       width: 100%;
       max-width: 400px;
       flex: 0 1 400px;
-      transform: translateY(var(--parallax-y, 0)) translateX(var(--parallax-x, 0));
+
+      /* 定义默认的CSS变量 */
+      --parallax-x: 0px;
+      --parallax-y: 0px;
+
+      /* 统一的 transform 规则 */
+      transform: translateX(var(--parallax-x)) translateY(var(--parallax-y));
     }
 
-    /* 左右两个有上下差距 */
-    .work-card:nth-child(odd) {
-      transform: translateY(calc(var(--parallax-y, 0) + 0)) translateX(var(--parallax-x, 0));
-    }
-
+    /* 仅让偶数卡片有一个初始的向下偏移 */
     .work-card:nth-child(even) {
-      transform: translateY(calc(var(--parallax-y, 0) + 2rem)) translateX(var(--parallax-x, 0));
+      transform: translateX(var(--parallax-x)) translateY(calc(var(--parallax-y) + 2rem));
     }
 
+    /* 鼠标悬停时，在当前视差位置的基础上向上移动一点 */
     .work-card:hover {
-      transform: translateY(calc(var(--parallax-y, 0) - 8px)) translateX(var(--parallax-x, 0));
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .work-card:nth-child(odd):hover {
+      transform: translateX(var(--parallax-x)) translateY(calc(var(--parallax-y) - 8px));
+    }
+
+    .work-card:nth-child(even):hover {
+      transform: translateX(var(--parallax-x)) translateY(calc(var(--parallax-y) + 2rem - 8px));
     }
 
     .work-card .work-cover {
@@ -110,16 +120,6 @@
     .work-card {
       --parallax-x: 0px;
       --parallax-y: 0px;
-    }
-
-    .work-card:nth-child(odd) {
-      align-self: flex-start;
-      margin-left: 0;
-    }
-
-    .work-card:nth-child(even) {
-      align-self: flex-end;
-      margin-right: 0;
     }
 
     /* -------------- Enhanced Modal -------------- */
