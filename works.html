@@ -58,13 +58,13 @@
       transform: translateY(-8px); 
     }
 
-    /* 第 2 张卡往右上偏 & 稍往下叠 */
+    /* 第 2 张卡稍微往下叠 */
     .work-card:nth-child(3n+2){
-      transform: translate(-20px, 40px);
+      transform: translate(0, 25px);
     }
-    /* 第 3 张卡再多偏一点，制造更明显的层次 */
+    /* 第 3 张卡再多叠一点，制造更明显的层次 */
     .work-card:nth-child(3n+3){
-      transform: translate(-40px, 80px);
+      transform: translate(0, 50px);
     }
 
     /* 移除偶数卡片的初始偏移，由JS处理 */
@@ -577,15 +577,15 @@ Through an immersive VR experience, viewers descend from the surface's refracted
         const distanceFromCenter = cardCenter - viewportCenter;
 
         // 调整这些乘数可以改变视差的强度
-        const parallaxY = (distanceFromCenter * 0.1).toFixed(1); // 调整了强度
-        const parallaxX = ((index % 2 === 0 ? 1 : -1) * distanceFromCenter * 0.05).toFixed(1); // 调整了强度
+        const parallaxY = (distanceFromCenter * 0.08).toFixed(1); // 降低垂直视差强度
+        const parallaxX = ((index % 2 === 0 ? 1 : -1) * distanceFromCenter * 0.03).toFixed(1); // 降低水平视差强度
 
         // 结合CSS错位效果和JavaScript视差效果
         let baseTransform = '';
         if (index % 3 === 1) { // 第2张卡 (3n+2)
-          baseTransform = 'translate(-20px, 40px)';
+          baseTransform = 'translate(0, 25px)';
         } else if (index % 3 === 2) { // 第3张卡 (3n+3)
-          baseTransform = 'translate(-40px, 80px)';
+          baseTransform = 'translate(0, 50px)';
         }
 
         // 在基础错位基础上添加视差效果

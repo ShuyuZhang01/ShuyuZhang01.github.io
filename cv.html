@@ -36,6 +36,16 @@
       margin-top: 2rem !important;
     }
     
+    /* 为文字内容区域添加灰色背景 */
+    .cv-content-background {
+      background: rgba(40, 40, 40, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 1rem 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
     .cv-section-title {
       font-family: "Open Sans", sans-serif;
       font-weight: 600;
@@ -146,60 +156,76 @@
     <h1 class="page-title">CV</h1>
 
     <!-- Personal info -->
-    <div class="cv-center-block" style="text-align:center; margin-top:0;">
-      <h1 style="font-family: 'Open Sans', sans-serif; font-size: 2rem; margin-bottom: 1rem;">SHUYU ZHANG</h1>
-      <p><em>Interactive &amp; Spatial Experience Designer&nbsp;|&nbsp;Digital Artist</em></p>
-      <p>London, UK&nbsp;| +44&nbsp;(0)7468&nbsp;438&nbsp;097&nbsp;| zayaismyname@163.com</p>
-      <p>https://shuyuzhang01.github.io/</p>
+    <div class="cv-content-background">
+      <div class="cv-center-block" style="text-align:center; margin-top:0;">
+        <h1 style="font-family: 'Open Sans', sans-serif; font-size: 2rem; margin-bottom: 1rem;">SHUYU ZHANG</h1>
+        <p><em>Interactive &amp; Spatial Experience Designer&nbsp;|&nbsp;Digital Artist</em></p>
+        <p>London, UK&nbsp;| +44&nbsp;(0)7468&nbsp;438&nbsp;097&nbsp;| zayaismyname@163.com</p>
+        <p>https://shuyuzhang01.github.io/</p>
+      </div>
     </div>
 
     <!-- EDUCATION -->
-    <h2 class="cv-section-title">EDUCATION</h2>
-    <ul class="cv-list">
-      <li><strong>MA Computational Arts (in progress)</strong> — Goldsmiths, University of London, UK | Sep&nbsp;2024 – Sep&nbsp;2026</li>
-      <li><strong>BA Arts, Technology &amp; Entertainment (First Class Honours)</strong> — Xi'an Jiaotong‑Liverpool University, China | Sep&nbsp;2019 – Jun&nbsp;2024</li>
-    </ul>
+    <div class="cv-content-background">
+      <h2 class="cv-section-title">EDUCATION</h2>
+      <ul class="cv-list">
+        <li><strong>MA Computational Arts (in progress)</strong> — Goldsmiths, University of London, UK | Sep&nbsp;2024 – Sep&nbsp;2026</li>
+        <li><strong>BA Arts, Technology &amp; Entertainment (First Class Honours)</strong> — Xi'an Jiaotong‑Liverpool University, China | Sep&nbsp;2019 – Jun&nbsp;2024</li>
+      </ul>
+    </div>
 
     <!-- CORE SKILLS & IMPACT -->
-    <h2 class="cv-section-title">CORE SKILLS &amp; IMPACT</h2>
-    <ul class="cv-list">
-      <li><strong>Interactive &amp; Spatial Experience Design</strong> — Unity (C#, VFX Graph, VR), Unreal, OptiTrack.<br>Led motion‑capture and VFX for 2025 live VR‑dance performance.</li>
-      <li><strong>Creative Coding &amp; Generative Art</strong> — JavaScript, TouchDesigner, Processing.<br>Created <em>Piano Piece of Day and Night</em> (2024), a time‑driven flower lifecycle animation.</li>
-      <li><strong>Physical Computing</strong> — Arduino C/C++, welding.<br>Built <em>Can I Have Some Water?</em> (2024) interactive plant installation detecting soil moisture.</li>
-      <li><strong>Game Modding</strong> — Lua, rigging, Spriter, narrative.<br>Authored <em>Don't Starve Together</em> mod "The Hiphop Dancer Yu".</li>
-    </ul>
+    <div class="cv-content-background">
+      <h2 class="cv-section-title">CORE SKILLS &amp; IMPACT</h2>
+      <ul class="cv-list">
+        <li><strong>Interactive &amp; Spatial Experience Design</strong> — Unity (C#, VFX Graph, VR), Unreal, OptiTrack.<br>Led motion‑capture and VFX for 2025 live VR‑dance performance.</li>
+        <li><strong>Creative Coding &amp; Generative Art</strong> — JavaScript, TouchDesigner, Processing.<br>Created <em>Piano Piece of Day and Night</em> (2024), a time‑driven flower lifecycle animation.</li>
+        <li><strong>Physical Computing</strong> — Arduino C/C++, welding.<br>Built <em>Can I Have Some Water?</em> (2024) interactive plant installation detecting soil moisture.</li>
+        <li><strong>Game Modding</strong> — Lua, rigging, Spriter, narrative.<br>Authored <em>Don't Starve Together</em> mod "The Hiphop Dancer Yu".</li>
+      </ul>
+    </div>
 
     <!-- PROFESSIONAL EXPERIENCE -->
-    <h2 class="cv-section-title">PROFESSIONAL EXPERIENCE</h2>
-    <ul class="cv-list">
-      <li><strong>Design Assistant</strong> — Suzhou Ruishen Education Tech Group Co. Ltd. | Jan&nbsp;–&nbsp;Sep&nbsp;2024<br>Converted research insights into proposals, mentored students, provided bilingual translation.</li>
-      <li><strong>Design Assistant</strong> — Jiangsu Jingtiancheng Cultural Tourism Dev. Co. Ltd. | Jun&nbsp;–&nbsp;Jul&nbsp;2023<br>Integrated visitor feedback into new tour‑map routes adopted for pilot launch.</li>
-    </ul>
+    <div class="cv-content-background">
+      <h2 class="cv-section-title">PROFESSIONAL EXPERIENCE</h2>
+      <ul class="cv-list">
+        <li><strong>Design Assistant</strong> — Suzhou Ruishen Education Tech Group Co. Ltd. | Jan&nbsp;–&nbsp;Sep&nbsp;2024<br>Converted research insights into proposals, mentored students, provided bilingual translation.</li>
+        <li><strong>Design Assistant</strong> — Jiangsu Jingtiancheng Cultural Tourism Dev. Co. Ltd. | Jun&nbsp;–&nbsp;Jul&nbsp;2023<br>Integrated visitor feedback into new tour‑map routes adopted for pilot launch.</li>
+      </ul>
+    </div>
 
     <!-- SELECTED PROJECTS -->
-    <h2 class="cv-section-title">SELECTED PROJECTS</h2>
-    <ul class="cv-list">
-      <li>2025 — Live VR‑Dance Performance — <em>Motion‑capture Tech Lead / VFX Designer</em></li>
-      <li>2024 — <em>Piano Piece of Day and Night</em> — <em>Solo Creator</em></li>
-      <li>2024 — <em>Can I Have Some Water?</em> — <em>Hardware Integrator</em></li>
-      <li>2024 — <em>The Hiphop Dancer Yu</em> — <em>Game Mod &amp; Installation</em></li>
-      <li>2023 — <em>Caged Bird</em> Short Film — <em>Art Director / Production Assistant</em></li>
-    </ul>
+    <div class="cv-content-background">
+      <h2 class="cv-section-title">SELECTED PROJECTS</h2>
+      <ul class="cv-list">
+        <li>2025 — Live VR‑Dance Performance — <em>Motion‑capture Tech Lead / VFX Designer</em></li>
+        <li>2024 — <em>Piano Piece of Day and Night</em> — <em>Solo Creator</em></li>
+        <li>2024 — <em>Can I Have Some Water?</em> — <em>Hardware Integrator</em></li>
+        <li>2024 — <em>The Hiphop Dancer Yu</em> — <em>Game Mod &amp; Installation</em></li>
+        <li>2023 — <em>Caged Bird</em> Short Film — <em>Art Director / Production Assistant</em></li>
+      </ul>
+    </div>
 
     <!-- TECHNICAL TOOLKIT -->
-    <h2 class="cv-section-title">TECHNICAL TOOLKIT</h2>
-    <p>Unity&nbsp;(Adv.) · TouchDesigner&nbsp;(Int.) · JavaScript · Lua · Arduino&nbsp;C/C++ · Python · OptiTrack<br>Procreate · Photoshop · Figma · Maya | Git · Notion · Miro</p>
+    <div class="cv-content-background">
+      <h2 class="cv-section-title">TECHNICAL TOOLKIT</h2>
+      <p>Unity&nbsp;(Adv.) · TouchDesigner&nbsp;(Int.) · JavaScript · Lua · Arduino&nbsp;C/C++ · Python · OptiTrack<br>Procreate · Photoshop · Figma · Maya | Git · Notion · Miro</p>
+    </div>
 
     <!-- LANGUAGES & INTERESTS -->
-    <h2 class="cv-section-title">LANGUAGES &amp; INTERESTS</h2>
-    <p>English (IELTS&nbsp;6.5) | Mandarin&nbsp;(native)<br>Street dance (popping/hip‑hop) · Art museums · Music</p>
+    <div class="cv-content-background">
+      <h2 class="cv-section-title">LANGUAGES &amp; INTERESTS</h2>
+      <p>English (IELTS&nbsp;6.5) | Mandarin&nbsp;(native)<br>Street dance (popping/hip‑hop) · Art museums · Music</p>
+    </div>
 
     <!-- REFEREES -->
-    <h2 class="cv-section-title">REFEREES</h2>
-    <ul class="cv-list">
-      <li><strong>Jessica Wolpert</strong> — Senior Lecturer, Goldsmiths, University of London<br>Email: J.Wolpert@gold.ac.uk | Phone: +44&nbsp;7813&nbsp;035&nbsp;494</li>
-      <li><strong>Kim Lau</strong> — Associate Professor, Xi'an Jiaotong‑Liverpool University<br>Email: kim.lau02@xjtlu.edu.cn | Phone: +86&nbsp;188&nbsp;6269&nbsp;1160</li>
-    </ul>
+    <div class="cv-content-background">
+      <h2 class="cv-section-title">REFEREES</h2>
+      <ul class="cv-list">
+        <li><strong>Jessica Wolpert</strong> — Senior Lecturer, Goldsmiths, University of London<br>Email: J.Wolpert@gold.ac.uk | Phone: +44&nbsp;7813&nbsp;035&nbsp;494</li>
+        <li><strong>Kim Lau</strong> — Associate Professor, Xi'an Jiaotong‑Liverpool University<br>Email: kim.lau02@xjtlu.edu.cn | Phone: +86&nbsp;188&nbsp;6269&nbsp;1160</li>
+      </ul>
+    </div>
 
   </main>
 

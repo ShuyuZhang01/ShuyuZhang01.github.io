@@ -229,6 +229,7 @@ class WebGLBackground {
     // 创建相机
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.z = this.cameraDistance;
+    this.camera.position.y = -5; // 减少垂直偏移，让左右流动更明显
     
     // 创建渲染器
     this.renderer = new THREE.WebGLRenderer({ 
@@ -260,8 +261,9 @@ class WebGLBackground {
         const i3 = i * 3;
         const x = (Math.random() - 0.5) * sceneWidth * 2;
         const z = (Math.random() - 0.5) * this.sceneDepth;
+        // 减少垂直方向的随机分布，让粒子更集中在水平线上
         const pathY = this.pathAmplitude * Math.sin(x * this.pathFrequency);
-        const y = pathY + (Math.random() - 0.5) * 20;
+        const y = pathY + (Math.random() - 0.5) * 10; // 减少垂直随机范围从20到10
         this.particlePositions[i3] = x;
         this.particlePositions[i3 + 1] = y;
         this.particlePositions[i3 + 2] = z;
@@ -378,11 +380,12 @@ class WebGLBackground {
         const pos = { x: this.particlePositions[i3], y: this.particlePositions[i3 + 1], z: this.particlePositions[i3 + 2] };
         const vel = { x: this.particleVelocities[i3], y: this.particleVelocities[i3 + 1], z: this.particleVelocities[i3 + 2] };
         let force = { x: 0, y: 0, z: 0 };
-        // 宏观流动力
+        // 宏观流动力 - 改为左右流动
         force.x += this.flowSpeed * this.flowDirection * dt;
+        // 减少垂直方向的引导力
         const pathY = this.pathAmplitude * Math.sin(pos.x * this.pathFrequency + this.time * 0.1);
-        force.y += (pathY - pos.y) * this.pathStrength;
-        const waveY = this.noise.noise3D(pos.x * this.waveFrequency, pos.z * this.waveFrequency, this.time * this.waveSpeed) * this.waveStrength;
+        force.y += (pathY - pos.y) * this.pathStrength * 0.3; // 降低垂直引导力强度
+        const waveY = this.noise.noise3D(pos.x * this.waveFrequency, pos.z * this.waveFrequency, this.time * this.waveSpeed) * this.waveStrength * 0.5; // 降低波浪强度
         force.y += waveY;
         const gridX = Math.floor(pos.x / this.gridSize);
         const gridY = Math.floor(pos.y / this.gridSize);
