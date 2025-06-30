@@ -44,48 +44,52 @@
       margin-top: 1rem;
     }
 
-    /* 2. 在小屏幕上（宽度大于768px），变为3列 */
-    @media (min-width: 768px) {
+    /* 2. 小屏幕（宽度大于 576px），变为2列 */
+    @media (min-width: 576px) {
       .practice-page .work-grid {
-        column-count: 3;
+        column-count: 2;
       }
     }
 
-    /* 3. 在中大屏幕上（宽度大于992px），保持3列 */
+    /* 3. 中大屏幕（宽度大于 992px），变为3列 */
     @media (min-width: 992px) {
       .practice-page .work-grid {
         column-count: 3;
       }
     }
 
-    /* 4. 设置瀑布流中的卡片样式（非常重要！） */
+    /* 4. 设置瀑布流中的卡片样式 */
     .practice-page .work-card {
-      /* 这是关键！防止单个卡片在两列之间被切断 */
+      /* 瀑布流核心属性 */
       break-inside: avoid; 
-      
-      /* 给每个卡片下面增加一点间距 */
       margin-bottom: 2rem;
-      
-      /* 确保卡片的宽度是100%，以填满它所在的列 */
       width: 100%;
 
-      /* 其他卡片样式 */
+      /* 您其他的卡片视觉样式 */
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
       overflow: hidden;
       position: relative;
       cursor: pointer;
       border-radius: 20px;
-      background: #000;
-      transform: translateY(0);
-      
-      /* 移除transition，由JS控制transform */
-      transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      
+      background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
+
       /* 入场动画 */
       opacity: 0;
       transform: translateY(30px);
       animation: cardSlideIn 0.8s ease forwards;
       animation-delay: calc(var(--card-index, 0) * 0.1s);
+    }
+
+    /* 5. 修正动画冲突：只让JS控制transform */
+    .practice-page .work-card:hover {
+      /* CSS的hover只改变阴影，transform 完全交给 JS */
+      box-shadow: 0 0 25px rgba(156, 163, 175, 0.4);
+    }
+
+    /* 6. 卡片内部图片的悬停效果（这个可以保留） */
+    .practice-page .work-card:hover .work-cover {
+      transform: scale(1.05);
+      opacity: 1;
     }
 
     /* Enhanced Card cover */
@@ -99,11 +103,6 @@
       opacity: 0.85; /* 添加透明度 */
     }
 
-    .practice-page .work-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-    }
-    
     .practice-page .work-card:hover .work-cover {
       transform: scale(1.05);
       opacity: 1; /* 悬停时恢复完全不透明 */
@@ -389,11 +388,6 @@
     
     /* Responsive Design */
     @media (max-width: 768px) {
-      .practice-page .work-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-      }
-      
       .practice-page .work-card.expanded {
         width: 95vw;
         height: 95vh;
@@ -428,34 +422,6 @@
 
     .practice-page .gallery::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
-    }
-
-    .practice-page .work-grid {
-      grid-auto-rows: minmax(100px, auto);
-    }
-    .card-large {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-    .card-wide {
-      grid-column: span 2;
-    }
-    .card-tall {
-      grid-row: span 2;
-    }
-    .card-tall .work-cover,
-    .card-large .work-cover {
-      height: 100%;
-      aspect-ratio: auto;
-    }
-    .practice-page .work-card {
-      background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s;
-    }
-    /* 移除CSS中的hover transform，完全由JS控制 */
-    .practice-page .work-card:hover {
-      box-shadow: 0 0 25px rgba(156, 163, 175, 0.4);
     }
 
     /* 卡片滑入动画 */
