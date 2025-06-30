@@ -271,8 +271,8 @@ class WebGLBackground {
         // Z值范围从 -sceneDepth/2 到 +sceneDepth/2
         // depthFactor 范围从 0 (最远) 到 1 (最近)
         const depthFactor = (z / sceneDepth) + 0.5;
-        // 越远的粒子越暗
-        const brightness = 0.3 + depthFactor * 0.5;
+        // 越远的粒子越暗，但整体亮度调高
+        const brightness = 0.4 + depthFactor * 0.6; // 亮度范围：0.4 (最远) 到 1.0 (最近)
         this.particleColors[i3] = brightness;
         this.particleColors[i3 + 1] = brightness;
         this.particleColors[i3 + 2] = brightness;
@@ -305,8 +305,13 @@ class WebGLBackground {
       varying float vAlpha;
       varying vec3 vColor;
       void main() {
-        gl_FragColor = vec4(vColor, 1.0) * texture2D(pointTexture, gl_PointCoord);
-        gl_FragColor.a *= vAlpha;
+        // 1. 从纹理中获取形状和透明度
+        vec4 texColor = texture2D(pointTexture, gl_PointCoord);
+        
+        // 2. 将顶点颜色 vColor 作为基础色，
+        //    然后用纹理的alpha通道和我们自定义的vAlpha来控制最终的透明度
+        gl_FragColor = vec4(vColor, 1.0);
+        gl_FragColor.a *= vAlpha * texColor.a;
       }
     `;
     const material = new THREE.ShaderMaterial({
