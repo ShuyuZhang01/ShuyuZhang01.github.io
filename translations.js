@@ -1,5 +1,5 @@
-// 多语言配置
-const translations = {
+// 多语言翻译配置
+window.translations = {
   zh: {
     // 导航栏
     nav: {
@@ -13,42 +13,51 @@ const translations = {
     // 主页
     home: {
       subtitle: "一个探索现实与虚拟交互的猫妈妈。",
-      spotlight: "正在加载特效..."
+      spotlight: "加载效果中..."
     },
     
     // 关于页面
     about: {
       title: "关于",
-      content: "这里是关于页面的内容..."
+      name: "张书语",
+      name_full: "张书语（Shuyu Zhang）",
+      birth_info: "2001年出生于中国青海西宁，是一个被山养育的孩子。她的旅程穿越了中国充满活力的城市：成都、北京、南宁、苏州，现在在英国伦敦生活学习。",
+      profession_intro: "作为一名<strong>互动与空间体验设计师</strong>和<strong>数字艺术家</strong>，张书语的学术和创作追求始终围绕探索人类与数字世界之间迷人的关系。她致力于在物理空间和虚拟领域的交叉点进行创新，不断尝试互动装置、游戏体验和生成艺术等媒介作为沟通的桥梁。张书语擅长快速自学和整合新技术（Unity VR、TouchDesigner、动作捕捉、Arduino），创作出能立即让观众感到惊喜和共鸣的作品——即使在他们理解底层概念之前。",
+      professional_experience: "专业经验",
+      experience_detail: "张书语展现了强大的跨学科协作能力，在文化旅游和教育科技公司担任设计助理等角色中获得了宝贵经验，为用户研究、故事地图设计和活动执行做出了贡献。",
+      inspiration_interests: "灵感与兴趣",
+      interests_detail: "除了工作之外，街舞（Popping & Hip-hop）和电子游戏是重要的灵感和快乐来源，经常融入她的艺术创作中。她精通英语（雅思6.5）和中文（母语），并不断从世界各地的艺术博物馆中汲取灵感。",
+      closing_statement: "张书语是一个不断在代码、光线、运动和空间之间编织新体验的创造者——一个连接现实与虚拟、技术与情感的探索者。"
     },
     
     // 作品页面
     works: {
       title: "作品",
+      close_modal: "关闭",
       projects: {
         "yu": {
           title: "嘻哈舞者Yu",
-          desc: "装置表演与游戏 · 2024"
+          description: "装置表演与游戏 · 2024"
         },
         "dream": {
           title: "救赎",
-          desc: "动态影像 · 2023"
+          description: "动态影像 · 2023"
         },
         "mocap": {
           title: "在此处和彼处舞蹈",
-          desc: "动作捕捉与Unity VR · 2025"
+          description: "动作捕捉与Unity VR · 2025"
         },
         "flower": {
           title: "昼夜钢琴曲",
-          desc: "JavaScript · 2024"
+          description: "JavaScript · 2024"
         },
         "water": {
           title: "能给我一些水吗...",
-          desc: "Arduino装置 · 2024"
+          description: "Arduino装置 · 2024"
         },
         "ai": {
           title: "CXC不眠城",
-          desc: "360度摄影 · 2021"
+          description: "360度摄影 · 2021"
         }
       }
     },
@@ -59,51 +68,51 @@ const translations = {
       projects: {
         "mind-uploading": {
           title: "意识上传",
-          desc: "UE4 · 动态影像 · VR · 装置艺术"
+          description: "UE4 · 动态影像 · VR · 装置艺术"
         },
         "unity-game": {
           title: "Unity小游戏",
-          desc: "Unity可视化脚本和基础C#"
+          description: "Unity可视化脚本和基础C#"
         },
         "js-pattern": {
           title: "JavaScript模式研究",
-          desc: "JavaScript · 简单模式"
+          description: "JavaScript · 简单模式"
         },
         "unity-interactive": {
           title: "Unity互动练习",
-          desc: "Unity + TouchDesigner + MediaPipe · 摄像头驱动粒子特效"
+          description: "Unity + TouchDesigner + MediaPipe · 摄像头驱动粒子特效"
         },
         "js-clock": {
           title: "JavaScript花朵时钟",
-          desc: "JavaScript · 数组 · Perlin噪声"
+          description: "JavaScript · 数组 · Perlin噪声"
         },
         "discoball": {
           title: "迪斯科球 — 舞蹈动作可视化",
-          desc: "Arduino · 拉伸传感器可穿戴互动项目"
+          description: "Arduino · 拉伸传感器可穿戴互动项目"
         },
         "chicken-soup": {
           title: "鸡汤来了",
-          desc: "JavaScript · 梗图 · 类和构造函数和回调和控制结构"
+          description: "JavaScript · 梗图 · 类和构造函数和回调和控制结构"
         },
         "togaither": {
           title: "一起AI",
-          desc: "Stable diffusion · OBS · 表演"
+          description: "Stable diffusion · OBS · 表演"
         },
         "obs-exploration": {
           title: "OBS直播探索",
-          desc: "OBS · 直播"
+          description: "OBS · 直播"
         },
         "help-me": {
           title: "帮助我",
-          desc: "Figma · Keynote"
+          description: "Figma · Keynote"
         },
         "flappy-bird": {
           title: "我的Flappy Bird项目",
-          desc: "JavaScript · MediaPipe"
+          description: "JavaScript · MediaPipe"
         },
         "hiphop-workshop": {
           title: "嘻哈舞蹈工作坊",
-          desc: "教学 · 舞蹈 · 工作坊"
+          description: "教学 · 舞蹈 · 工作坊"
         }
       }
     },
@@ -166,14 +175,6 @@ const translations = {
       name_placeholder: "你的姓名",
       email_placeholder: "你的邮箱地址",
       message_placeholder: "告诉我你的想法..."
-    },
-    
-    // 通用
-    common: {
-      loading: "加载中...",
-      close: "关闭",
-      view: "查看",
-      back: "返回"
     }
   },
   
@@ -196,36 +197,45 @@ const translations = {
     // 关于页面
     about: {
       title: "About",
-      content: "About page content..."
+      name: "Shuyu Zhang",
+      name_full: "Shuyu Zhang (张书语)",
+      birth_info: "born in 2001 in Xining, Qinghai, China, is a child nurtured by the mountains. Her journey has taken her through the vibrant cities of Chengdu, Beijing, Nanning, and Suzhou in China, and she now lives and studies in London, UK.",
+      profession_intro: "As an <strong>Interactive & Spatial Experience Designer</strong> and <strong>Digital Artist</strong>, Shuyu's academic and creative pursuits consistently center on exploring the fascinating relationship between humans and the digital world. She is dedicated to innovating at the intersection of physical space and the virtual realm, constantly experimenting with mediums such as interactive installations, game experiences, and generative art as bridges for communication. Shuyu excels at rapid self-learning and integrating new technologies (Unity VR, TouchDesigner, motion capture, Arduino) to create compelling works that evoke immediate surprise and resonance in audiences—even before they grasp the underlying concept.",
+      professional_experience: "Professional Experience",
+      experience_detail: "Shuyu has demonstrated strong cross-disciplinary collaboration skills, gaining valuable experience in roles such as Design Assistant at cultural tourism and education technology companies, contributing to user research, story-map design, and event execution.",
+      inspiration_interests: "Inspiration & Interests",
+      interests_detail: "Beyond her work, street dance (Popping & Hip-hop) and video games are significant sources of inspiration and joy, often weaving their way into her artistic creations. She is proficient in English (IELTS 6.5) and Mandarin (native), and continuously draws inspiration from art museums worldwide.",
+      closing_statement: "Shuyu Zhang is a creator constantly weaving new experiences between code, light, movement, and space — an explorer bridging the real and virtual, technology and emotion."
     },
     
     // 作品页面
     works: {
       title: "Works",
+      close_modal: "Close",
       projects: {
         "yu": {
           title: "Hiphop Dancer Yu",
-          desc: "Installation Performance & Game · 2024"
+          description: "Installation Performance & Game · 2024"
         },
         "dream": {
           title: "Redemption",
-          desc: "Moving Image · 2023"
+          description: "Moving Image · 2023"
         },
         "mocap": {
           title: "Dancing in Here and There",
-          desc: "Motion Capture & Unity VR · 2025"
+          description: "Motion Capture & Unity VR · 2025"
         },
         "flower": {
           title: "Piano Piece of Day and Night",
-          desc: "JavaScript · 2024"
+          description: "JavaScript · 2024"
         },
         "water": {
           title: "Can You Please Give Me Some Water...",
-          desc: "Arduino Installation · 2024"
+          description: "Arduino Installation · 2024"
         },
         "ai": {
           title: "CXC Sleepless City",
-          desc: "360-degree Photography · 2021"
+          description: "360-degree Photography · 2021"
         }
       }
     },
@@ -236,51 +246,51 @@ const translations = {
       projects: {
         "mind-uploading": {
           title: "Mind uploading",
-          desc: "UE4 · Moving image · VR · Installation"
+          description: "UE4 · Moving image · VR · Installation"
         },
         "unity-game": {
           title: "Unity Mini-Game",
-          desc: "Unity Visual Script & C# basics"
+          description: "Unity Visual Script & C# basics"
         },
         "js-pattern": {
           title: "JavaScript Pattern Study",
-          desc: "JavaScript · simple pattern"
+          description: "JavaScript · simple pattern"
         },
         "unity-interactive": {
           title: "Unity Interactive Practice",
-          desc: "Unity + TouchDesigner + MediaPipe · Camera-driven particle FX"
+          description: "Unity + TouchDesigner + MediaPipe · Camera-driven particle FX"
         },
         "js-clock": {
           title: "JavaScript Flower clock",
-          desc: "JavaScript · Arrays · Perlin Noise"
+          description: "JavaScript · Arrays · Perlin Noise"
         },
         "discoball": {
           title: "Discoball — Dance Move Visualization",
-          desc: "Arduino · Stretch-sensor wearable interactive project"
+          description: "Arduino · Stretch-sensor wearable interactive project"
         },
         "chicken-soup": {
           title: "Here comes chicken soup",
-          desc: "JavaScript · meme · class & constructor & callback & control structrures"
+          description: "JavaScript · meme · class & constructor & callback & control structrures"
         },
         "togaither": {
           title: "TogAIther",
-          desc: "Stable diffusion · OBS · Performance"
+          description: "Stable diffusion · OBS · Performance"
         },
         "obs-exploration": {
           title: "OBS live exploration",
-          desc: "OBS · live streaming"
+          description: "OBS · live streaming"
         },
         "help-me": {
           title: "Help me",
-          desc: "Figma · Keynote"
+          description: "Figma · Keynote"
         },
         "flappy-bird": {
           title: "My Flappy Bird project",
-          desc: "JavaScript · MediaPipe"
+          description: "JavaScript · MediaPipe"
         },
         "hiphop-workshop": {
           title: "Hiphop dance workshop",
-          desc: "Teaching · dance · workshop"
+          description: "Teaching · dance · workshop"
         }
       }
     },
@@ -343,328 +353,6 @@ const translations = {
       name_placeholder: "Your name",
       email_placeholder: "Your email address",
       message_placeholder: "Tell me your thoughts..."
-    },
-    
-    // 通用
-    common: {
-      loading: "Loading...",
-      close: "Close",
-      view: "View",
-      back: "Back"
     }
   }
-};
-
-// 语言管理类
-class LanguageManager {
-  constructor() {
-    this.currentLang = localStorage.getItem('language') || 'en';
-    this.init();
-  }
-  
-  init() {
-    // 确保DOM加载完成后再初始化
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        this.updateLanguage();
-        this.createLanguageToggle();
-      });
-    } else {
-      this.updateLanguage();
-      this.createLanguageToggle();
-    }
-  }
-  
-  setLanguage(lang) {
-    this.currentLang = lang;
-    localStorage.setItem('language', lang);
-    this.updateLanguage();
-  }
-  
-  getText(key) {
-    const keys = key.split('.');
-    let text = translations[this.currentLang];
-    
-    for (const k of keys) {
-      if (text && text[k]) {
-        text = text[k];
-      } else {
-        return key; // 如果找不到翻译，返回原key
-      }
-    }
-    
-    return text;
-  }
-  
-  updateLanguage() {
-    // 更新导航栏
-    const navLinks = document.querySelectorAll('.nav-list a');
-    navLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href.includes('about.html')) {
-        link.textContent = this.getText('nav.about');
-      } else if (href.includes('works.html')) {
-        link.textContent = this.getText('nav.works');
-      } else if (href.includes('practice.html')) {
-        link.textContent = this.getText('nav.practice');
-      } else if (href.includes('cv.html')) {
-        link.textContent = this.getText('nav.cv');
-      } else if (href.includes('contact.html')) {
-        link.textContent = this.getText('nav.contact');
-      }
-    });
-    
-    // 更新页面标题
-    const pageTitle = document.querySelector('.page-title');
-    if (pageTitle) {
-      const currentPage = window.location.pathname;
-      if (currentPage.includes('about.html')) {
-        pageTitle.textContent = this.getText('about.title');
-      } else if (currentPage.includes('works.html')) {
-        pageTitle.textContent = this.getText('works.title');
-      } else if (currentPage.includes('practice.html')) {
-        pageTitle.textContent = this.getText('practice.title');
-      } else if (currentPage.includes('cv.html')) {
-        pageTitle.textContent = this.getText('cv.title');
-      } else if (currentPage.includes('contact.html')) {
-        pageTitle.textContent = this.getText('contact.title');
-      }
-    }
-    
-    // 更新主页内容
-    const heroSub = document.querySelector('.hero-sub');
-    if (heroSub) {
-      heroSub.textContent = this.getText('home.subtitle');
-    }
-    
-    // 更新作品页面项目
-    this.updateWorksProjects();
-    
-    // 更新练习页面项目
-    this.updatePracticeProjects();
-    
-    // 更新CV页面内容
-    this.updateCVContent();
-    
-    // 更新联系页面内容
-    this.updateContactContent();
-  }
-  
-  updateWorksProjects() {
-    const workCards = document.querySelectorAll('.work-card');
-    workCards.forEach(card => {
-      const projectId = card.dataset.project;
-      if (projectId && translations[this.currentLang].works.projects[projectId]) {
-        const project = translations[this.currentLang].works.projects[projectId];
-        const title = card.querySelector('.work-title');
-        const desc = card.querySelector('.work-desc');
-        const overlay = card.querySelector('.overlay');
-        
-        if (title) title.textContent = project.title;
-        if (desc) desc.textContent = project.desc;
-        
-        // 更新overlay内容
-        if (overlay) {
-          const overlayText = overlay.childNodes[0];
-          if (overlayText && overlayText.nodeType === Node.TEXT_NODE) {
-            overlayText.textContent = project.title;
-          }
-        }
-      }
-    });
-  }
-  
-  updatePracticeProjects() {
-    const workCards = document.querySelectorAll('.practice-page .work-card');
-    workCards.forEach(card => {
-      const projectId = this.getProjectId(card);
-      if (projectId && translations[this.currentLang].practice.projects[projectId]) {
-        const project = translations[this.currentLang].practice.projects[projectId];
-        const title = card.querySelector('.work-title');
-        const desc = card.querySelector('.work-desc');
-        
-        if (title) title.textContent = project.title;
-        if (desc) desc.textContent = project.desc;
-      }
-    });
-  }
-  
-  updateCVContent() {
-    const cvPage = document.querySelector('.cv-page');
-    if (!cvPage) return;
-    
-    // 更新CV页面内容
-    const nameElement = cvPage.querySelector('h1');
-    if (nameElement) {
-      nameElement.textContent = this.getText('cv.name');
-    }
-    
-    const titleDesc = cvPage.querySelector('p em');
-    if (titleDesc) {
-      titleDesc.textContent = this.getText('cv.title_desc');
-    }
-    
-    const sectionTitles = cvPage.querySelectorAll('.cv-section-title');
-    sectionTitles.forEach(title => {
-      const text = title.textContent.toLowerCase();
-      if (text.includes('education')) {
-        title.textContent = this.getText('cv.education');
-      } else if (text.includes('core skills') || text.includes('核心技能')) {
-        title.textContent = this.getText('cv.core_skills');
-      } else if (text.includes('professional experience') || text.includes('专业经验')) {
-        title.textContent = this.getText('cv.professional_experience');
-      } else if (text.includes('selected projects') || text.includes('精选项目')) {
-        title.textContent = this.getText('cv.selected_projects');
-      }
-    });
-  }
-  
-  updateContactContent() {
-    const contactPage = document.querySelector('.contact-page');
-    if (!contactPage) return;
-    
-    // 更新联系页面内容
-    const labels = contactPage.querySelectorAll('label');
-    labels.forEach(label => {
-      const text = label.textContent.toLowerCase();
-      if (text.includes('name') || text.includes('姓名')) {
-        label.textContent = this.getText('contact.name_label');
-      } else if (text.includes('email') || text.includes('邮箱')) {
-        label.textContent = this.getText('contact.email_label');
-      } else if (text.includes('message') || text.includes('消息')) {
-        label.textContent = this.getText('contact.message_label');
-      }
-    });
-    
-    const sendButton = contactPage.querySelector('.contact-btn');
-    if (sendButton) {
-      sendButton.textContent = this.getText('contact.send_button');
-    }
-    
-    const placeholders = contactPage.querySelectorAll('input[placeholder], textarea[placeholder]');
-    placeholders.forEach(input => {
-      const placeholder = input.getAttribute('placeholder');
-      if (placeholder.includes('name') || placeholder.includes('姓名')) {
-        input.placeholder = this.getText('contact.name_placeholder');
-      } else if (placeholder.includes('email') || placeholder.includes('邮箱')) {
-        input.placeholder = this.getText('contact.email_placeholder');
-      } else if (placeholder.includes('message') || placeholder.includes('消息')) {
-        input.placeholder = this.getText('contact.message_placeholder');
-      }
-    });
-  }
-  
-  getProjectId(card) {
-    // 根据卡片内容推断项目ID
-    const title = card.querySelector('.work-title')?.textContent.toLowerCase();
-    if (title?.includes('mind')) return 'mind-uploading';
-    if (title?.includes('unity') && title?.includes('mini')) return 'unity-game';
-    if (title?.includes('javascript') && title?.includes('pattern')) return 'js-pattern';
-    if (title?.includes('unity') && title?.includes('interactive')) return 'unity-interactive';
-    if (title?.includes('javascript') && title?.includes('flower')) return 'js-clock';
-    if (title?.includes('discoball')) return 'discoball';
-    if (title?.includes('chicken soup')) return 'chicken-soup';
-    if (title?.includes('togaither')) return 'togaither';
-    if (title?.includes('obs')) return 'obs-exploration';
-    if (title?.includes('help me')) return 'help-me';
-    if (title?.includes('flappy bird')) return 'flappy-bird';
-    if (title?.includes('hiphop')) return 'hiphop-workshop';
-    return null;
-  }
-  
-  createLanguageToggle() {
-    // 检查是否已经存在语言切换按钮
-    if (document.querySelector('.lang-toggle')) {
-      return;
-    }
-    
-    // 创建语言切换按钮
-    const nav = document.querySelector('.nav-inner');
-    if (!nav) return;
-    
-    const langToggle = document.createElement('div');
-    langToggle.className = 'lang-toggle';
-    langToggle.innerHTML = `
-      <button class="lang-btn" id="langBtn">
-        <span class="lang-text">${this.currentLang === 'zh' ? 'EN' : '中'}</span>
-      </button>
-    `;
-    
-    // 添加样式
-    if (!document.querySelector('#lang-toggle-styles')) {
-      const style = document.createElement('style');
-      style.id = 'lang-toggle-styles';
-      style.textContent = `
-        .lang-toggle {
-          margin-left: 2rem;
-          display: flex;
-          align-items: center;
-        }
-        
-        .lang-btn {
-          background: rgba(255, 255, 255, 0.1);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          color: #fff;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          cursor: pointer;
-          font-size: 0.9rem;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(10px);
-          white-space: nowrap;
-        }
-        
-        .lang-btn:hover {
-          background: rgba(255, 255, 255, 0.2);
-          border-color: rgba(255, 255, 255, 0.3);
-          transform: translateY(-1px);
-        }
-        
-        .lang-text {
-          font-weight: 500;
-        }
-        
-        @media (max-width: 768px) {
-          .lang-toggle {
-            margin-left: 1rem;
-          }
-          
-          .lang-btn {
-            padding: 0.4rem 0.8rem;
-            font-size: 0.8rem;
-          }
-        }
-        
-        @media (max-width: 600px) {
-          .nav-inner {
-            flex-wrap: wrap;
-            gap: 0.5rem;
-          }
-          
-          .lang-toggle {
-            margin-left: 0;
-            order: 3;
-            width: 100%;
-            justify-content: center;
-            margin-top: 0.5rem;
-          }
-        }
-      `;
-      
-      document.head.appendChild(style);
-    }
-    
-    nav.appendChild(langToggle);
-    
-    // 添加点击事件
-    const langBtn = document.getElementById('langBtn');
-    langBtn.addEventListener('click', () => {
-      const newLang = this.currentLang === 'zh' ? 'en' : 'zh';
-      this.setLanguage(newLang);
-      langBtn.querySelector('.lang-text').textContent = newLang === 'zh' ? 'EN' : '中';
-    });
-  }
-}
-
-// 初始化语言管理器
-window.languageManager = new LanguageManager(); 
+}; 
