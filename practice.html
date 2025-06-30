@@ -32,8 +32,13 @@
     /* ───────── Waterfall Grid (FIXED) ───────── */
     .practice-page .work-grid {
       display: block !important; /* 强制覆盖全局样式 */
-      column-count: 2; /* 移动端默认2列 */
+      column-count: 1; /* 小屏幕默认1列 */
       column-gap: 1.5rem;
+    }
+    @media (min-width: 481px) {
+      .practice-page .work-grid {
+        column-count: 2; /* 中等屏幕显示2列 */
+      }
     }
     @media (min-width: 768px) {
       .practice-page .work-grid {
@@ -212,10 +217,40 @@
 
     .lightbox-text { line-height: 1.6; font-size: 1rem; color: #ccc; }
     
+    /* iPad和中等屏幕的媒体查询 */
+    @media (min-width: 481px) and (max-width: 1024px) {
+        .practice-page .work-cover {
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            background: #333 !important;
+            min-height: 200px !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        .practice-page .work-card {
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        .lightbox-content { padding: 1.5rem; }
+    }
+    
     @media (max-width: 480px) {
         .practice-page .work-grid { column-count: 1; } /* 小屏幕手机显示1列 */
         .lightbox-content { padding: 1rem; }
         .lightbox-text { font-size: 0.9rem; }
+    }
+    
+    /* iPad Safari特殊处理 */
+    @supports (-webkit-touch-callout: none) {
+        .practice-page .work-cover {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
     }
   </style>
 </head>
@@ -323,21 +358,20 @@
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // 确保图片正确显示
-      const images = document.querySelectorAll('.work-cover');
-      images.forEach(img => {
-        if (img.complete) {
-          console.log('Image already loaded:', img.src);
-        } else {
-          img.addEventListener('load', () => console.log('Image loaded:', img.src));
-          img.addEventListener('error', () => {
-            console.log('Image failed to load:', img.src);
-            img.style.background = 'linear-gradient(45deg, #333, #555)';
-            img.style.position = 'relative';
-            img.insertAdjacentHTML('afterend', '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 14px;">图片加载失败</div>');
-          });
-        }
-      });
+      // iPad特殊处理
+      const isIPad = /iPad|Macintosh/.test(navigator.userAgent) && 'ontouchend' in document;
+      if (isIPad) {
+        console.log('检测到iPad设备');
+        // 强制重新加载问题图片
+        const problemImages = document.querySelectorAll('.work-cover[src*="clock.jpg"], .work-cover[src*="obs.png"]');
+        problemImages.forEach(img => {
+          const originalSrc = img.src;
+          img.src = '';
+          setTimeout(() => {
+            img.src = originalSrc;
+          }, 100);
+        });
+      }
 
       const workCards = document.querySelectorAll('.work-card');
       const lightboxOverlay = document.getElementById('lightbox-overlay');
