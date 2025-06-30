@@ -9,38 +9,37 @@ class WebGLBackground {
     this.geometries = [];
     this.animationId = null;
     this.time = 0;
+    this.lastFrameTime = 0; // 新增：用于计算帧时间差
     this.mouseX = 0;
     this.mouseY = 0;
     
     // =================================================================
-    // 1. 参数大升级 (Parameters Overhaul)
+    // 最终版参数 (Final Tuned Parameters)
     // =================================================================
-    this.particleCount = 5000; // << 增加粒子数量，营造宏大感
-    this.damping = 0.96;               // 阻尼 (Viscosity)
-    this.flowSpeed = 0.1;              // 宏观流速 (Global Flow Speed)
-    this.repulsionStrength = 0.15;     // 局部排斥力 (Local Repulsion)
-    this.repulsionRadius = 2.5;        // 局部排斥半径 (Local Repulsion Radius)
-    this.pathStrength = 0.008;         // 河道引导力强度 (Path Guiding Force)
-    this.pathAmplitude = 10.0;         // 河道弯曲幅度 (Path Amplitude)
-    this.pathFrequency = 0.03;         // 河道弯曲频率 (Path Frequency)
-    this.waveStrength = 2.5;           // 波浪起伏强度 (Wave Height/Strength)
-    this.waveFrequency = 0.05;         // 波浪大小/频率 (Wave Size/Frequency)
-    this.waveSpeed = 0.3;              // 波浪移动速度 (Wave Speed)
-    this.turbulenceStrength = 0.01;    // 内部湍流强度 (Fuzziness)
-    this.turbulenceFrequency = 0.1;    // 湍流细节频率
-    this.turbulenceSpeed = 0.1;        // 湍流演变速度
-    // =================================================================
-    // 2. 空间网格系统 (Spatial Grid System)
-    // =================================================================
+    this.particleCount = 8000;         // 粒子数量再增加，营造更浓密的星河
+    this.particleSize = 2.0;           // 基础粒子大小
+    this.cameraDistance = 40;          // 相机距离
+    this.maxVelocity = 1.2;            // 速度上限，防止粒子过快
+    this.damping = 0.985;              // 增加阻尼，让运动更"粘滞"，更柔和
+    this.flowSpeed = 0.03;             // 大幅降低宏观流速
+    this.repulsionStrength = 0.08;     // 降低排斥力，减少剧烈弹开
+    this.repulsionRadius = 2.0;        // 
+    this.pathStrength = 0.01;          // 路径引导力
+    this.pathAmplitude = 12.0;         // 路径弯曲幅度
+    this.pathFrequency = 0.025;        // 路径弯曲频率
+    this.waveStrength = 1.5;           // 降低波浪强度，使其更像暗流涌动
+    this.waveFrequency = 0.08;         // 
+    this.waveSpeed = 0.1;              // 减慢波浪速度
     this.grid = new Map();
-    this.gridSize = 5; // << 网格大小，这是非常关键的调优参数
+    this.gridSize = 6;                 // 增大网格尺寸以适应更缓和的互动
     // =================================================================
     this.particlePositions = new Float32Array(this.particleCount * 3);
     this.particleVelocities = new Float32Array(this.particleCount * 3);
     this.particleColors = new Float32Array(this.particleCount * 3);
+    this.particleAlphas = new Float32Array(this.particleCount); // 新增：用于存储每个粒子的透明度
     this.flowDirection = 1;
     this.directionChangeTime = 0;
-    this.directionChangeInterval = 15000; // 15秒
+    this.directionChangeInterval = 20000; // 20秒
     
     // 水流方向控制
     this.flowDirection = 1;
@@ -223,11 +222,11 @@ class WebGLBackground {
   initThreeJS() {
     // 创建场景
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(0x0a0a0a, 50, 200);
+    this.scene.fog = new THREE.Fog(0x0a0a0a, this.cameraDistance * 0.5, this.cameraDistance * 2.5);
     
     // 创建相机
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.camera.position.z = 50;
+    this.camera.position.z = this.cameraDistance;
     
     // 创建渲染器
     this.renderer = new THREE.WebGLRenderer({ 
@@ -235,7 +234,7 @@ class WebGLBackground {
       alpha: true 
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setClearColor(0x0a0a0a, 0.3);
+    this.renderer.setClearColor(0x0a0a0a, 0);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     
     // 添加到页面
@@ -248,34 +247,37 @@ class WebGLBackground {
     container.style.height = '100%';
     container.style.zIndex = '-1';
     container.style.pointerEvents = 'none';
+    container.style.background = 'radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%)';
     container.appendChild(this.renderer.domElement);
     document.body.appendChild(container);
   }
 
   initParticleSystem() {
-    const sceneWidth = 100; // 扩大场景宽度
-    const sceneDepth = 40;  // 增加场景深度
+    const sceneWidth = 120; // 场景范围再扩大
+    const sceneDepth = 50;
     for (let i = 0; i < this.particleCount; i++) {
         const i3 = i * 3;
-        // 在一个广阔的3D空间内随机生成
         const x = (Math.random() - 0.5) * sceneWidth * 2;
         const z = (Math.random() - 0.5) * sceneDepth;
-        // 计算河床的中心 Y 坐标
         const pathY = this.pathAmplitude * Math.sin(x * this.pathFrequency);
-        // 在河床上下方散布粒子，形成有厚度的水流
-        const y = pathY + (Math.random() - 0.5) * 15; // 在 Y 方向散开，形成厚度
+        const y = pathY + (Math.random() - 0.5) * 20;
         this.particlePositions[i3] = x;
         this.particlePositions[i3 + 1] = y;
         this.particlePositions[i3 + 2] = z;
-        // 随机初始速度，增加初始动态
-        this.particleVelocities[i3] = (Math.random() - 0.5) * 0.1;
-        this.particleVelocities[i3 + 1] = (Math.random() - 0.5) * 0.1;
-        this.particleVelocities[i3 + 2] = (Math.random() - 0.5) * 0.1;
-        // 根据 Z 轴深度赋予不同的初始颜色/亮度，增加立体感
-        const brightness = 0.4 + (z / sceneDepth + 0.5) * 0.5;
+        this.particleVelocities[i3] = 0;
+        this.particleVelocities[i3 + 1] = 0;
+        this.particleVelocities[i3 + 2] = 0;
+        // --- 核心修改：基于深度的视觉初始化 ---
+        // Z值范围从 -sceneDepth/2 到 +sceneDepth/2
+        // depthFactor 范围从 0 (最远) 到 1 (最近)
+        const depthFactor = (z / sceneDepth) + 0.5;
+        // 越远的粒子越暗
+        const brightness = 0.3 + depthFactor * 0.5;
         this.particleColors[i3] = brightness;
         this.particleColors[i3 + 1] = brightness;
         this.particleColors[i3 + 2] = brightness;
+        // 越远的粒子越透明 (近实远虚)
+        this.particleAlphas[i] = 0.1 + depthFactor * 0.6;
     }
   }
 
@@ -283,15 +285,41 @@ class WebGLBackground {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(this.particlePositions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(this.particleColors, 3));
-    const material = new THREE.PointsMaterial({
-        size: 1.5,
-        vertexColors: true,
+    geometry.setAttribute('alpha', new THREE.BufferAttribute(this.particleAlphas, 1));
+    // GLSL 着色器代码
+    const vertexShader = `
+      attribute float alpha;
+      varying float vAlpha;
+      varying vec3 vColor;
+      uniform float size;
+      void main() {
+        vAlpha = alpha;
+        vColor = color;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = size * (300.0 / -mvPosition.z); // 近大远小
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `;
+    const fragmentShader = `
+      uniform sampler2D pointTexture;
+      varying float vAlpha;
+      varying vec3 vColor;
+      void main() {
+        gl_FragColor = vec4(vColor, 1.0) * texture2D(pointTexture, gl_PointCoord);
+        gl_FragColor.a *= vAlpha;
+      }
+    `;
+    const material = new THREE.ShaderMaterial({
+        uniforms: {
+            pointTexture: { value: this.createCircularParticleTexture() },
+            size: { value: this.particleSize }
+        },
+        vertexShader,
+        fragmentShader,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
         transparent: true,
-        opacity: 0.7,
-        blending: THREE.AdditiveBlending, // 叠加混合，产生发光效果
-        sizeAttenuation: true,
-        depthWrite: false, // 关闭深度写入，让粒子相互穿透，更像星云
-        map: this.createCircularParticleTexture()
+        vertexColors: true
     });
     this.particleSystem = new THREE.Points(geometry, material);
     this.scene.add(this.particleSystem);
@@ -318,15 +346,11 @@ class WebGLBackground {
     return texture;
   }
 
-  updateFluidDynamics() {
-    // 定时改变方向
+  updateFluidDynamics(dt) {
     if (this.time - this.directionChangeTime > this.directionChangeInterval) {
       this.flowDirection *= -1;
       this.directionChangeTime = this.time;
     }
-    // =================================================================
-    // 1. 构建空间网格 (Build Spatial Grid)
-    // =================================================================
     this.grid.clear();
     for (let i = 0; i < this.particleCount; i++) {
         const i3 = i * 3;
@@ -342,29 +366,18 @@ class WebGLBackground {
         }
         this.grid.get(key).push(i);
     }
-    // =================================================================
-    // 2. 计算所有力 (Calculate Forces)
-    // =================================================================
     const boundaryWidth = 100;
     for (let i = 0; i < this.particleCount; i++) {
         const i3 = i * 3;
         const pos = { x: this.particlePositions[i3], y: this.particlePositions[i3 + 1], z: this.particlePositions[i3 + 2] };
         const vel = { x: this.particleVelocities[i3], y: this.particleVelocities[i3 + 1], z: this.particleVelocities[i3 + 2] };
         let force = { x: 0, y: 0, z: 0 };
-        // --- a. 宏观流动力 (Global Flow Force) ---
-        force.x += this.flowSpeed * this.flowDirection;
-        // --- b. 河道引导力 (Path Guiding Force) ---
+        // 宏观流动力
+        force.x += this.flowSpeed * this.flowDirection * dt;
         const pathY = this.pathAmplitude * Math.sin(pos.x * this.pathFrequency + this.time * 0.1);
         force.y += (pathY - pos.y) * this.pathStrength;
-        // --- c. 表面波浪力 (Surface Wave Force) ---
         const waveY = this.noise.noise3D(pos.x * this.waveFrequency, pos.z * this.waveFrequency, this.time * this.waveSpeed) * this.waveStrength;
         force.y += waveY;
-        // --- d. 内部湍流力 (Internal Turbulence Force) ---
-        const turbTime = this.time * this.turbulenceSpeed;
-        force.x += this.noise.noise3D(pos.y * this.turbulenceFrequency, pos.z * this.turbulenceFrequency, turbTime) * this.turbulenceStrength;
-        force.y += this.noise.noise3D(pos.x * this.turbulenceFrequency, pos.z * this.turbulenceFrequency, turbTime) * this.turbulenceStrength;
-        force.z += this.noise.noise3D(pos.x * this.turbulenceFrequency, pos.y * this.turbulenceFrequency, turbTime) * this.turbulenceStrength;
-        // --- e. 局部排斥力 (Local Repulsion from Neighbors) ---
         const gridX = Math.floor(pos.x / this.gridSize);
         const gridY = Math.floor(pos.y / this.gridSize);
         const gridZ = Math.floor(pos.z / this.gridSize);
@@ -393,30 +406,39 @@ class WebGLBackground {
                 }
             }
         }
-        // --- 更新速度 ---
+        // 更新速度（Verlet ➜ Euler 足够）
         this.particleVelocities[i3] += force.x;
         this.particleVelocities[i3 + 1] += force.y;
         this.particleVelocities[i3 + 2] += force.z;
-        // --- 应用阻尼 ---
+        // 速度上限，防"飙车"
+        const vLen = Math.hypot(
+            this.particleVelocities[i3],
+            this.particleVelocities[i3 + 1],
+            this.particleVelocities[i3 + 2]
+        );
+        if (vLen > this.maxVelocity) {
+            const s = this.maxVelocity / vLen;
+            this.particleVelocities[i3] *= s;
+            this.particleVelocities[i3 + 1] *= s;
+            this.particleVelocities[i3 + 2] *= s;
+        }
         this.particleVelocities[i3] *= this.damping;
         this.particleVelocities[i3 + 1] *= this.damping;
         this.particleVelocities[i3 + 2] *= this.damping;
-        // --- 更新位置 ---
-        this.particlePositions[i3] += this.particleVelocities[i3];
-        this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1];
-        this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2];
-        // --- 边界循环 ---
+        // 根据 dt 位移
+        this.particlePositions[i3] += this.particleVelocities[i3] * dt;
+        this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1] * dt;
+        this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2] * dt;
         if (this.particlePositions[i3] > boundaryWidth && this.flowDirection === 1) {
             this.particlePositions[i3] = -boundaryWidth;
         } else if (this.particlePositions[i3] < -boundaryWidth && this.flowDirection === -1) {
             this.particlePositions[i3] = boundaryWidth;
         }
-        // --- 根据速度和高度更新颜色 ---
-        const speed = Math.sqrt(vel.x*vel.x + vel.y*vel.y);
-        const heightFactor = Math.max(0, Math.min(1, (pos.y / 20) + 0.5)); // 越高越亮
-        const speedFactor = Math.min(1, speed * 2.0); // 越快越亮
-        const brightness = 0.3 + heightFactor * 0.4 + speedFactor * 0.3;
-        this.particleColors[i3] = this.particleColors[i3+1] = this.particleColors[i3+2] = brightness;
+        // 颜色随速度微调
+        const finalBrightness = this.particleColors[i3] * (1 + vLen * 2.0);
+        this.particleSystem.geometry.attributes.color.setX(i, finalBrightness);
+        this.particleSystem.geometry.attributes.color.setY(i, finalBrightness);
+        this.particleSystem.geometry.attributes.color.setZ(i, finalBrightness);
     }
     this.particleSystem.geometry.attributes.position.needsUpdate = true;
     this.particleSystem.geometry.attributes.color.needsUpdate = true;
@@ -442,16 +464,11 @@ class WebGLBackground {
 
   animate() {
     this.animationId = requestAnimationFrame(() => this.animate());
-    
-    this.time += 0.01;
-    
-    // 更新流体动力学
-    this.updateFluidDynamics();
-    
-    // 相机轻微跟随鼠标
-    this.camera.position.x += (this.mouseX * 10 - this.camera.position.x) * 0.01;
-    this.camera.position.y += (this.mouseY * 10 - this.camera.position.y) * 0.01;
-    
+    const now = performance.now();
+    const dt = (now - this.lastFrameTime) * 0.001;  // 秒
+    this.lastFrameTime = now;
+    this.time += dt;                  // 用 dt 而不是固定 +0.01
+    this.updateFluidDynamics(dt);     // 把 dt 传进去
     this.renderer.render(this.scene, this.camera);
   }
 
