@@ -24,9 +24,9 @@
       pointer-events: none;
       z-index: 1000;
       background: radial-gradient(
-        circle 120px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        circle 240px at var(--mouse-x, 50%) var(--mouse-y, 50%),
         transparent 0%,
-        rgba(0, 0, 0, 0.95) 120px
+        rgba(0, 0, 0, 0.98) 240px
       );
       transition: background 0.1s ease-out;
     }
@@ -46,6 +46,34 @@
     /* 确保视频背景在聚光灯效果下方 */
     .hero video {
       z-index: -1;
+    }
+    /* 恢复原始hero-content样式 */
+    .hero-content {
+      position: absolute;
+      z-index: 3;
+      left: 3vw;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      text-align: left;
+      max-width: 600px;
+      padding-left: 0;
+    }
+    .hero-title {
+      font-size: 7rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+    .hero-sub {
+      font-size: 2rem;
+      color: #e5e7eb;
+    }
+    @media (max-width: 600px) {
+      .hero-title { font-size: 2.5rem; }
+      .hero-content { max-width: 95vw; padding: 0 1rem; }
+      .hero-sub { font-size: 1.25rem; color: #e5e7eb; }
     }
   </style>
 </head>

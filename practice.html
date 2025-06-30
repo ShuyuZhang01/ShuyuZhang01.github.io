@@ -274,10 +274,16 @@
     .work-card {
       opacity: 0;
       transform: translateY(30px);
-      animation: cardSlideIn 0.8s ease forwards;
-      animation-delay: calc(var(--card-index, 0) * 0.1s);
+      pointer-events: none;
+      visibility: hidden;
     }
-    
+    .work-card.in-view {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+      animation: cardSlideIn 0.8s ease forwards;
+    }
     @keyframes cardSlideIn {
       from {
         opacity: 0;
@@ -580,35 +586,22 @@
 
   <script>
   (function(){
-    const cards=document.querySelectorAll('.work-card');
-    const body=document.body;
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const workGrid = document.querySelector('.work-grid');
-    
-    // 监听WebGL背景加载完成事件
-    function handleWebGLLoaded() {
-      setTimeout(() => {
-        loadingOverlay.classList.add('hidden');
-        workGrid.classList.add('loaded');
-      }, 500); // 延迟500ms让过渡更平滑
-    }
-    
-    // 监听WebGL背景加载完成事件
-    window.addEventListener('webglBackgroundLoaded', handleWebGLLoaded);
-    
-    // 备用方案：如果5秒后还没有收到事件，也显示内容
-    setTimeout(() => {
-      if (!workGrid.classList.contains('loaded')) {
-        console.log('WebGL背景加载超时，显示内容');
-        handleWebGLLoaded();
-      }
-    }, 5000);
+    const cards = document.querySelectorAll('.work-card');
+    const body = document.body;
 
-    /* fade‑in on scroll */
-    const io=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in-view');io.unobserve(entry.target);}});
-    },{threshold:0.2});
-    cards.forEach(c=>io.observe(c));
+    // 逐个显示卡片动画
+    function showCardsSequentially() {
+      let i = 0;
+      function showNext() {
+        if (i < cards.length) {
+          cards[i].classList.add('in-view');
+          i++;
+          setTimeout(showNext, 180); // 每180ms显示一张
+        }
+      }
+      showNext();
+    }
+    showCardsSequentially();
 
     cards.forEach(card=>card.addEventListener('click',()=>expand(card)));
 
