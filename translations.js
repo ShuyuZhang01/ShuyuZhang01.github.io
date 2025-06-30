@@ -106,7 +106,7 @@ window.translations = {
         "chicken-soup": {
           title: "鸡汤来了",
           description: "JavaScript · 梗图 · 类和构造函数和回调和控制结构",
-          intro: "在TouchDesigner中进行的粒子系统实验。"
+          intro: "可交互Javascript项目"
         },
         "togaither": {
           title: "一起AI",
@@ -303,7 +303,7 @@ window.translations = {
         "chicken-soup": {
           title: "Here comes chicken soup",
           description: "JavaScript · meme · class & constructor & callback & control structrures",
-          intro: "Play with particle systems in TouchDesigner."
+          intro: "Interactive JavaScript project"
         },
         "togaither": {
           title: "TogAIther",
