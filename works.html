@@ -621,8 +621,8 @@ Through an immersive VR experience, viewers descend from the surface's refracted
         const offsetX = Math.sin(rad) * radius;
         const offsetY = Math.cos(rad) * radius * -0.15 + 40; // 从-0.25改为-0.15，并整体下移40px
 
-        // 添加随机旋转角度，但不超过左右40°
-        const randomRotation = (Math.random() - 0.5) * 80; // -40° 到 +40°
+        // 添加随机旋转角度，但不超过左右30°
+        const randomRotation = (Math.random() - 0.5) * 60; // -30° 到 +30°
         const finalRotation = angle + randomRotation;
 
         card.dataset.baseX  = offsetX.toFixed(1);
