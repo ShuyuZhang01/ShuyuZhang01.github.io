@@ -636,20 +636,14 @@ Through an immersive VR experience, viewers descend from the surface's refracted
     // 为滚动和窗口大小调整添加事件监听
     window.addEventListener('scroll', updateParallax, { passive: true });
     window.addEventListener('resize', () => {
-      setFanLayout();
+      // 移除重复的setFanLayout调用，只在resize时更新视差效果
       updateParallax();
     });
 
-    // 初始化静态偏移
+    // 初始化静态偏移 - 只调用一次
     setFanLayout();
     // 立即执行一次以设置初始位置
     updateParallax();
-
-    // 等图片加载完再算尺寸，确保计算准确
-    window.addEventListener('load', () => {
-      setFanLayout();
-      updateParallax();
-    });
 
     /* 点击和关闭事件 */
     cards.forEach(card => card.addEventListener('click', () => {

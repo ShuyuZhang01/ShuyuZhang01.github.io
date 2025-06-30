@@ -11,9 +11,49 @@
 
   <!-- Global styles -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- 主页聚光灯效果样式 -->
+  <style>
+    /* 聚光灯效果容器 */
+    .spotlight-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      background: radial-gradient(
+        circle 120px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        transparent 0%,
+        rgba(0, 0, 0, 0.95) 120px
+      );
+      transition: background 0.1s ease-out;
+    }
+    
+    /* 确保导航栏和主要内容始终可见 */
+    .nav,
+    .hero-content {
+      position: relative;
+      z-index: 1001;
+    }
+    
+    /* 主页特定样式 */
+    .home .hero {
+      position: relative;
+    }
+    
+    /* 确保视频背景在聚光灯效果下方 */
+    .hero video {
+      z-index: -1;
+    }
+  </style>
 </head>
 
 <body class="home page-dark">
+
+  <!-- 聚光灯效果容器 -->
+  <div class="spotlight-container" id="spotlight"></div>
 
   <!-- NAVBAR -->
   <nav class="nav">
@@ -45,7 +85,36 @@
     <div class="hero-mask"></div>
   </section>
   
-  <script src="cursorParticles.js"></script>
+  <!-- 聚光灯效果脚本 -->
+  <script>
+    // 只在主页启用聚光灯效果
+    if (window.location.pathname.endsWith('index.html') || 
+        window.location.pathname.endsWith('/') || 
+        window.location.pathname === '') {
+      
+      const spotlight = document.getElementById('spotlight');
+      let mouseX = 0;
+      let mouseY = 0;
+      
+      // 更新鼠标位置
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // 更新聚光灯位置
+        spotlight.style.setProperty('--mouse-x', mouseX + 'px');
+        spotlight.style.setProperty('--mouse-y', mouseY + 'px');
+      });
+      
+      // 页面加载时初始化聚光灯位置到屏幕中心
+      window.addEventListener('load', () => {
+        mouseX = window.innerWidth / 2;
+        mouseY = window.innerHeight / 2;
+        spotlight.style.setProperty('--mouse-x', mouseX + 'px');
+        spotlight.style.setProperty('--mouse-y', mouseY + 'px');
+      });
+    }
+  </script>
 
 </body>
 </html>
