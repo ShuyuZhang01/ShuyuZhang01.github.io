@@ -49,13 +49,16 @@
 
       /* 移除CSS变量定义，让JS直接控制transform */
       transform: translate(0, 0); 
+      
+      /* 让旋转后的阴影不被裁掉 */
+      transform-origin: 50% 80%;   /* 以下边偏内一点为圆心旋转，更像摊开的牌 */
     }
 
     .work-card:hover{ 
       z-index: 2; 
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-      /* 悬停时的位移可以保留，但要注意它会和JS的transform叠加 */
-      transform: translateY(-8px); 
+      box-shadow: 0 25px 60px rgba(0,0,0,.45);
+      /* 鼠标悬停时稍微放大而不是上浮，否则旋转角度会被抵消 */
+      transform: scale(1.04) rotate(var(--rotate, 0deg));
     }
 
     /* 移除固定的错位规则，改为由JavaScript动态计算 */
@@ -582,9 +585,13 @@ Through an immersive VR experience, viewers descend from the surface's refracted
         // 获取静态偏移
         const baseX = parseFloat(card.dataset.baseX || 0);
         const baseY = parseFloat(card.dataset.baseY || 0);
-
-        // 在静态偏移基础上添加视差效果
-        const finalTransform = `translateX(calc(${baseX}px + ${parallaxX}px)) translateY(calc(${baseY}px + ${parallaxY}px))`;
+        const rotate = parseFloat(card.dataset.rotate || 0);
+        
+        // 在静态偏移基础上添加视差效果，并加上旋转角度
+        const finalTransform = 
+          `translateX(calc(${baseX}px + ${parallaxX}px))
+           translateY(calc(${baseY}px + ${parallaxY}px))
+           rotate(${rotate}deg)`;
         card.style.transform = finalTransform;
       });
     }
@@ -595,35 +602,50 @@ Through an immersive VR experience, viewers descend from the surface's refracted
       const card = grid.querySelector('.work-card');
       const gridWidth = grid.clientWidth;
       const cardWidth = card.clientWidth;
-      return Math.max(1, Math.round(gridWidth / cardWidth)); // 向最近整数取整
+      return Math.max(1, Math.floor(gridWidth / cardWidth)); // 使用Math.floor向下取整，更稳定
     }
 
     // 根据列数给每张卡写一个静态 offset
-    function setStaticOffsets() {
+    function setFanLayout(){
       const cards = document.querySelectorAll('.work-card');
-      const cols = getColCount();          // 2、3、4...
-      const lift = 60;                     // 垂直重叠量
-      const stepY = [0, 25, 50];           // 每列在本行内的错位
+      const angleStep = 8;          // 相邻两张牌之间夹角（度）
+      const radius    = 260;        // 圆弧半径：越大扇得越平
+      const midIndex  = (cards.length - 1) / 2;
 
       cards.forEach((card, i) => {
-        const col = i % cols;               // 0 … cols-1
-        const row = Math.floor(i / cols);   // 第几行
-        card.dataset.baseX = 0;             // 这里如果想左右错位可以再加
-        card.dataset.baseY = stepY[col % 3] + row * lift;
+        // 以中间那张为 0°，向两侧 ±angleStep 递增
+        const angle = (i - midIndex) * angleStep;
+        const rad   = angle * Math.PI / 180;
+
+        // 极坐标 → 直角坐标，把圆心放在(0,0)
+        const offsetX = Math.sin(rad) * radius;
+        const offsetY = Math.cos(rad) * radius * -0.35; // -0.35 让牌底部稍微抬起来
+
+        card.dataset.baseX  = offsetX.toFixed(1);
+        card.dataset.baseY  = offsetY.toFixed(1);
+        card.dataset.rotate = angle.toFixed(1);
+        // 给 :hover 用
+        card.style.setProperty('--rotate', `${angle.toFixed(1)}deg`);
       });
     }
 
     // 为滚动和窗口大小调整添加事件监听
     window.addEventListener('scroll', updateParallax, { passive: true });
     window.addEventListener('resize', () => {
-      setStaticOffsets();
+      setFanLayout();
       updateParallax();
     });
 
     // 初始化静态偏移
-    setStaticOffsets();
+    setFanLayout();
     // 立即执行一次以设置初始位置
     updateParallax();
+
+    // 等图片加载完再算尺寸，确保计算准确
+    window.addEventListener('load', () => {
+      setFanLayout();
+      updateParallax();
+    });
 
     /* 点击和关闭事件 */
     cards.forEach(card => card.addEventListener('click', () => {

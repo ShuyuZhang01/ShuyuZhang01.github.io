@@ -22,8 +22,10 @@
   <!-- 联系页面特定样式 -->
   <style>
     /* 联系页面特定样式 */
-    .contact-page .container {
-      padding-left: clamp(1.5rem, 6vw, 5rem);
+    /* 把 contact 页的 Container 左右都加同样的 padding */
+    .contact-page .container{
+      /* padding-inline 是 padding-left + padding-right 的简写 */
+      padding-inline: clamp(1.5rem, 6vw, 5rem);
     }
     
     .contact-page .page-title {
@@ -35,6 +37,7 @@
 }
     
     /* 为文字内容区域添加灰色背景 */
+    /* 灰色背景最大宽度 — 同步到 700~800 之间你觉得合适的值 */
     .contact-content-background {
       background: rgba(40, 40, 40, 0.8);
       backdrop-filter: blur(10px);
@@ -43,7 +46,7 @@
       margin: 2rem 0;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       width: 100%;
-      max-width: 800px;
+      max-width: 700px;     /* 根据喜好调，700=稍窄，800=保持原宽 */
     }
     
     .contact-form-container {
@@ -53,8 +56,9 @@
       width: 100%;
     }
     
+    /* 表单本身也设同样宽度，让输入框填满背景 */
     .contact-form {
-      max-width: 600px;
+      max-width: 700px;     /* 数值要和上面保持一致 */
       width: 100%;
       font-family: "Open Sans", sans-serif;
       animation: formSlideIn 0.8s ease;
@@ -90,6 +94,13 @@
       box-sizing: border-box;
       transition: all 0.3s ease;
       position: relative;
+    }
+    
+    /* 比 rows 属性更直观，固定高度 220px 左右 */
+    .contact-field[type="textarea"],
+    textarea.contact-field{
+      height: 220px;        /* 需要更高就再调 */
+      resize: vertical;     /* 允许用户继续拖拽调高 */
     }
     
     .contact-field:focus {

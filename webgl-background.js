@@ -14,24 +14,26 @@ class WebGLBackground {
     this.mouseY = 0;
     
     // =================================================================
-    // 最终版参数 (Final Tuned Parameters)
+    // 【核心参数调整】: 为了实现平缓的左右流动
     // =================================================================
     this.particleCount = 8000;         // 粒子数量再增加，营造更浓密的星河
-    this.particleSize = 2.0;           // 基础粒子大小
-    this.cameraDistance = 40;          // 相机距离
-    this.maxVelocity = 1.2;            // 速度上限，防止粒子过快
-    this.damping = 0.985;              // 增加阻尼，让运动更"粘滞"，更柔和
-    this.flowSpeed = 0.03;             // 大幅降低宏观流速
-    this.repulsionStrength = 0.08;     // 降低排斥力，减少剧烈弹开
+    this.particleSize = 1.8;           // 粒子可以稍小，显得更精致
+    this.cameraDistance = 45;          // 相机稍远，视野更广
+    this.maxVelocity = 0.8;            // 降低最大速度，让流动更平缓
+    this.damping = 0.98;               // 轻微减小阻尼，让粒子能流动得更远
+    
+    // --- 核心修改：改变力的平衡 ---
+    this.flowSpeed = 0.08;             // **显著提高**宏观流速，这是左右运动的主力
+    this.repulsionStrength = 0.05;     // 减弱排斥力
     this.repulsionRadius = 2.0;        // 
-    this.pathStrength = 0.01;          // 路径引导力
-    this.pathAmplitude = 12.0;         // 路径弯曲幅度
-    this.pathFrequency = 0.025;        // 路径弯曲频率
-    this.waveStrength = 1.5;           // 降低波浪强度，使其更像暗流涌动
+    this.pathStrength = 0.005;         // **大幅减弱**路径引导力，避免剧烈上下运动
+    this.pathAmplitude = 4.0;          // **大幅减小**路径弯曲幅度，让"河道"更平直
+    this.pathFrequency = 0.02;         // 降低弯曲频率
+    this.waveStrength = 0;             // **禁用**Y轴的噪声波浪，这是之前上下浮动的主要原因
     this.waveFrequency = 0.08;         // 
     this.waveSpeed = 0.1;              // 减慢波浪速度
     this.grid = new Map();
-    this.gridSize = 6;                 // 增大网格尺寸以适应更缓和的互动
+    this.gridSize = 5;                 // 增大网格尺寸以适应更缓和的互动
     this.sceneDepth = 50;              // 场景深度，方便在多个函数中使用
     this.boundaryDepth = 40;           // Z轴边界限制，防止粒子被雾效吞掉
     // =================================================================
@@ -229,7 +231,9 @@ class WebGLBackground {
     // 创建相机
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.z = this.cameraDistance;
-    this.camera.position.y = -5; // 减少垂直偏移，让左右流动更明显
+    
+    // 【视觉调整】: 将相机Y轴下移，让水流出现在中下部
+    this.camera.position.y = -8;
     
     // 创建渲染器
     this.renderer = new THREE.WebGLRenderer({ 
@@ -261,15 +265,23 @@ class WebGLBackground {
         const i3 = i * 3;
         const x = (Math.random() - 0.5) * sceneWidth * 2;
         const z = (Math.random() - 0.5) * this.sceneDepth;
-        // 减少垂直方向的随机分布，让粒子更集中在水平线上
+        
+        // 【核心修改】: 重新定义粒子生成区域，使其更像一条平直的"河"
+        // 1. pathAmplitude 已经大幅减小，所以 sin 波起伏很小。
+        // 2. 垂直随机范围也减小 (从 *10 变为 *8)，让粒子更集中。
+        // 3. 整体区域下移 5 个单位。
         const pathY = this.pathAmplitude * Math.sin(x * this.pathFrequency);
-        const y = pathY + (Math.random() - 0.5) * 10; // 减少垂直随机范围从20到10
+        const y = pathY - 5 + (Math.random() - 0.5) * 8; 
+        
         this.particlePositions[i3] = x;
         this.particlePositions[i3 + 1] = y;
         this.particlePositions[i3 + 2] = z;
-        this.particleVelocities[i3] = 0;
-        this.particleVelocities[i3 + 1] = 0;
-        this.particleVelocities[i3 + 2] = 0;
+        
+        // 初始化速度，可以给一点随机的初始X轴速度，增加自然感
+        this.particleVelocities[i3] = (Math.random() - 0.5) * 0.1;
+        this.particleVelocities[i3 + 1] = (Math.random() - 0.5) * 0.1;
+        this.particleVelocities[i3 + 2] = (Math.random() - 0.5) * 0.1;
+        
         // --- 核心修改：基于深度的视觉初始化 ---
         // Z值范围从 -sceneDepth/2 到 +sceneDepth/2
         // depthFactor 范围从 0 (最远) 到 1 (最近)
@@ -380,13 +392,30 @@ class WebGLBackground {
         const pos = { x: this.particlePositions[i3], y: this.particlePositions[i3 + 1], z: this.particlePositions[i3 + 2] };
         const vel = { x: this.particleVelocities[i3], y: this.particleVelocities[i3 + 1], z: this.particleVelocities[i3 + 2] };
         let force = { x: 0, y: 0, z: 0 };
-        // 宏观流动力 - 改为左右流动
+        
+        // =================================================================
+        // 【核心修改】: 彻底改变力的计算方式
+        // =================================================================
+
+        // 1. **主导力**: 强大的、持续的水平推力
         force.x += this.flowSpeed * this.flowDirection * dt;
-        // 减少垂直方向的引导力
-        const pathY = this.pathAmplitude * Math.sin(pos.x * this.pathFrequency + this.time * 0.1);
-        force.y += (pathY - pos.y) * this.pathStrength * 0.3; // 降低垂直引导力强度
-        const waveY = this.noise.noise3D(pos.x * this.waveFrequency, pos.z * this.waveFrequency, this.time * this.waveSpeed) * this.waveStrength * 0.5; // 降低波浪强度
-        force.y += waveY;
+
+        // 2. **微弱的垂直引导**: 让粒子大致保持在一个平缓的Y轴区域内，但不起主导作用
+        const pathY = this.pathAmplitude * Math.sin(pos.x * this.pathFrequency);
+        force.y += (pathY - pos.y) * this.pathStrength; // 注意：去掉了 *0.3，因为pathStrength本身已经很小了
+
+        // 3. **禁用Y轴波浪**: 这是关键！注释掉下面这行代码，消除了主要的上下浮动来源。
+        // const waveY = this.noise.noise3D(pos.x * this.waveFrequency, pos.z * this.waveFrequency, this.time * this.waveSpeed) * this.waveStrength * 0.5;
+        // force.y += waveY;
+        
+        // 4. (可选) 添加微弱的X/Z轴湍流，增加细节
+        const turbulenceX = this.noise.noise3D(pos.y * 0.1, pos.z * 0.1, this.time * 0.1) * 0.01;
+        const turbulenceZ = this.noise.noise3D(pos.x * 0.1, pos.y * 0.1, this.time * 0.1) * 0.01;
+        force.x += turbulenceX;
+        force.z += turbulenceZ;
+
+        // =================================================================
+        
         const gridX = Math.floor(pos.x / this.gridSize);
         const gridY = Math.floor(pos.y / this.gridSize);
         const gridZ = Math.floor(pos.z / this.gridSize);
