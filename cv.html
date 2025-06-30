@@ -36,10 +36,10 @@
       margin-top: 2rem !important;
     }
     
-    /* 为文字内容区域添加灰色背景 */
+    /* 为文字内容区域添加灰色背景 - 调整透明度使其更透明 */
     .cv-content-background {
-      background: rgba(40, 40, 40, 0.3);
-      backdrop-filter: blur(10px);
+      background: rgba(40, 40, 40, 0.1);
+      backdrop-filter: blur(5px);
       border-radius: 15px;
       padding: 2rem;
       margin: 1rem 0;
@@ -131,11 +131,6 @@
       text-decoration: underline;
       color: #d1d5db;
       transform: translateX(5px);
-    }
-
-    /* 若有类似 .cv-content-background 或 main.container 的 background 样式，改为 transparent */
-    .cv-content-background, main.container {
-      background: rgba(40, 40, 40, 0.3) !important;
     }
   </style>
 </head>
