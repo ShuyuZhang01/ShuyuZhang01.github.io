@@ -13,32 +13,32 @@ class WebGLBackground {
     this.mouseY = 0;
     
     // 流体粒子参数
-    this.particleCount = 600; // 增加粒子数量
+    this.particleCount = 600;
     this.particlePositions = new Float32Array(this.particleCount * 3);
     this.particleVelocities = new Float32Array(this.particleCount * 3);
     this.particleForces = new Float32Array(this.particleCount * 3);
     this.particleColors = new Float32Array(this.particleCount * 3);
     
-    // 水流参数 - 调整让粒子更靠近
-    this.attractionRadius = 6; // 减小吸引半径
-    this.repulsionRadius = 2; // 减小排斥半径
-    this.attractionStrength = 0.015; // 增加吸引力
-    this.repulsionStrength = 0.08; // 增加排斥力
-    this.damping = 0.98; // 稍微减少阻尼
-    this.boundaryForce = 0.15; // 增加边界力
-    this.flowSpeed = 0.15; // 稍微减慢整体速度，让细节更突出
+    // --- 核心修改：恢复并调整粒子间相互作用力 ---
+    this.attractionRadius = 8;     // 相互吸引的最大范围
+    this.repulsionRadius = 1.5;    // 相互排斥的半径（防止挤在一起）
+    this.attractionStrength = 0.01; // 吸引力强度（决定水流的"粘稠度"）
+    this.repulsionStrength = 0.1;  // 排斥力强度（非常重要，防止塌缩成线）
+    // ---------------------------------------------
     
+    this.damping = 0.97; // 阻尼，模拟水的粘滞性
+    this.flowSpeed = 0.2; // 整体流速
+
     // 水流方向控制
-    this.flowDirection = 1; // 1: 向右, -1: 向左
+    this.flowDirection = 1;
     this.directionChangeTime = 0;
-    this.directionChangeInterval = 10000; // 10秒改变一次方向
-    
-    // --- 新增：水流形态和噪声参数 ---
+    this.directionChangeInterval = 12000; // 12秒
+
+    // 水流形态和噪声参数
     this.noise = new SimplexNoise();
-    this.flowPathAmplitude = 8.0;   // 河道的弯曲幅度
-    this.flowPathFrequency = 0.05;  // 河道的弯曲频率
-    this.turbulenceStrength = 0.08; // 湍流强度
-    // ------------------------------------
+    this.flowPathAmplitude = 7.0;  // 河道的弯曲幅度
+    this.flowPathFrequency = 0.04; // 河道的弯曲频率
+    this.turbulenceStrength = 0.12;// 湍流强度（提高，增加浪花感）
     
     console.log('WebGLBackground: 初始化开始');
     this.init();
@@ -280,12 +280,13 @@ class WebGLBackground {
     geometry.setAttribute('position', new THREE.BufferAttribute(this.particlePositions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(this.particleColors, 3));
     const material = new THREE.PointsMaterial({
-      size: 0.8, // 更小的粒子
+      size: 1.2, // 更小的粒子，增加水雾感
       vertexColors: true,
       transparent: true,
-      opacity: 0.7, // 稍微增加透明度
+      opacity: 0.6, // 降低透明度，更像雾气
       blending: THREE.AdditiveBlending,
       sizeAttenuation: true,
+      depthWrite: false, // 让水带看起来更松散、更像雾气
       map: this.createCircularParticleTexture() // 使用圆形纹理
     });
     this.particleSystem = new THREE.Points(geometry, material);
@@ -319,92 +320,101 @@ class WebGLBackground {
       this.flowDirection *= -1;
       this.directionChangeTime = this.time;
     }
-    
-    const boundaryWidth = 80; // 定义场景的水平边界
 
-    // 更新粒子
+    // 1. 重置所有粒子受力
+    // -----------------------------------
+    for (let i = 0; i < this.particleForces.length; i++) {
+      this.particleForces[i] = 0;
+    }
+
+    // 2. 计算粒子间的相互作用力 (核心修正！恢复体积感的关键)
+    // -----------------------------------
+    for (let i = 0; i < this.particleCount; i++) {
+      for (let j = i + 1; j < this.particleCount; j++) {
+        const i3 = i * 3;
+        const j3 = j * 3;
+        
+        const dx = this.particlePositions[j3] - this.particlePositions[i3];
+        const dy = this.particlePositions[j3 + 1] - this.particlePositions[i3 + 1];
+        const dz = this.particlePositions[j3 + 2] - this.particlePositions[i3 + 2];
+        const distanceSq = dx * dx + dy * dy + dz * dz;
+
+        if (distanceSq > 0 && distanceSq < this.attractionRadius * this.attractionRadius) {
+          const distance = Math.sqrt(distanceSq);
+          let force;
+
+          if (distance < this.repulsionRadius) {
+            // 在排斥半径内，施加一个强烈的推力
+            force = -this.repulsionStrength * (1 - distance / this.repulsionRadius);
+          } else {
+            // 在吸引半径内，施加一个拉力
+            force = this.attractionStrength * (1 - distance / this.attractionRadius);
+          }
+
+          const fx = (dx / distance) * force;
+          const fy = (dy / distance) * force;
+          const fz = (dz / distance) * force;
+
+          this.particleForces[i3] += fx;
+          this.particleForces[i3 + 1] += fy;
+          this.particleForces[i3 + 2] += fz;
+
+          this.particleForces[j3] -= fx;
+          this.particleForces[j3 + 1] -= fy;
+          this.particleForces[j3 + 2] -= fz;
+        }
+      }
+    }
+
+    // 3. 计算每个粒子的宏观力 (河道引导 + 湍流 + 整体流向)
+    // -----------------------------------
+    const boundaryWidth = 80;
     for (let i = 0; i < this.particleCount; i++) {
       const i3 = i * 3;
-      
-      const pos = {
-        x: this.particlePositions[i3],
-        y: this.particlePositions[i3 + 1],
-        z: this.particlePositions[i3 + 2]
-      };
+      const pos = { x: this.particlePositions[i3], y: this.particlePositions[i3 + 1], z: this.particlePositions[i3 + 2] };
 
-      // 1. 计算"河道"吸引力
-      // -----------------------------------
-      // 计算当前粒子位置对应的"河道"中心Y坐标
+      // 河道引导力 (只在Y轴起作用，不再强制拉Z轴)
       const targetY = this.flowPathAmplitude * Math.sin(pos.x * this.flowPathFrequency + this.time * 0.5);
-      // 产生一个将粒子拉向河道中心的力
-      const pathAttractionForce = {
-        x: 0,
-        y: (targetY - pos.y) * 0.01, // Y方向的吸引力
-        z: -pos.z * 0.01 // Z方向的吸引力，让粒子回到中心平面
-      };
+      this.particleForces[i3 + 1] += (targetY - pos.y) * 0.006; // 减小吸附系数，让粒子别粘得那么死
 
-      // 2. 计算湍流力（使用噪声）
-      // -----------------------------------
-      const noiseFactor = 0.02; // 控制噪声的尺度
+      // 湍流力 - 添加动态强弱变化
+      const noiseFactor = 0.02;
       const noiseTime = this.time * 0.2;
-      const turbulence = {
-        x: this.noise.noise3D(pos.x * noiseFactor, pos.y * noiseFactor, noiseTime) * this.turbulenceStrength,
-        y: this.noise.noise3D(pos.y * noiseFactor, pos.z * noiseFactor, noiseTime) * this.turbulenceStrength,
-        z: this.noise.noise3D(pos.z * noiseFactor, pos.x * noiseFactor, noiseTime) * this.turbulenceStrength
-      };
+      const dynamicTurbulence = this.turbulenceStrength * (1 + Math.sin(this.time * 0.3) * 0.3); // 动态湍流强度
+      this.particleForces[i3]     += this.noise.noise3D(pos.x * noiseFactor, pos.y * noiseFactor, noiseTime) * dynamicTurbulence;
+      this.particleForces[i3 + 1] += this.noise.noise3D(pos.y * noiseFactor, pos.z * noiseFactor, noiseTime) * dynamicTurbulence;
+      this.particleForces[i3 + 2] += this.noise.noise3D(pos.z * noiseFactor, pos.x * noiseFactor, noiseTime) * dynamicTurbulence;
 
-      // 3. 计算整体流动方向的力
-      // -----------------------------------
-      const flowForce = {
-        x: this.flowSpeed * this.flowDirection,
-        y: 0,
-        z: 0
-      };
+      // 整体流向力
+      this.particleForces[i3] += this.flowSpeed * this.flowDirection;
 
-      // 4. 合并所有的力
+      // 4. 更新速度和位置
       // -----------------------------------
-      const totalForce = {
-        x: pathAttractionForce.x + turbulence.x + flowForce.x,
-        y: pathAttractionForce.y + turbulence.y + flowForce.y,
-        z: pathAttractionForce.z + turbulence.z + flowForce.z
-      };
-      
-      // 5. 更新速度和位置 (Verlet integration)
-      // -----------------------------------
-      this.particleVelocities[i3] += totalForce.x;
-      this.particleVelocities[i3 + 1] += totalForce.y;
-      this.particleVelocities[i3 + 2] += totalForce.z;
+      this.particleVelocities[i3] += this.particleForces[i3];
+      this.particleVelocities[i3 + 1] += this.particleForces[i3 + 1];
+      this.particleVelocities[i3 + 2] += this.particleForces[i3 + 2];
 
       this.particlePositions[i3] += this.particleVelocities[i3];
       this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1];
       this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2];
       
-      // 应用阻尼，模拟水的粘滞性
       this.particleVelocities[i3] *= this.damping;
       this.particleVelocities[i3 + 1] *= this.damping;
       this.particleVelocities[i3 + 2] *= this.damping;
-
-      // 6. 边界处理：左右循环
-      // -----------------------------------
+      
+      // 边界循环
       if (this.particlePositions[i3] > boundaryWidth && this.flowDirection === 1) {
         this.particlePositions[i3] = -boundaryWidth;
       } else if (this.particlePositions[i3] < -boundaryWidth && this.flowDirection === -1) {
         this.particlePositions[i3] = boundaryWidth;
       }
-
-      // 7. (可选) 根据速度改变颜色/亮度
-      // -----------------------------------
-      const speed = Math.sqrt(
-        this.particleVelocities[i3] ** 2 +
-        this.particleVelocities[i3 + 1] ** 2
-      );
-      const brightness = Math.min(0.5 + speed * 2.0, 1.0); // 速度越快越亮
-      this.particleColors[i3] = brightness * 0.8;
-      this.particleColors[i3 + 1] = brightness * 0.8;
-      this.particleColors[i3 + 2] = brightness * 0.8;
+      
+      // 根据速度改变亮度
+      const speed = Math.sqrt(this.particleVelocities[i3]**2 + this.particleVelocities[i3+1]**2);
+      const brightness = Math.min(0.5 + speed * 2.0, 1.0);
+      this.particleColors[i3] = this.particleColors[i3+1] = this.particleColors[i3+2] = brightness;
     }
-    
-    // 别忘了标记属性需要更新
+
     this.particleSystem.geometry.attributes.position.needsUpdate = true;
     this.particleSystem.geometry.attributes.color.needsUpdate = true;
   }
