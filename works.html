@@ -41,14 +41,10 @@
       width: 100%;
       max-width: 400px;
       flex: 0 1 400px;
-    }
-
-    /* 视差效果 + 左右两个有上下差距 */
-    .work-card {
       transform: translateY(var(--parallax-y, 0)) translateX(var(--parallax-x, 0));
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
+    /* 左右两个有上下差距 */
     .work-card:nth-child(odd) {
       transform: translateY(calc(var(--parallax-y, 0) + 0)) translateX(var(--parallax-x, 0));
     }
