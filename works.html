@@ -58,14 +58,13 @@
       transform: translateY(-8px); 
     }
 
-    /* 第 2 张卡稍微往下叠 */
-    .work-card:nth-child(3n+2){
+    /* 移除固定的错位规则，改为由JavaScript动态计算 */
+    /* .work-card:nth-child(3n+2){
       transform: translate(0, 25px);
     }
-    /* 第 3 张卡再多叠一点，制造更明显的层次 */
     .work-card:nth-child(3n+3){
       transform: translate(0, 50px);
-    }
+    } */
 
     /* 移除偶数卡片的初始偏移，由JS处理 */
     /* .work-card:nth-child(even) {
@@ -580,24 +579,49 @@ Through an immersive VR experience, viewers descend from the surface's refracted
         const parallaxY = (distanceFromCenter * 0.08).toFixed(1); // 降低垂直视差强度
         const parallaxX = ((index % 2 === 0 ? 1 : -1) * distanceFromCenter * 0.03).toFixed(1); // 降低水平视差强度
 
-        // 结合CSS错位效果和JavaScript视差效果
-        let baseTransform = '';
-        if (index % 3 === 1) { // 第2张卡 (3n+2)
-          baseTransform = 'translate(0, 25px)';
-        } else if (index % 3 === 2) { // 第3张卡 (3n+3)
-          baseTransform = 'translate(0, 50px)';
-        }
+        // 获取静态偏移
+        const baseX = parseFloat(card.dataset.baseX || 0);
+        const baseY = parseFloat(card.dataset.baseY || 0);
 
-        // 在基础错位基础上添加视差效果
-        const finalTransform = `${baseTransform} translateX(${parallaxX}px) translateY(${parallaxY}px)`;
+        // 在静态偏移基础上添加视差效果
+        const finalTransform = `translateX(calc(${baseX}px + ${parallaxX}px)) translateY(calc(${baseY}px + ${parallaxY}px))`;
         card.style.transform = finalTransform;
+      });
+    }
+
+    // 实时计算当前有几列
+    function getColCount() {
+      const grid = document.querySelector('.work-grid');
+      const card = grid.querySelector('.work-card');
+      const gridWidth = grid.clientWidth;
+      const cardWidth = card.clientWidth;
+      return Math.max(1, Math.round(gridWidth / cardWidth)); // 向最近整数取整
+    }
+
+    // 根据列数给每张卡写一个静态 offset
+    function setStaticOffsets() {
+      const cards = document.querySelectorAll('.work-card');
+      const cols = getColCount();          // 2、3、4...
+      const lift = 60;                     // 垂直重叠量
+      const stepY = [0, 25, 50];           // 每列在本行内的错位
+
+      cards.forEach((card, i) => {
+        const col = i % cols;               // 0 … cols-1
+        const row = Math.floor(i / cols);   // 第几行
+        card.dataset.baseX = 0;             // 这里如果想左右错位可以再加
+        card.dataset.baseY = stepY[col % 3] + row * lift;
       });
     }
 
     // 为滚动和窗口大小调整添加事件监听
     window.addEventListener('scroll', updateParallax, { passive: true });
-    window.addEventListener('resize', updateParallax);
+    window.addEventListener('resize', () => {
+      setStaticOffsets();
+      updateParallax();
+    });
 
+    // 初始化静态偏移
+    setStaticOffsets();
     // 立即执行一次以设置初始位置
     updateParallax();
 
