@@ -1,4 +1,4 @@
-// WebGL Background Effect - 方案一：深空星云
+// WebGL Background Effect - 方案一：深空星云 (修正版)
 class WebGLBackground {
   constructor() {
     this.scene = null;
@@ -7,6 +7,7 @@ class WebGLBackground {
     this.particleSystem = null;
     this.animationId = null;
     this.time = 0;
+    this.lastFrameTime = 0;
     this.mouseX = 0;
     this.mouseY = 0;
     this.mouseTargetX = 0;
@@ -16,22 +17,23 @@ class WebGLBackground {
     this.particleCount = 10000;
     this.particleSize = 1.5;
     this.cameraDistance = 40;
-    this.damping = 0.96; // 阻尼稍大，让运动更"粘稠"
+    this.damping = 0.96;
     this.noise = new SimplexNoise();
 
     // 力学参数
     this.noiseTimeScale = 0.0001;
     this.noisePosScale = 0.05;
     this.noiseForce = 0.01;
-    this.mouseRepulsion = 0.5; // 鼠标排斥力
-    this.mouseRadius = 4;     // 鼠标影响半径
-    this.centerPull = 0.0003; // 向中心轻微拉扯，防止粒子飘散
-    this.boxSize = this.cameraDistance * 1.5; // 立方体空间范围
+    this.mouseRepulsion = 0.5;
+    this.mouseRadius = 4;
+    // 【核心修正 ①】: 禁用向心力，防止粒子塌缩
+    this.centerPull = 0; // 将此值设为 0
+    this.boxSize = this.cameraDistance * 1.5;
 
     this.particlePositions = new Float32Array(this.particleCount * 3);
     this.particleVelocities = new Float32Array(this.particleCount * 3);
     this.particleColors = new Float32Array(this.particleCount * 3);
-    this.particleRandoms = new Float32Array(this.particleCount * 3); // x: 随机相位, y: 随机大小, z: 随机速度
+    this.particleRandoms = new Float32Array(this.particleCount * 3);
 
     this.init();
   }
@@ -115,7 +117,6 @@ class WebGLBackground {
         float dist = length(gl_PointCoord - vec2(0.5));
         if (dist > 0.5) discard;
         
-        // 基于"速度感"的颜色混合
         float speedFactor = smoothstep(0.0, 50.0, vSpeed);
         vec3 color1 = vec3(0.1, 0.2, 0.7); // Deep Blue
         vec3 color2 = vec3(0.8, 0.2, 0.9); // Magenta
@@ -149,7 +150,8 @@ class WebGLBackground {
     const t = this.time * this.noiseTimeScale;
     const positions = this.particleSystem.geometry.attributes.position.array;
     const velocities = this.particleVelocities;
-    const boxSize = this.boxSize;
+    const boxHalfSize = this.boxSize / 2;
+
     for (let i = 0; i < this.particleCount; i++) {
         const i3 = i * 3;
         // 1. 噪声力
@@ -160,7 +162,7 @@ class WebGLBackground {
         velocities[i3+1] += this.noise.noise4D(q, r, p, t) * this.noiseForce;
         velocities[i3+2] += this.noise.noise4D(r, p, q, t) * this.noiseForce;
 
-        // 2. 向心力
+        // 2. 向心力 (已被禁用)
         velocities[i3] -= positions[i3] * this.centerPull;
         velocities[i3+1] -= positions[i3+1] * this.centerPull;
         velocities[i3+2] -= positions[i3+2] * this.centerPull;
@@ -185,16 +187,15 @@ class WebGLBackground {
         velocities[i3+1] *= this.damping;
         velocities[i3+2] *= this.damping;
 
-        // 边界处理：如果粒子超出立方体空间，反弹回去，防止整体塌缩或远离
-        for (let d = 0; d < 3; d++) {
-          if (positions[i3 + d] > boxSize / 2) {
-            positions[i3 + d] = boxSize / 2;
-            velocities[i3 + d] *= -0.7;
-          } else if (positions[i3 + d] < -boxSize / 2) {
-            positions[i3 + d] = -boxSize / 2;
-            velocities[i3 + d] *= -0.7;
-          }
-        }
+        // 【核心修正 ②】: 使用"循环边界"替代"反弹边界"
+        if (positions[i3] > boxHalfSize) positions[i3] = -boxHalfSize;
+        else if (positions[i3] < -boxHalfSize) positions[i3] = boxHalfSize;
+
+        if (positions[i3+1] > boxHalfSize) positions[i3+1] = -boxHalfSize;
+        else if (positions[i3+1] < -boxHalfSize) positions[i3+1] = boxHalfSize;
+
+        if (positions[i3+2] > boxHalfSize) positions[i3+2] = -boxHalfSize;
+        else if (positions[i3+2] < -boxHalfSize) positions[i3+2] = boxHalfSize;
     }
     this.particleSystem.geometry.attributes.position.needsUpdate = true;
   }
