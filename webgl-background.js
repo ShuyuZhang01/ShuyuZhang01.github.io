@@ -1,15 +1,31 @@
-// WebGL Background Effect - 参考 le-voyage-azarien.art 风格
+// WebGL Background Effect - 流体粒子系统
 class WebGLBackground {
   constructor() {
     this.scene = null;
     this.camera = null;
     this.renderer = null;
     this.particles = [];
+    this.particleSystem = null;
     this.geometries = [];
     this.animationId = null;
     this.time = 0;
     this.mouseX = 0;
     this.mouseY = 0;
+    
+    // 流体粒子参数
+    this.particleCount = 300;
+    this.particlePositions = new Float32Array(this.particleCount * 3);
+    this.particleVelocities = new Float32Array(this.particleCount * 3);
+    this.particleForces = new Float32Array(this.particleCount * 3);
+    this.particleColors = new Float32Array(this.particleCount * 3);
+    
+    // 流体参数
+    this.attractionRadius = 15;
+    this.repulsionRadius = 8;
+    this.attractionStrength = 0.02;
+    this.repulsionStrength = 0.05;
+    this.damping = 0.98;
+    this.boundaryForce = 0.1;
     
     console.log('WebGLBackground: 初始化开始');
     this.init();
@@ -44,8 +60,11 @@ class WebGLBackground {
       // 初始化Three.js
       this.initThreeJS();
       
+      // 初始化粒子位置和速度
+      this.initParticleSystem();
+      
       // 创建新的背景效果
-      this.createParticleSystem();
+      this.createFluidParticleSystem();
       this.createFlowingGeometries();
       this.createLights();
       
@@ -99,63 +118,66 @@ class WebGLBackground {
     cssContainer.style.overflow = 'hidden';
     cssContainer.style.background = 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)';
     
-    // 创建流动的几何形状
-    for (let i = 0; i < 8; i++) {
-      const shape = document.createElement('div');
-      shape.style.position = 'absolute';
-      shape.style.width = (100 + Math.random() * 200) + 'px';
-      shape.style.height = (100 + Math.random() * 200) + 'px';
-      shape.style.border = '1px solid rgba(255, 255, 255, 0.1)';
-      shape.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-      shape.style.left = Math.random() * 100 + '%';
-      shape.style.top = Math.random() * 100 + '%';
-      shape.style.opacity = '0.1';
-      shape.style.animation = `flowMove ${15 + Math.random() * 10}s infinite linear`;
-      shape.style.animationDelay = Math.random() * 5 + 's';
-      cssContainer.appendChild(shape);
-    }
-    
-    // 创建粒子
-    for (let i = 0; i < 30; i++) {
-      const particle = document.createElement('div');
-      particle.style.position = 'absolute';
-      particle.style.width = '2px';
-      particle.style.height = '2px';
-      particle.style.backgroundColor = 'rgba(255, 255, 255, 0.6)';
-      particle.style.borderRadius = '50%';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.top = Math.random() * 100 + '%';
-      particle.style.opacity = '0.4';
-      particle.style.animation = `particleFloat ${8 + Math.random() * 6}s infinite ease-in-out`;
-      particle.style.animationDelay = Math.random() * 8 + 's';
-      cssContainer.appendChild(particle);
+    // 创建流动的粒子群
+    for (let i = 0; i < 5; i++) {
+      const particleGroup = document.createElement('div');
+      particleGroup.style.position = 'absolute';
+      particleGroup.style.width = '200px';
+      particleGroup.style.height = '200px';
+      particleGroup.style.left = Math.random() * 100 + '%';
+      particleGroup.style.top = Math.random() * 100 + '%';
+      particleGroup.style.animation = `fluidMove ${20 + Math.random() * 15}s infinite ease-in-out`;
+      particleGroup.style.animationDelay = Math.random() * 10 + 's';
+      
+      // 在粒子群中创建多个小粒子
+      for (let j = 0; j < 15; j++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '3px';
+        particle.style.height = '3px';
+        particle.style.backgroundColor = 'rgba(74, 144, 226, 0.8)';
+        particle.style.borderRadius = '50%';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.opacity = '0.6';
+        particle.style.animation = `particleFloat ${3 + Math.random() * 2}s infinite ease-in-out`;
+        particle.style.animationDelay = Math.random() * 3 + 's';
+        particleGroup.appendChild(particle);
+      }
+      
+      cssContainer.appendChild(particleGroup);
     }
     
     // 添加CSS动画
     const style = document.createElement('style');
     style.textContent = `
-      @keyframes flowMove {
-        0% {
+      @keyframes fluidMove {
+        0%, 100% {
           transform: translate(0, 0) rotate(0deg);
-          opacity: 0.1;
+          opacity: 0.6;
+        }
+        25% {
+          transform: translate(100px, -50px) rotate(90deg);
+          opacity: 0.8;
         }
         50% {
-          opacity: 0.2;
+          transform: translate(50px, 100px) rotate(180deg);
+          opacity: 0.7;
         }
-        100% {
-          transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotate(360deg);
-          opacity: 0.1;
+        75% {
+          transform: translate(-50px, 50px) rotate(270deg);
+          opacity: 0.9;
         }
       }
       
       @keyframes particleFloat {
         0%, 100% {
-          transform: translateY(0px) scale(1);
-          opacity: 0.4;
+          transform: translate(0, 0) scale(1);
+          opacity: 0.6;
         }
         50% {
-          transform: translateY(-20px) scale(1.2);
-          opacity: 0.8;
+          transform: translate(10px, -10px) scale(1.2);
+          opacity: 0.9;
         }
       }
     `;
@@ -196,38 +218,144 @@ class WebGLBackground {
     document.body.appendChild(container);
   }
 
-  createParticleSystem() {
-    // 创建粒子系统
-    const particleCount = 200;
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
+  initParticleSystem() {
+    // 初始化粒子位置 - 让粒子聚集在几个中心点周围
+    const centers = [
+      { x: -30, y: -20, z: 0 },
+      { x: 30, y: 20, z: 0 },
+      { x: 0, y: -30, z: 0 },
+      { x: -20, y: 30, z: 0 },
+      { x: 25, y: -25, z: 0 }
+    ];
     
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 200;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 200;
+    for (let i = 0; i < this.particleCount; i++) {
+      const centerIndex = Math.floor(i / (this.particleCount / centers.length));
+      const center = centers[centerIndex];
       
+      // 在中心点周围随机分布
+      const radius = Math.random() * 20;
+      const angle = Math.random() * Math.PI * 2;
+      
+      this.particlePositions[i * 3] = center.x + Math.cos(angle) * radius;
+      this.particlePositions[i * 3 + 1] = center.y + Math.sin(angle) * radius;
+      this.particlePositions[i * 3 + 2] = center.z + (Math.random() - 0.5) * 10;
+      
+      // 初始化速度
+      this.particleVelocities[i * 3] = (Math.random() - 0.5) * 0.5;
+      this.particleVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.5;
+      this.particleVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.5;
+      
+      // 初始化颜色 - 蓝色调
       const color = new THREE.Color();
-      color.setHSL(0.6, 0.8, 0.5 + Math.random() * 0.5);
-      colors[i * 3] = color.r;
-      colors[i * 3 + 1] = color.g;
-      colors[i * 3 + 2] = color.b;
+      color.setHSL(0.6, 0.8, 0.5 + Math.random() * 0.3);
+      this.particleColors[i * 3] = color.r;
+      this.particleColors[i * 3 + 1] = color.g;
+      this.particleColors[i * 3 + 2] = color.b;
     }
-    
+  }
+
+  createFluidParticleSystem() {
+    // 创建粒子几何体
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('position', new THREE.BufferAttribute(this.particlePositions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(this.particleColors, 3));
     
     const material = new THREE.PointsMaterial({
-      size: 2,
+      size: 3,
       vertexColors: true,
       transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending,
+      sizeAttenuation: true
     });
     
-    this.particles = new THREE.Points(geometry, material);
-    this.scene.add(this.particles);
+    this.particleSystem = new THREE.Points(geometry, material);
+    this.scene.add(this.particleSystem);
+  }
+
+  updateFluidDynamics() {
+    // 重置力
+    for (let i = 0; i < this.particleCount * 3; i++) {
+      this.particleForces[i] = 0;
+    }
+    
+    // 计算粒子间的相互作用力
+    for (let i = 0; i < this.particleCount; i++) {
+      const i3 = i * 3;
+      const posI = {
+        x: this.particlePositions[i3],
+        y: this.particlePositions[i3 + 1],
+        z: this.particlePositions[i3 + 2]
+      };
+      
+      for (let j = i + 1; j < this.particleCount; j++) {
+        const j3 = j * 3;
+        const posJ = {
+          x: this.particlePositions[j3],
+          y: this.particlePositions[j3 + 1],
+          z: this.particlePositions[j3 + 2]
+        };
+        
+        const dx = posJ.x - posI.x;
+        const dy = posJ.y - posI.y;
+        const dz = posJ.z - posI.z;
+        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        
+        if (distance > 0 && distance < this.attractionRadius) {
+          const force = distance < this.repulsionRadius ? 
+            -this.repulsionStrength * (1 - distance / this.repulsionRadius) :
+            this.attractionStrength * (distance - this.repulsionRadius) / (this.attractionRadius - this.repulsionRadius);
+          
+          const fx = (dx / distance) * force;
+          const fy = (dy / distance) * force;
+          const fz = (dz / distance) * force;
+          
+          // 应用力到两个粒子
+          this.particleForces[i3] -= fx;
+          this.particleForces[i3 + 1] -= fy;
+          this.particleForces[i3 + 2] -= fz;
+          
+          this.particleForces[j3] += fx;
+          this.particleForces[j3 + 1] += fy;
+          this.particleForces[j3 + 2] += fz;
+        }
+      }
+      
+      // 边界力 - 让粒子保持在可视范围内
+      const boundary = 40;
+      if (Math.abs(posI.x) > boundary) {
+        this.particleForces[i3] -= Math.sign(posI.x) * this.boundaryForce;
+      }
+      if (Math.abs(posI.y) > boundary) {
+        this.particleForces[i3 + 1] -= Math.sign(posI.y) * this.boundaryForce;
+      }
+      if (Math.abs(posI.z) > boundary) {
+        this.particleForces[i3 + 2] -= Math.sign(posI.z) * this.boundaryForce;
+      }
+    }
+    
+    // 更新速度和位置
+    for (let i = 0; i < this.particleCount; i++) {
+      const i3 = i * 3;
+      
+      // 更新速度
+      this.particleVelocities[i3] += this.particleForces[i3];
+      this.particleVelocities[i3 + 1] += this.particleForces[i3 + 1];
+      this.particleVelocities[i3 + 2] += this.particleForces[i3 + 2];
+      
+      // 应用阻尼
+      this.particleVelocities[i3] *= this.damping;
+      this.particleVelocities[i3 + 1] *= this.damping;
+      this.particleVelocities[i3 + 2] *= this.damping;
+      
+      // 更新位置
+      this.particlePositions[i3] += this.particleVelocities[i3];
+      this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1];
+      this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2];
+    }
+    
+    // 更新几何体
+    this.particleSystem.geometry.attributes.position.needsUpdate = true;
   }
 
   createFlowingGeometries() {
@@ -296,11 +424,8 @@ class WebGLBackground {
     
     this.time += 0.01;
     
-    // 更新粒子
-    if (this.particles) {
-      this.particles.rotation.y += 0.001;
-      this.particles.rotation.x += 0.0005;
-    }
+    // 更新流体动力学
+    this.updateFluidDynamics();
     
     // 更新几何形状
     this.geometries.forEach((geo) => {
