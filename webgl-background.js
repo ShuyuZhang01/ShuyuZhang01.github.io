@@ -1,11 +1,9 @@
-// WebGL Background Effect using Three.js - Enhanced Version (Grid + Rings + Particles + Geometries)
+// WebGL Background Effect - 参考 le-voyage-azarien.art 风格
 class WebGLBackground {
   constructor() {
     this.scene = null;
     this.camera = null;
     this.renderer = null;
-    this.grid = null;
-    this.rings = [];
     this.particles = [];
     this.geometries = [];
     this.animationId = null;
@@ -41,17 +39,14 @@ class WebGLBackground {
     }
 
     console.log('WebGLBackground: Three.js版本', THREE.REVISION);
-    console.log('WebGLBackground: 浏览器信息', navigator.userAgent);
 
     try {
       // 初始化Three.js
       this.initThreeJS();
       
-      // 创建3D效果
-      this.createGrid();
-      this.createRings();
-      this.createParticles();
-      this.createGeometries();
+      // 创建新的背景效果
+      this.createParticleSystem();
+      this.createFlowingGeometries();
       this.createLights();
       
       // 添加鼠标交互
@@ -66,14 +61,12 @@ class WebGLBackground {
       console.log('WebGLBackground: 初始化成功');
     } catch (error) {
       console.error('WebGLBackground: 初始化失败', error);
-      console.error('WebGLBackground: 错误堆栈', error.stack);
       console.log('WebGLBackground: 使用CSS备选方案');
       this.createCSSFallback();
     }
   }
 
   isHomePage() {
-    // 检查是否为主页（index.html）
     const currentPath = window.location.pathname;
     const isIndex = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath === '';
     console.log('WebGLBackground: 当前页面路径:', currentPath, '是否为主页:', isIndex);
@@ -84,17 +77,8 @@ class WebGLBackground {
     try {
       const canvas = document.createElement('canvas');
       const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      if (!gl) {
-        console.log('WebGLBackground: WebGL context not available');
-        return false;
-      }
-      console.log('WebGLBackground: WebGL supported');
-      console.log('WebGLBackground: WebGL vendor', gl.getParameter(gl.VENDOR));
-      console.log('WebGLBackground: WebGL renderer', gl.getParameter(gl.RENDERER));
-      console.log('WebGLBackground: WebGL version', gl.getParameter(gl.VERSION));
-      return true;
+      return !!gl;
     } catch (e) {
-      console.log('WebGLBackground: WebGL check failed', e);
       return false;
     }
   }
@@ -102,7 +86,6 @@ class WebGLBackground {
   createCSSFallback() {
     console.log('WebGLBackground: 创建CSS备选方案');
     
-    // 创建CSS 3D效果背景
     const cssContainer = document.createElement('div');
     cssContainer.id = 'css-particles-background';
     cssContainer.style.position = 'fixed';
@@ -111,68 +94,39 @@ class WebGLBackground {
     cssContainer.style.width = '100%';
     cssContainer.style.height = '100%';
     cssContainer.style.zIndex = '-1';
-    cssContainer.style.opacity = '0.15';
+    cssContainer.style.opacity = '0.3';
     cssContainer.style.pointerEvents = 'none';
     cssContainer.style.overflow = 'hidden';
-    cssContainer.style.background = 'linear-gradient(45deg, #000 0%, #1a1a1a 100%)';
+    cssContainer.style.background = 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)';
     
-    // 创建网格线
-    for (let i = 0; i < 15; i++) {
-      const line = document.createElement('div');
-      line.style.position = 'absolute';
-      line.style.width = '100%';
-      line.style.height = '1px';
-      line.style.backgroundColor = '#9ca3af';
-      line.style.top = (i * 7) + '%';
-      line.style.opacity = '0.2';
-      line.style.animation = `gridMove ${10 + Math.random() * 5}s infinite linear`;
-      line.style.animationDelay = Math.random() * 3 + 's';
-      cssContainer.appendChild(line);
+    // 创建流动的几何形状
+    for (let i = 0; i < 8; i++) {
+      const shape = document.createElement('div');
+      shape.style.position = 'absolute';
+      shape.style.width = (100 + Math.random() * 200) + 'px';
+      shape.style.height = (100 + Math.random() * 200) + 'px';
+      shape.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+      shape.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      shape.style.left = Math.random() * 100 + '%';
+      shape.style.top = Math.random() * 100 + '%';
+      shape.style.opacity = '0.1';
+      shape.style.animation = `flowMove ${15 + Math.random() * 10}s infinite linear`;
+      shape.style.animationDelay = Math.random() * 5 + 's';
+      cssContainer.appendChild(shape);
     }
     
-    // 创建垂直网格线
-    for (let i = 0; i < 15; i++) {
-      const line = document.createElement('div');
-      line.style.position = 'absolute';
-      line.style.width = '1px';
-      line.style.height = '100%';
-      line.style.backgroundColor = '#9ca3af';
-      line.style.left = (i * 7) + '%';
-      line.style.opacity = '0.2';
-      line.style.animation = `gridMove ${10 + Math.random() * 5}s infinite linear`;
-      line.style.animationDelay = Math.random() * 3 + 's';
-      cssContainer.appendChild(line);
-    }
-    
-    // 创建光圈
-    for (let i = 0; i < 4; i++) {
-      const ring = document.createElement('div');
-      ring.style.position = 'absolute';
-      ring.style.width = (120 + i * 60) + 'px';
-      ring.style.height = (120 + i * 60) + 'px';
-      ring.style.border = '1px solid #9ca3af';
-      ring.style.borderRadius = '50%';
-      ring.style.left = '50%';
-      ring.style.top = '50%';
-      ring.style.transform = 'translate(-50%, -50%)';
-      ring.style.opacity = '0.15';
-      ring.style.animation = `ringRotate ${12 + i * 3}s infinite linear`;
-      ring.style.animationDelay = i * 2 + 's';
-      cssContainer.appendChild(ring);
-    }
-    
-    // 创建移动粒子
-    for (let i = 0; i < 20; i++) {
+    // 创建粒子
+    for (let i = 0; i < 30; i++) {
       const particle = document.createElement('div');
       particle.style.position = 'absolute';
       particle.style.width = '2px';
       particle.style.height = '2px';
-      particle.style.backgroundColor = '#9ca3af';
+      particle.style.backgroundColor = 'rgba(255, 255, 255, 0.6)';
       particle.style.borderRadius = '50%';
-      particle.style.left = '-10px';
+      particle.style.left = Math.random() * 100 + '%';
       particle.style.top = Math.random() * 100 + '%';
-      particle.style.opacity = '0.6';
-      particle.style.animation = `particleMove ${8 + Math.random() * 4}s infinite linear`;
+      particle.style.opacity = '0.4';
+      particle.style.animation = `particleFloat ${8 + Math.random() * 6}s infinite ease-in-out`;
       particle.style.animationDelay = Math.random() * 8 + 's';
       cssContainer.appendChild(particle);
     }
@@ -180,275 +134,157 @@ class WebGLBackground {
     // 添加CSS动画
     const style = document.createElement('style');
     style.textContent = `
-      @keyframes gridMove {
+      @keyframes flowMove {
         0% {
-          transform: translateY(0px);
-          opacity: 0.2;
-        }
-        50% {
+          transform: translate(0, 0) rotate(0deg);
           opacity: 0.1;
         }
-        100% {
-          transform: translateY(-15px);
+        50% {
           opacity: 0.2;
         }
+        100% {
+          transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotate(360deg);
+          opacity: 0.1;
+        }
       }
       
-      @keyframes ringRotate {
-        0% {
-          transform: translate(-50%, -50%) rotate(0deg);
-          opacity: 0.15;
+      @keyframes particleFloat {
+        0%, 100% {
+          transform: translateY(0px) scale(1);
+          opacity: 0.4;
         }
         50% {
-          opacity: 0.3;
-        }
-        100% {
-          transform: translate(-50%, -50%) rotate(360deg);
-          opacity: 0.15;
-        }
-      }
-      
-      @keyframes particleMove {
-        0% {
-          transform: translateX(0px);
-          opacity: 0;
-        }
-        10% {
-          opacity: 0.6;
-        }
-        90% {
-          opacity: 0.6;
-        }
-        100% {
-          transform: translateX(calc(100vw + 20px));
-          opacity: 0;
+          transform: translateY(-20px) scale(1.2);
+          opacity: 0.8;
         }
       }
     `;
     
     document.head.appendChild(style);
     document.body.appendChild(cssContainer);
-    
-    console.log('WebGLBackground: CSS备选方案创建成功');
   }
 
   initThreeJS() {
-    console.log('WebGLBackground: 开始初始化Three.js');
-    
     // 创建场景
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(0x000000, 3, 20);
-    console.log('WebGLBackground: 场景创建成功');
+    this.scene.fog = new THREE.Fog(0x0a0a0a, 50, 200);
     
     // 创建相机
-    this.camera = new THREE.PerspectiveCamera(
-      60, 
-      window.innerWidth / window.innerHeight, 
-      0.1, 
-      1000
-    );
-    this.camera.position.set(0, 0, 8);
-    console.log('WebGLBackground: 相机创建成功');
+    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera.position.z = 50;
     
     // 创建渲染器
-    console.log('WebGLBackground: 开始创建渲染器');
     this.renderer = new THREE.WebGLRenderer({ 
-      alpha: true,
-      antialias: true,
-      preserveDrawingBuffer: false,
-      powerPreference: "high-performance"
+      antialias: true, 
+      alpha: true 
     });
-    console.log('WebGLBackground: 渲染器创建成功');
-    
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setClearColor(0x000000, 0);
+    this.renderer.setClearColor(0x0a0a0a, 0.3);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     
-    // 设置canvas样式
-    this.renderer.domElement.style.position = 'fixed';
-    this.renderer.domElement.style.top = '0';
-    this.renderer.domElement.style.left = '0';
-    this.renderer.domElement.style.width = '100%';
-    this.renderer.domElement.style.height = '100%';
-    this.renderer.domElement.style.zIndex = '-1';
-    this.renderer.domElement.style.pointerEvents = 'none';
-    
-    console.log('WebGLBackground: Canvas样式设置完成');
-    console.log('WebGLBackground: Canvas元素', this.renderer.domElement);
-    
-    // 直接添加到body
-    document.body.appendChild(this.renderer.domElement);
-    console.log('WebGLBackground: Canvas已添加到body');
-    console.log('WebGLBackground: Three.js初始化成功', this.renderer.domElement);
+    // 添加到页面
+    const container = document.createElement('div');
+    container.id = 'webgl-background';
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.zIndex = '-1';
+    container.style.pointerEvents = 'none';
+    container.appendChild(this.renderer.domElement);
+    document.body.appendChild(container);
   }
 
-  createGrid() {
-    console.log('WebGLBackground: 开始创建网格');
-    
-    // 创建网格几何体
-    const gridGeometry = new THREE.GridHelper(15, 30, 0x9ca3af, 0x6b7280);
-    const gridMaterial = new THREE.MeshBasicMaterial({
-      color: 0x9ca3af,
-      transparent: true,
-      opacity: 0.3,
-      wireframe: true
-    });
-    
-    this.grid = new THREE.Mesh(gridGeometry, gridMaterial);
-    this.grid.position.z = -5;
-    this.scene.add(this.grid);
-    console.log('WebGLBackground: 网格创建成功');
-  }
-
-  createRings() {
-    console.log('WebGLBackground: 开始创建光圈');
-    
-    // 创建多个光圈
-    for (let i = 0; i < 8; i++) {
-      const ringGeometry = new THREE.RingGeometry(1 + i * 0.5, 1.3 + i * 0.5, 32);
-      const ringMaterial = new THREE.MeshBasicMaterial({
-        color: 0x9ca3af,
-        transparent: true,
-        opacity: 0.2 - i * 0.02,
-        wireframe: true,
-        side: THREE.DoubleSide
-      });
-      
-      const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-      ring.position.z = -3 - i * 0.5;
-      ring.userData = { index: i };
-      this.rings.push(ring);
-      this.scene.add(ring);
-    }
-    console.log('WebGLBackground: 光圈创建成功，数量:', this.rings.length);
-  }
-
-  createParticles() {
-    console.log('WebGLBackground: 开始创建粒子系统');
-    
-    // 创建粒子几何体
-    const particleCount = 80;
+  createParticleSystem() {
+    // 创建粒子系统
+    const particleCount = 200;
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     
     for (let i = 0; i < particleCount; i++) {
-      // 粒子从左侧开始，随机Y位置
-      positions[i * 3] = -15; // x - 从左侧开始
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 15; // y - 随机高度
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z - 随机深度
+      positions[i * 3] = (Math.random() - 0.5) * 200;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 200;
       
-      // 颜色
-      colors[i * 3] = 0.6; // r
-      colors[i * 3 + 1] = 0.6; // g
-      colors[i * 3 + 2] = 0.7; // b
+      const color = new THREE.Color();
+      color.setHSL(0.6, 0.8, 0.5 + Math.random() * 0.5);
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
     }
     
-    const particleGeometry = new THREE.BufferGeometry();
-    particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     
-    const particleMaterial = new THREE.PointsMaterial({
-      size: 0.1,
+    const material = new THREE.PointsMaterial({
+      size: 2,
       vertexColors: true,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0.6,
       blending: THREE.AdditiveBlending
     });
     
-    const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
-    this.particles.push(particleSystem);
-    this.scene.add(particleSystem);
-    
-    console.log('WebGLBackground: 粒子系统创建成功');
+    this.particles = new THREE.Points(geometry, material);
+    this.scene.add(this.particles);
   }
 
-  createGeometries() {
-    console.log('WebGLBackground: 开始创建几何体');
-    
-    // 创建一些简单的几何体形状
+  createFlowingGeometries() {
+    // 创建流动的几何形状
     const geometries = [
-      { type: 'box', size: 0.5, position: [3, 2, 0] },
-      { type: 'sphere', size: 0.4, position: [-3, -2, 0] },
-      { type: 'cylinder', size: 0.35, position: [2, -3, 0] },
-      { type: 'torus', size: 0.3, position: [-2, 3, 0] },
-      { type: 'octahedron', size: 0.4, position: [0, 0, 0] },
-      { type: 'tetrahedron', size: 0.3, position: [4, 1, 0] },
-      { type: 'icosahedron', size: 0.25, position: [-4, -1, 0] }
+      new THREE.TorusGeometry(10, 3, 16, 100),
+      new THREE.OctahedronGeometry(8),
+      new THREE.TetrahedronGeometry(6),
+      new THREE.IcosahedronGeometry(5)
     ];
     
-    geometries.forEach((geo, index) => {
-      let geometry;
-      
-      switch(geo.type) {
-        case 'box':
-          geometry = new THREE.BoxGeometry(geo.size, geo.size, geo.size);
-          break;
-        case 'sphere':
-          geometry = new THREE.SphereGeometry(geo.size, 16, 16);
-          break;
-        case 'cylinder':
-          geometry = new THREE.CylinderGeometry(geo.size, geo.size, geo.size * 2, 16);
-          break;
-        case 'torus':
-          geometry = new THREE.TorusGeometry(geo.size, geo.size * 0.3, 8, 16);
-          break;
-        case 'octahedron':
-          geometry = new THREE.OctahedronGeometry(geo.size);
-          break;
-        case 'tetrahedron':
-          geometry = new THREE.TetrahedronGeometry(geo.size);
-          break;
-        case 'icosahedron':
-          geometry = new THREE.IcosahedronGeometry(geo.size);
-          break;
-      }
-      
+    geometries.forEach((geometry, index) => {
       const material = new THREE.MeshBasicMaterial({
-        color: 0x9ca3af,
-        transparent: true,
-        opacity: 0.4,
+        color: 0x4a90e2,
         wireframe: true,
-        side: THREE.DoubleSide
+        transparent: true,
+        opacity: 0.1
       });
       
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(...geo.position);
-      mesh.userData = { 
-        index: index,
-        originalPosition: [...geo.position],
-        rotationSpeed: {
-          x: (Math.random() - 0.5) * 0.015,
-          y: (Math.random() - 0.5) * 0.015,
-          z: (Math.random() - 0.5) * 0.015
-        }
-      };
+      mesh.position.set(
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 100
+      );
+      mesh.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+      );
       
-      this.geometries.push(mesh);
+      this.geometries.push({
+        mesh: mesh,
+        speed: 0.001 + Math.random() * 0.002,
+        rotationSpeed: {
+          x: (Math.random() - 0.5) * 0.02,
+          y: (Math.random() - 0.5) * 0.02,
+          z: (Math.random() - 0.5) * 0.02
+        }
+      });
+      
       this.scene.add(mesh);
     });
-    
-    console.log('WebGLBackground: 几何体创建成功，数量:', this.geometries.length);
   }
 
   createLights() {
-    console.log('WebGLBackground: 开始创建灯光');
-    
-    // 环境光
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+    // 添加环境光
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
     this.scene.add(ambientLight);
     
-    // 点光源
-    const pointLight = new THREE.PointLight(0x9ca3af, 0.8, 20);
-    pointLight.position.set(0, 0, 10);
+    // 添加点光源
+    const pointLight = new THREE.PointLight(0x4a90e2, 0.5, 100);
+    pointLight.position.set(0, 0, 50);
     this.scene.add(pointLight);
-    
-    console.log('WebGLBackground: 灯光创建成功');
   }
 
   addMouseInteraction() {
-    // 鼠标移动事件
     document.addEventListener('mousemove', (event) => {
       this.mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       this.mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -456,123 +292,62 @@ class WebGLBackground {
   }
 
   animate() {
-    console.log('WebGLBackground: 开始动画循环');
-    
     this.animationId = requestAnimationFrame(() => this.animate());
+    
     this.time += 0.01;
     
-    // 网格动画
-    if (this.grid) {
-      this.grid.rotation.x += 0.001;
-      this.grid.rotation.y += 0.001;
-      this.grid.material.opacity = 0.2 + Math.sin(this.time) * 0.1;
+    // 更新粒子
+    if (this.particles) {
+      this.particles.rotation.y += 0.001;
+      this.particles.rotation.x += 0.0005;
     }
     
-    // 光圈动画
-    this.rings.forEach((ring, index) => {
-      ring.rotation.z += 0.005 + index * 0.001;
-      ring.rotation.x += 0.002 + index * 0.0005;
-      ring.rotation.y += 0.003 + index * 0.0003;
-      ring.material.opacity = (0.2 - index * 0.02) + Math.sin(this.time + index) * 0.05;
+    // 更新几何形状
+    this.geometries.forEach((geo) => {
+      geo.mesh.rotation.x += geo.rotationSpeed.x;
+      geo.mesh.rotation.y += geo.rotationSpeed.y;
+      geo.mesh.rotation.z += geo.rotationSpeed.z;
+      
+      // 添加轻微的浮动效果
+      geo.mesh.position.y += Math.sin(this.time * geo.speed) * 0.1;
     });
     
-    // 粒子动画 - 从左往右移动
-    this.particles.forEach((particleSystem) => {
-      const positions = particleSystem.geometry.attributes.position.array;
-      
-      for (let i = 0; i < positions.length; i += 3) {
-        // 粒子从左往右移动
-        positions[i] += 0.08;
-        
-        // 当粒子到达右侧边界时，重置到左侧
-        if (positions[i] > 15) {
-          positions[i] = -15;
-          positions[i + 1] = (Math.random() - 0.5) * 15; // 随机Y位置
-          positions[i + 2] = (Math.random() - 0.5) * 10; // 随机Z位置
-        }
-      }
-      
-      particleSystem.geometry.attributes.position.needsUpdate = true;
-    });
+    // 相机轻微跟随鼠标
+    this.camera.position.x += (this.mouseX * 10 - this.camera.position.x) * 0.01;
+    this.camera.position.y += (this.mouseY * 10 - this.camera.position.y) * 0.01;
     
-    // 几何体动画
-    this.geometries.forEach((mesh, index) => {
-      // 旋转动画
-      mesh.rotation.x += mesh.userData.rotationSpeed.x;
-      mesh.rotation.y += mesh.userData.rotationSpeed.y;
-      mesh.rotation.z += mesh.userData.rotationSpeed.z;
-      
-      // 轻微的浮动动画
-      const floatOffset = Math.sin(this.time + index) * 0.3;
-      mesh.position.y = mesh.userData.originalPosition[1] + floatOffset;
-      
-      // 透明度动画
-      mesh.material.opacity = 0.3 + Math.sin(this.time * 1.5 + index) * 0.15;
-    });
-    
-    // 相机动画
-    this.camera.position.x = Math.sin(this.time * 0.3) * 0.5;
-    this.camera.position.y = Math.cos(this.time * 0.2) * 0.3;
-    this.camera.lookAt(0, 0, 0);
-    
-    // 渲染场景
-    if (this.renderer && this.scene && this.camera) {
-      this.renderer.render(this.scene, this.camera);
-    }
+    this.renderer.render(this.scene, this.camera);
   }
 
   onWindowResize() {
-    if (this.camera && this.renderer) {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-    }
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
   destroy() {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
     }
-    if (this.renderer && this.renderer.domElement && this.renderer.domElement.parentNode) {
-      this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
-    }
-    // 移除CSS备选方案
-    const cssContainer = document.getElementById('css-particles-background');
-    if (cssContainer) {
-      cssContainer.remove();
+    
+    if (this.renderer) {
+      this.renderer.dispose();
+      const container = document.getElementById('webgl-background');
+      if (container) {
+        container.remove();
+      }
     }
   }
 }
 
-// 等待Three.js加载完成
+// 初始化函数
 function initWebGLBackground() {
-  console.log('initWebGLBackground: 检查Three.js...');
-  
-  if (typeof THREE !== 'undefined') {
-    console.log('initWebGLBackground: Three.js已加载，开始初始化WebGL背景');
-    new WebGLBackground();
-  } else {
-    console.log('initWebGLBackground: Three.js未加载，等待...');
-    // 等待一段时间后重试
-    setTimeout(initWebGLBackground, 100);
-  }
+  return new WebGLBackground();
 }
 
-// 当页面加载完成后初始化WebGL背景
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOMContentLoaded: 页面加载完成，开始初始化WebGL背景');
+// 页面加载完成后初始化
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initWebGLBackground);
+} else {
   initWebGLBackground();
-});
-
-// 备用初始化方法
-window.addEventListener('load', function() {
-  console.log('window.load: 页面完全加载，检查WebGL背景');
-  if (typeof THREE !== 'undefined' && !document.querySelector('canvas') && !document.getElementById('css-particles-background')) {
-    console.log('window.load: 重新初始化WebGL背景');
-    new WebGLBackground();
-  }
-});
-
-// 立即检查
-console.log('WebGL脚本加载完成，THREE对象状态:', typeof THREE);
-console.log('WebGL脚本加载完成，页面URL:', window.location.href); 
+} 
