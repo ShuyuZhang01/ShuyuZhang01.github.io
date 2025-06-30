@@ -7,60 +7,156 @@ class WebGLBackground {
     this.particles = null;
     this.animationId = null;
     
+    console.log('WebGLBackground: 初始化开始');
     this.init();
   }
 
   init() {
+    // 检查是否为主页
+    if (this.isHomePage()) {
+      console.log('WebGLBackground: 主页检测到，跳过WebGL背景初始化');
+      return;
+    }
+    
+    console.log('WebGLBackground: 开始初始化检查');
+    
     // 检查是否支持WebGL
     if (!this.isWebGLAvailable()) {
-      console.log('WebGL not supported');
+      console.log('WebGLBackground: WebGL not supported, 使用CSS备选方案');
+      this.createCSSFallback();
       return;
     }
 
-    // 创建容器
-    this.createContainer();
-    
-    // 初始化Three.js
-    this.initThreeJS();
-    
-    // 创建粒子
-    this.createParticles();
-    
-    // 开始动画
-    this.animate();
-    
-    // 响应窗口大小变化
-    window.addEventListener('resize', () => this.onWindowResize());
+    // 检查Three.js是否可用
+    if (typeof THREE === 'undefined') {
+      console.log('WebGLBackground: Three.js not loaded, 使用CSS备选方案');
+      this.createCSSFallback();
+      return;
+    }
+
+    console.log('WebGLBackground: Three.js版本', THREE.REVISION);
+    console.log('WebGLBackground: 浏览器信息', navigator.userAgent);
+
+    try {
+      // 初始化Three.js
+      this.initThreeJS();
+      
+      // 创建粒子
+      this.createParticles();
+      
+      // 开始动画
+      this.animate();
+      
+      // 响应窗口大小变化
+      window.addEventListener('resize', () => this.onWindowResize());
+      
+      console.log('WebGLBackground: 初始化成功');
+    } catch (error) {
+      console.error('WebGLBackground: 初始化失败', error);
+      console.error('WebGLBackground: 错误堆栈', error.stack);
+      console.log('WebGLBackground: 使用CSS备选方案');
+      this.createCSSFallback();
+    }
+  }
+
+  isHomePage() {
+    // 检查是否为主页（index.html）
+    const currentPath = window.location.pathname;
+    const isIndex = currentPath.endsWith('index.html') || currentPath.endsWith('/') || currentPath === '';
+    console.log('WebGLBackground: 当前页面路径:', currentPath, '是否为主页:', isIndex);
+    return isIndex;
   }
 
   isWebGLAvailable() {
     try {
       const canvas = document.createElement('canvas');
-      return !!(window.WebGLRenderingContext && 
-        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        console.log('WebGLBackground: WebGL context not available');
+        return false;
+      }
+      console.log('WebGLBackground: WebGL supported');
+      console.log('WebGLBackground: WebGL vendor', gl.getParameter(gl.VENDOR));
+      console.log('WebGLBackground: WebGL renderer', gl.getParameter(gl.RENDERER));
+      console.log('WebGLBackground: WebGL version', gl.getParameter(gl.VERSION));
+      return true;
     } catch (e) {
+      console.log('WebGLBackground: WebGL check failed', e);
       return false;
     }
   }
 
-  createContainer() {
-    // 创建背景容器
-    this.container = document.createElement('div');
-    this.container.style.position = 'fixed';
-    this.container.style.top = '0';
-    this.container.style.left = '0';
-    this.container.style.width = '100%';
-    this.container.style.height = '100%';
-    this.container.style.zIndex = '-1';
-    this.container.style.opacity = '0.3';
-    this.container.style.pointerEvents = 'none';
+  createCSSFallback() {
+    console.log('WebGLBackground: 创建CSS备选方案');
     
-    document.body.appendChild(this.container);
+    // 创建CSS粒子背景
+    const cssContainer = document.createElement('div');
+    cssContainer.id = 'css-particles-background';
+    cssContainer.style.position = 'fixed';
+    cssContainer.style.top = '0';
+    cssContainer.style.left = '0';
+    cssContainer.style.width = '100%';
+    cssContainer.style.height = '100%';
+    cssContainer.style.zIndex = '-1';
+    cssContainer.style.opacity = '0.3';
+    cssContainer.style.pointerEvents = 'none';
+    cssContainer.style.overflow = 'hidden';
+    
+    // 创建多个CSS粒子
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.style.position = 'absolute';
+      particle.style.width = '2px';
+      particle.style.height = '2px';
+      particle.style.backgroundColor = '#9ca3af';
+      particle.style.borderRadius = '50%';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animation = `float ${3 + Math.random() * 4}s infinite linear`;
+      particle.style.animationDelay = Math.random() * 2 + 's';
+      
+      cssContainer.appendChild(particle);
+    }
+    
+    // 添加CSS动画
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0% {
+          transform: translateY(0px) translateX(0px) rotate(0deg);
+          opacity: 0.8;
+        }
+        25% {
+          transform: translateY(-20px) translateX(10px) rotate(90deg);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-40px) translateX(-10px) rotate(180deg);
+          opacity: 0.8;
+        }
+        75% {
+          transform: translateY(-20px) translateX(-20px) rotate(270deg);
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(0px) translateX(0px) rotate(360deg);
+          opacity: 0.8;
+        }
+      }
+    `;
+    
+    document.head.appendChild(style);
+    document.body.appendChild(cssContainer);
+    
+    console.log('WebGLBackground: CSS备选方案创建成功');
   }
 
   initThreeJS() {
+    console.log('WebGLBackground: 开始初始化Three.js');
+    
     // 创建场景
     this.scene = new THREE.Scene();
+    console.log('WebGLBackground: 场景创建成功');
     
     // 创建相机
     this.camera = new THREE.PerspectiveCamera(
@@ -70,20 +166,44 @@ class WebGLBackground {
       1000
     );
     this.camera.position.z = 1;
+    console.log('WebGLBackground: 相机创建成功');
     
     // 创建渲染器
+    console.log('WebGLBackground: 开始创建渲染器');
     this.renderer = new THREE.WebGLRenderer({ 
       alpha: true,
-      antialias: true 
+      antialias: true,
+      preserveDrawingBuffer: false,
+      powerPreference: "high-performance"
     });
+    console.log('WebGLBackground: 渲染器创建成功');
+    
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(0x000000, 0);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     
-    this.container.appendChild(this.renderer.domElement);
+    // 设置canvas样式
+    this.renderer.domElement.style.position = 'fixed';
+    this.renderer.domElement.style.top = '0';
+    this.renderer.domElement.style.left = '0';
+    this.renderer.domElement.style.width = '100%';
+    this.renderer.domElement.style.height = '100%';
+    this.renderer.domElement.style.zIndex = '-1';
+    this.renderer.domElement.style.pointerEvents = 'none';
+    
+    console.log('WebGLBackground: Canvas样式设置完成');
+    console.log('WebGLBackground: Canvas元素', this.renderer.domElement);
+    
+    // 直接添加到body
+    document.body.appendChild(this.renderer.domElement);
+    console.log('WebGLBackground: Canvas已添加到body');
+    console.log('WebGLBackground: Three.js初始化成功', this.renderer.domElement);
   }
 
   createParticles() {
-    const particleCount = 2000;
+    console.log('WebGLBackground: 开始创建粒子系统');
+    
+    const particleCount = 100; // 进一步减少粒子数量
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     
@@ -100,25 +220,33 @@ class WebGLBackground {
       colors[i * 3 + 2] = gray; // b
     }
     
+    console.log('WebGLBackground: 粒子数据生成完成');
+    
     // 创建几何体
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    console.log('WebGLBackground: 几何体创建完成');
     
     // 创建材质
     const material = new THREE.PointsMaterial({
-      size: 0.01,
+      size: 0.1,
       vertexColors: true,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.8,
+      sizeAttenuation: true
     });
+    console.log('WebGLBackground: 材质创建完成');
     
     // 创建粒子系统
     this.particles = new THREE.Points(geometry, material);
     this.scene.add(this.particles);
+    console.log('WebGLBackground: 粒子系统创建成功，粒子数量:', particleCount);
   }
 
   animate() {
+    console.log('WebGLBackground: 开始动画循环');
+    
     this.animationId = requestAnimationFrame(() => this.animate());
     
     // 旋转粒子
@@ -128,31 +256,63 @@ class WebGLBackground {
     }
     
     // 渲染场景
-    this.renderer.render(this.scene, this.camera);
+    if (this.renderer && this.scene && this.camera) {
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 
   onWindowResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    if (this.camera && this.renderer) {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
   }
 
   destroy() {
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
     }
-    if (this.container && this.container.parentNode) {
-      this.container.parentNode.removeChild(this.container);
+    if (this.renderer && this.renderer.domElement && this.renderer.domElement.parentNode) {
+      this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
     }
+    // 移除CSS备选方案
+    const cssContainer = document.getElementById('css-particles-background');
+    if (cssContainer) {
+      cssContainer.remove();
+    }
+  }
+}
+
+// 等待Three.js加载完成
+function initWebGLBackground() {
+  console.log('initWebGLBackground: 检查Three.js...');
+  
+  if (typeof THREE !== 'undefined') {
+    console.log('initWebGLBackground: Three.js已加载，开始初始化WebGL背景');
+    new WebGLBackground();
+  } else {
+    console.log('initWebGLBackground: Three.js未加载，等待...');
+    // 等待一段时间后重试
+    setTimeout(initWebGLBackground, 100);
   }
 }
 
 // 当页面加载完成后初始化WebGL背景
 document.addEventListener('DOMContentLoaded', function() {
-  // 检查Three.js是否可用
-  if (typeof THREE !== 'undefined') {
+  console.log('DOMContentLoaded: 页面加载完成，开始初始化WebGL背景');
+  initWebGLBackground();
+});
+
+// 备用初始化方法
+window.addEventListener('load', function() {
+  console.log('window.load: 页面完全加载，检查WebGL背景');
+  if (typeof THREE !== 'undefined' && !document.querySelector('canvas') && !document.getElementById('css-particles-background')) {
+    console.log('window.load: 重新初始化WebGL背景');
     new WebGLBackground();
-  } else {
-    console.log('Three.js not loaded');
   }
-}); 
+});
+
+// 立即检查
+console.log('WebGL脚本加载完成，THREE对象状态:', typeof THREE);
+console.log('WebGL脚本加载完成，页面URL:', window.location.href); 
