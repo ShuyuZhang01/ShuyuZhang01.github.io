@@ -660,59 +660,29 @@
 
   <script>
   (function(){
-    const cards=document.querySelectorAll('.work-card');
-    const body=document.body;
-    
-    // 调试信息 - 检测移动端
-    console.log('设备检测:', {
-      isMobile: 'ontouchstart' in window,
-      userAgent: navigator.userAgent,
-      viewport: window.innerWidth + 'x' + window.innerHeight
-    });
+    const cards = document.querySelectorAll('.work-card');
+    const body = document.body;
 
-    /* fade‑in on scroll */
-    const io=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in-view');io.unobserve(entry.target);}});
-    },{threshold:0.2});
-    cards.forEach(c=>io.observe(c));
-
-    // 修复移动端点击问题 - 使用更可靠的事件处理
-    cards.forEach(card=>{
-      // 添加触摸事件支持
-      card.addEventListener('touchstart', function(e) {
-        e.preventDefault(); // 防止默认行为
-        this.touchStartTime = Date.now();
-      }, { passive: false });
-      
-      card.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        const touchDuration = Date.now() - this.touchStartTime;
-        // 只有短触摸才触发展开（避免长按）
-        if (touchDuration < 500) {
-          expand(this);
-        }
-      }, { passive: false });
-      
-      // 保留原有的点击事件
-      card.addEventListener('click', function(e) {
-        // 在移动端，如果已经有触摸事件处理，则阻止点击事件
-        if ('ontouchstart' in window && this.touchStartTime) {
-          const touchDuration = Date.now() - this.touchStartTime;
-          if (touchDuration < 500) {
-            e.preventDefault();
-            return;
+    // Fade-in on scroll
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
           }
-        }
-        expand(this);
-      });
-    });
-
-    // 简化的3D悬停效果 - 只在非移动端应用
+        });
+      }, { threshold: 0.1 });
+      cards.forEach(c => io.observe(c));
+    } else {
+      cards.forEach(c => c.classList.add('in-view'));
+    }
+    
+    // Simplified 3D hover effect for desktop
     if (!('ontouchstart' in window)) {
       cards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
           if (card.classList.contains('expanded')) return;
-          
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
@@ -720,124 +690,153 @@
           const centerY = rect.height / 2;
           const rotateX = (y - centerY) / 20;
           const rotateY = (x - centerX) / -20;
-
-          card.style.transition = 'transform 0.1s';
           card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
 
         card.addEventListener('mouseleave', () => {
           if (card.classList.contains('expanded')) return;
-          
-          card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
           card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
         });
       });
     }
 
-    function expand(card){
-      if(card.classList.contains('expanded'))return;
-
-      const closeBtn=document.createElement('button');
-      closeBtn.className='close-btn';
-      closeBtn.innerHTML='&times;';
-      closeBtn.addEventListener('click',e=>{
-        e.stopPropagation();
-        collapse(card,closeBtn);
+    // A single, reliable click handler for all devices
+    cards.forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Prevent expanding if a link inside the card was clicked.
+        if (e.target.tagName === 'A') return;
+        
+        // If the card is already expanded, do nothing.
+        if (this.classList.contains('expanded')) return;
+        
+        expand(this);
       });
+    });
 
+    function expand(card) {
+      // Create a close button
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'close-btn';
+      closeBtn.innerHTML = '×';
+
+      const collapseCard = (e) => {
+        if (e) e.stopPropagation();
+        collapse(card);
+      };
+      closeBtn.addEventListener('click', collapseCard);
+      
       card.appendChild(closeBtn);
-      card.classList.add('expanded');
-      body.style.overflow='hidden';
 
-      /* build description */
-      const currentLang = localStorage.getItem('language') || 'en';
-      const projectKey = card.querySelector('.work-title').textContent.toLowerCase().replace(/\s+/g, '-');
-      
-      // 查找对应的项目数据
-      let projectIntro = 'Description not found.'; // 默认文本
-      const projectKeys = Object.keys(window.translations[currentLang].practice.projects);
-      const cardTitle = card.querySelector('.work-title').textContent;
-      
-      const foundKey = projectKeys.find(key => window.translations[currentLang].practice.projects[key].title === cardTitle);
+      // Create and append the dynamic content
+      let contentContainer = null;
 
-      if (foundKey) {
-          projectIntro = window.translations[currentLang].practice.projects[foundKey].intro;
+      if (card.dataset.pdf) {
+        contentContainer = document.createElement('iframe');
+        contentContainer.src = card.dataset.pdf;
+        contentContainer.type = 'application/pdf';
+        contentContainer.allow = 'fullscreen';
+      } else if (card.dataset.video) {
+        contentContainer = document.createElement('iframe');
+        const videoUrl = card.dataset.video.includes('vimeo') 
+          ? card.dataset.video + '?autoplay=1'
+          : card.dataset.video + '&autoplay=1';
+        contentContainer.src = videoUrl;
+        contentContainer.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        contentContainer.allowFullscreen = true;
+      } else if (card.dataset.gallery) {
+        contentContainer = document.createElement('div');
+        contentContainer.className = 'gallery';
+        card.dataset.gallery.split(',').forEach(p => {
+          const img = document.createElement('img');
+          img.src = p.trim();
+          contentContainer.appendChild(img);
+        });
+      }
+      
+      if (contentContainer) {
+        card.appendChild(contentContainer);
       }
 
-      const textElem=document.createElement('p');
-      textElem.className='typing-text';
-      textElem.textContent=projectIntro;
+      // Create and append the description text
+      const textElem = document.createElement('p');
+      textElem.className = 'typing-text';
       
-      /* ① PDF 优先 */
-     if (card.dataset.pdf){
-    const iframe = document.createElement('iframe');
-    iframe.src   = card.dataset.pdf;
-    iframe.type  = 'application/pdf';
-    iframe.allow = 'fullscreen';
-    card.appendChild(iframe);
-  }
-  /* ② 其次是视频 */
-  else if (card.dataset.video){
-    const iframe = document.createElement('iframe');
-    iframe.src   = card.dataset.video + (card.dataset.video.includes('?') ? '&' : '?') + 'autoplay=1&rel=0';
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.allowFullscreen = true;
-    card.appendChild(iframe);
-  }
-  /* ③ 最后是图集 */
-  else if (card.dataset.gallery){
-    const gallery = document.createElement('div');
-    gallery.className = 'gallery';
-    card.dataset.gallery.split(',').forEach(p=>{
-      const img = document.createElement('img');
-      img.src = p.trim();
-      gallery.appendChild(img);
-    });
-    card.appendChild(gallery);
-  }
-
+      // 获取多语言描述
+      const currentLang = localStorage.getItem('language') || 'en';
+      const cardTitle = card.querySelector('.work-title').textContent;
+      const projectKeys = Object.keys(window.translations[currentLang].practice.projects);
+      const foundKey = projectKeys.find(key => window.translations[currentLang].practice.projects[key].title === cardTitle);
+      
+      if (foundKey) {
+        textElem.textContent = window.translations[currentLang].practice.projects[foundKey].intro;
+      } else {
+        textElem.textContent = card.dataset.text || 'No description available.';
+      }
+      
       card.appendChild(textElem);
 
-      /* Esc key */
-      const onKey=e=>{if(e.key==='Escape')collapse(card,closeBtn,onKey,textElem);};
-      document.addEventListener('keydown',onKey);
+      card.classList.add('expanded');
+      body.style.overflow = 'hidden';
 
-      /* click outside - 修复移动端点击外部关闭问题 */
-      setTimeout(()=>{
-        const outsideHandler = function(ev){
-          if(!card.contains(ev.target) && !ev.target.closest('.image-modal')){
-            collapse(card,closeBtn,onKey,textElem);
-            document.removeEventListener('click', outsideHandler);
-            document.removeEventListener('touchend', outsideHandler);
-          }
-        };
-        document.addEventListener('click', outsideHandler);
-        document.addEventListener('touchend', outsideHandler);
+      // Handlers for closing the expanded card
+      const onKey = e => {
+        if (e.key === 'Escape') collapse(card);
+      };
+      
+      const clickOutsideHandler = e => {
+        if (!card.contains(e.target) && !e.target.closest('.image-modal')) {
+          collapse(card);
+        }
+      };
+
+      // Use setTimeout to ensure listeners are added after the current event cycle
+      setTimeout(() => {
+        document.addEventListener('keydown', onKey);
+        document.addEventListener('click', clickOutsideHandler);
+        card.dataset.keyHandler = onKey; // Store reference to remove later
+        card.dataset.clickOutsideHandler = clickOutsideHandler; // Store reference
       }, 100);
     }
 
-    function collapse(card,btn,keyHandler,textElem){
+    function collapse(card) {
       card.classList.remove('expanded');
-      body.style.overflow='';
-      if(btn) btn.remove();
-      const iframe=card.querySelector('iframe');
-      if(iframe)iframe.remove();
-      const gallery=card.querySelector('.gallery');
-      if(gallery)gallery.remove();
-      if(textElem)textElem.remove();
-      if(keyHandler)document.removeEventListener('keydown',keyHandler);
+      body.style.overflow = '';
       
-      // 重置卡片的transform样式
+      // Remove all dynamically added children (close button, iframe, gallery, text)
+      while(card.firstChild) {
+          if(card.firstChild.classList && (
+             card.firstChild.classList.contains('close-btn') ||
+             card.firstChild.tagName === 'IFRAME' ||
+             card.firstChild.classList.contains('gallery') ||
+             card.firstChild.classList.contains('typing-text'))
+            ) {
+              card.removeChild(card.firstChild);
+          } else {
+             // This logic assumes we should only remove our dynamic content.
+             // If other children are present and should be removed, adjust this.
+             break; 
+          }
+      }
+      // Re-query and remove to be safe
+      const toRemove = card.querySelectorAll('.close-btn, iframe, .gallery, .typing-text');
+      toRemove.forEach(el => el.remove());
+
+      // Remove event listeners
+      document.removeEventListener('keydown', card.dataset.keyHandler);
+      document.removeEventListener('click', card.dataset.clickOutsideHandler);
+      
+      // Clean up dataset properties
+      delete card.dataset.keyHandler;
+      delete card.dataset.clickOutsideHandler;
+
+      // Reset card transform style
       card.style.transform = '';
-      card.style.transition = '';
     }
 
-    // 图片放大功能（事件委托）- 修复移动端支持
+    // Image gallery modal logic (remains the same)
     document.addEventListener('click', function(e) {
-      // 只处理expanded卡片里的图片点击，排除cover图片
-      var expanded = document.querySelector('.work-card.expanded');
-      if (expanded && e.target.tagName === 'IMG' && expanded.contains(e.target)) {
-        // 排除cover图片和模态框里的图片
+      var expandedCard = document.querySelector('.work-card.expanded');
+      if (expandedCard && e.target.tagName === 'IMG' && expandedCard.contains(e.target)) {
         if (!e.target.classList.contains('work-cover') && !e.target.closest('.image-modal')) {
           var imgSrc = e.target.src;
           var imageModal = document.getElementById('imageModal');
@@ -847,23 +846,12 @@
           document.body.style.overflow = 'hidden';
         }
       }
-      // 关闭图片模态框
-      if (e.target.matches('#imageModalClose') || (e.target.matches('#imageModal') && e.target === document.getElementById('imageModal'))) {
+      if (e.target.matches('#imageModalClose') || e.target.id === 'imageModal') {
         document.getElementById('imageModal').classList.remove('show');
         document.body.style.overflow = '';
       }
     });
-    
-    // 添加触摸事件支持到图片模态框
-    document.addEventListener('touchend', function(e) {
-      // 关闭图片模态框
-      if (e.target.matches('#imageModalClose') || (e.target.matches('#imageModal') && e.target === document.getElementById('imageModal'))) {
-        document.getElementById('imageModal').classList.remove('show');
-        document.body.style.overflow = '';
-      }
-    });
-    
-    // ESC关闭
+
     window.addEventListener('keydown', function(e){
       if(e.key==='Escape'){
         document.getElementById('imageModal').classList.remove('show');
