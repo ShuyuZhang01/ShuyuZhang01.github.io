@@ -24,6 +24,9 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 
+  <!-- Masonry.js for waterfall layout -->
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
   <style>
     /* ───────── Self‑Practice page tweaks ───────── */
     .practice-page .container{
@@ -38,10 +41,36 @@
 
     /* Enhanced 3‑column grid on desktop */
     .practice-page .work-grid{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2.5rem 2rem;
+      display: block; /* 改为block，让Masonry接管布局 */
       margin-top: 1rem;
+    }
+
+    /* 为Masonry设置基础样式 */
+    .practice-page .work-card{
+      width: calc(33.333% - 1.33rem); /* 三列布局，减去间距 */
+      margin-bottom: 2rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #000;
+      transform: translateY(0);
+    }
+
+    /* 响应式设计 - 小屏幕改为两列 */
+    @media (max-width: 768px) {
+      .practice-page .work-card {
+        width: calc(50% - 1rem); /* 两列布局 */
+      }
+    }
+
+    /* 超小屏幕改为单列 */
+    @media (max-width: 480px) {
+      .practice-page .work-card {
+        width: 100%; /* 单列布局 */
+      }
     }
 
     /* Enhanced Card cover */
@@ -54,17 +83,6 @@
       display: block;
     }
 
-    .practice-page .work-card{
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      border-radius: 20px;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      background: #000;
-      transform: translateY(0);
-    }
-    
     .practice-page .work-card:hover {
       transform: translateY(-8px);
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
@@ -701,6 +719,14 @@
 
       card.appendChild(textElem);
 
+      // 重新布局Masonry
+      const grid = document.querySelector('.practice-page .work-grid');
+      if (grid && grid.masonry) {
+        setTimeout(() => {
+          grid.masonry.layout();
+        }, 100);
+      }
+
       /* Esc key */
       const onKey=e=>{if(e.key==='Escape')collapse(card,closeBtn,onKey,textElem);};
       document.addEventListener('keydown',onKey);
@@ -719,6 +745,14 @@
       if(gallery)gallery.remove();
       if(textElem)textElem.remove();
       if(keyHandler)document.removeEventListener('keydown',keyHandler);
+
+      // 重新布局Masonry
+      const grid = document.querySelector('.practice-page .work-grid');
+      if (grid && grid.masonry) {
+        setTimeout(() => {
+          grid.masonry.layout();
+        }, 100);
+      }
     }
 
     /* enhanced parallax */
@@ -729,6 +763,77 @@
         card.style.setProperty('--parallax',`${Math.max(d,0)}px`);
       });
     },{passive:true});
+
+    // 初始化Masonry瀑布流布局
+    function initMasonry() {
+      const grid = document.querySelector('.practice-page .work-grid');
+      if (grid) {
+        // 等待所有图片加载完成后再初始化Masonry
+        const images = grid.querySelectorAll('img');
+        let loadedImages = 0;
+        
+        if (images.length === 0) {
+          // 如果没有图片，直接初始化
+          initMasonryLayout();
+        } else {
+          images.forEach(img => {
+            if (img.complete) {
+              loadedImages++;
+              if (loadedImages === images.length) {
+                initMasonryLayout();
+              }
+            } else {
+              img.addEventListener('load', () => {
+                loadedImages++;
+                if (loadedImages === images.length) {
+                  initMasonryLayout();
+                }
+              });
+            }
+          });
+        }
+      }
+    }
+
+    function initMasonryLayout() {
+      const grid = document.querySelector('.practice-page .work-grid');
+      if (grid && typeof Masonry !== 'undefined') {
+        const masonry = new Masonry(grid, {
+          itemSelector: '.work-card',
+          columnWidth: '.work-card',
+          percentPosition: true,
+          gutter: 20, // 卡片间的间距
+          transitionDuration: '0.4s'
+        });
+
+        // 当卡片展开/收起时重新布局
+        const observer = new MutationObserver(() => {
+          masonry.layout();
+        });
+        
+        observer.observe(grid, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['class']
+        });
+      }
+    }
+
+    // 页面加载完成后初始化Masonry
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMasonry);
+    } else {
+      initMasonry();
+    }
+
+    // 窗口大小改变时重新布局
+    window.addEventListener('resize', () => {
+      const grid = document.querySelector('.practice-page .work-grid');
+      if (grid && grid.masonry) {
+        grid.masonry.layout();
+      }
+    });
 
     // 图片放大功能（事件委托）
     document.addEventListener('click', function(e) {
