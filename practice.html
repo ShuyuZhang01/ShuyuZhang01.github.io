@@ -274,16 +274,10 @@
     .work-card {
       opacity: 0;
       transform: translateY(30px);
-      pointer-events: none;
-      visibility: hidden;
-    }
-    .work-card.in-view {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-      visibility: visible;
       animation: cardSlideIn 0.8s ease forwards;
+      animation-delay: calc(var(--card-index, 0) * 0.1s);
     }
+    
     @keyframes cardSlideIn {
       from {
         opacity: 0;
@@ -356,71 +350,10 @@
     .practice-page .gallery::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
     }
-
-    /* 添加加载状态样式 */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-    
-    .loading-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-    
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 3px solid rgba(255, 255, 255, 0.1);
-      border-top: 3px solid var(--primary-color);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-      color: #fff;
-      margin-top: 20px;
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
-    
-    /* 隐藏卡片直到加载完成 */
-    .work-grid {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    
-    .work-grid.loaded {
-      opacity: 1;
-      transform: translateY(0);
-    }
   </style>
 </head>
 
 <body class="page-dark practice-page">
-  <!-- 加载覆盖层 -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div style="text-align: center;">
-      <div class="loading-spinner"></div>
-      <div class="loading-text">正在加载特效...</div>
-    </div>
-  </div>
-
   <nav class="nav">
     <div class="nav-inner container">
       <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
@@ -586,22 +519,14 @@
 
   <script>
   (function(){
-    const cards = document.querySelectorAll('.work-card');
-    const body = document.body;
+    const cards=document.querySelectorAll('.work-card');
+    const body=document.body;
 
-    // 逐个显示卡片动画
-    function showCardsSequentially() {
-      let i = 0;
-      function showNext() {
-        if (i < cards.length) {
-          cards[i].classList.add('in-view');
-          i++;
-          setTimeout(showNext, 180); // 每180ms显示一张
-        }
-      }
-      showNext();
-    }
-    showCardsSequentially();
+    /* fade‑in on scroll */
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in-view');io.unobserve(entry.target);}});
+    },{threshold:0.2});
+    cards.forEach(c=>io.observe(c));
 
     cards.forEach(card=>card.addEventListener('click',()=>expand(card)));
 
