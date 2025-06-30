@@ -56,6 +56,8 @@ class WebGLBackground {
     this.flowPathFrequency = 0.04; // 河道的弯曲频率
     this.turbulenceStrength = 0.12;// 湍流强度（提高，增加浪花感）
     
+    this.particleRandoms = new Float32Array(this.particleCount * 4); // 随机参数：速度/生命周期/初始色
+    
     console.log('WebGLBackground: 初始化开始');
     this.init();
   }
@@ -265,12 +267,34 @@ class WebGLBackground {
     container.style.background = 'radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%)';
     container.appendChild(this.renderer.domElement);
     document.body.appendChild(container);
+
+    // 新增：后处理composer
+    this.composer = new EffectComposer(this.renderer);
+    this.composer.addPass(new RenderPass(this.scene, this.camera));
+    this.bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      1.2, 0.35, 0.85
+    );
+    this.composer.addPass(this.bloomPass);
+
+    // 新增：添加低多边形线框体
+    const wireGeo = new THREE.IcosahedronGeometry(32, 1);
+    const wireMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.13
+    });
+    this.wireframeMesh = new THREE.Mesh(wireGeo, wireMat);
+    this.wireframeMesh.position.set(0, 0, 0);
+    this.scene.add(this.wireframeMesh);
   }
 
   initParticleSystem() {
     const sceneWidth = 120; // 场景范围再扩大
     for (let i = 0; i < this.particleCount; i++) {
         const i3 = i * 3;
+        const i4 = i * 4;
         const x = (Math.random() - 0.5) * sceneWidth * 2;
         const z = (Math.random() - 0.5) * this.sceneDepth;
         
@@ -299,6 +323,12 @@ class WebGLBackground {
         this.particleColors[i3 + 2] = brightness;
         // 越远的粒子越透明 (近实远虚)
         this.particleAlphas[i] = 0.1 + depthFactor * 0.6;
+
+        // 新增：为每个粒子生成随机色渐变参数、生命周期、速度
+        this.particleRandoms[i4] = Math.random(); // 色彩插值t
+        this.particleRandoms[i4+1] = Math.random() * 0.6 + 0.7; // 速度
+        this.particleRandoms[i4+2] = Math.random() * 8 + 6; // 生命周期（秒）
+        this.particleRandoms[i4+3] = Math.random() * Math.PI * 2; // 初始相位
     }
   }
 
@@ -307,17 +337,33 @@ class WebGLBackground {
     geometry.setAttribute('position', new THREE.BufferAttribute(this.particlePositions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(this.particleColors, 3));
     geometry.setAttribute('alpha', new THREE.BufferAttribute(this.particleAlphas, 1));
-    // GLSL 着色器代码
+    geometry.setAttribute('aRandom', new THREE.BufferAttribute(this.particleRandoms, 4));
+    // 新增：渐变色、动态变化、随机大小/生命周期
     const vertexShader = `
       attribute float alpha;
+      attribute vec4 aRandom;
       varying float vAlpha;
       varying vec3 vColor;
+      varying float vLife;
       uniform float size;
+      uniform float time;
+      uniform vec2 uMouse;
       void main() {
         vAlpha = alpha;
-        vColor = color;
+        float t = aRandom.x;
+        float life = aRandom.z;
+        float phase = aRandom.w;
+        vLife = mod(time + phase, life) / life;
+        // 渐变色：中心粉色，外圈蓝色，随时间/鼠标缓慢变化
+        vec3 colorA = vec3(1.0, 0.4, 0.7); // 粉
+        vec3 colorB = vec3(0.12, 0.46, 1.0); // 蓝
+        float mouseMix = 0.5 + 0.5 * uMouse.x;
+        float timeMix = 0.5 + 0.5 * sin(time * 0.2 + phase);
+        float gradMix = mix(t, vLife, 0.5);
+        vColor = mix(colorA, colorB, gradMix * mouseMix * timeMix);
         vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (300.0 / -mvPosition.z); // 近大远小
+        float sizeJitter = 0.7 + 0.6 * sin(time * aRandom.y + phase);
+        gl_PointSize = size * sizeJitter * (300.0 / -mvPosition.z);
         gl_Position = projectionMatrix * mvPosition;
       }
     `;
@@ -325,27 +371,26 @@ class WebGLBackground {
       uniform sampler2D pointTexture;
       varying float vAlpha;
       varying vec3 vColor;
+      varying float vLife;
       void main() {
-        // 1. 从纹理中获取形状和透明度
         vec4 texColor = texture2D(pointTexture, gl_PointCoord);
-        
-        // 2. 将顶点颜色 vColor 作为基础色，
-        //    然后用纹理的alpha通道和我们自定义的vAlpha来控制最终的透明度
-        gl_FragColor = vec4(vColor, 1.0);
-        gl_FragColor.a *= vAlpha * texColor.a;
+        float fade = smoothstep(0.0, 0.1, vLife) * (1.0 - smoothstep(0.85, 1.0, vLife));
+        gl_FragColor = vec4(vColor, fade * vAlpha * texColor.a);
       }
     `;
     const material = new THREE.ShaderMaterial({
-        uniforms: {
-            pointTexture: { value: this.createCircularParticleTexture() },
-            size: { value: this.particleSize }
-        },
-        vertexShader,
-        fragmentShader,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        transparent: true,
-        vertexColors: true
+      uniforms: {
+        pointTexture: { value: this.createCircularParticleTexture() },
+        size: { value: this.particleSize },
+        time: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0, 0) }
+      },
+      vertexShader,
+      fragmentShader,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      transparent: true,
+      vertexColors: true
     });
     this.particleSystem = new THREE.Points(geometry, material);
     this.scene.add(this.particleSystem);
@@ -529,11 +574,26 @@ class WebGLBackground {
   animate() {
     this.animationId = requestAnimationFrame(() => this.animate());
     const now = performance.now();
-    const dt = (now - this.lastFrameTime) * 0.001;  // 秒
+    const dt = (now - this.lastFrameTime) * 0.001;
     this.lastFrameTime = now;
-    this.time += dt;                  // 用 dt 而不是固定 +0.01
-    this.updateFluidDynamics(dt);     // 把 dt 传进去
-    this.renderer.render(this.scene, this.camera);
+    this.time += dt;
+    // 新增：更新shader的time和鼠标uniform
+    if (this.particleSystem && this.particleSystem.material.uniforms) {
+      this.particleSystem.material.uniforms.time.value = this.time;
+      this.particleSystem.material.uniforms.uMouse.value.set(this.mouseX, this.mouseY);
+    }
+    // 线框体缓慢自转
+    if (this.wireframeMesh) {
+      this.wireframeMesh.rotation.x += 0.01 * dt;
+      this.wireframeMesh.rotation.y += 0.008 * dt;
+    }
+    this.updateFluidDynamics(dt);
+    // 用composer渲染，带bloom
+    if (this.composer) {
+      this.composer.render();
+    } else {
+      this.renderer.render(this.scene, this.camera);
+    }
   }
 
   onWindowResize() {
