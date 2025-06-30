@@ -13,20 +13,20 @@ class WebGLBackground {
     this.mouseY = 0;
     
     // 流体粒子参数
-    this.particleCount = 800;
+    this.particleCount = 1000; // 更多粒子
     this.particlePositions = new Float32Array(this.particleCount * 3);
     this.particleVelocities = new Float32Array(this.particleCount * 3);
     this.particleForces = new Float32Array(this.particleCount * 3);
     this.particleColors = new Float32Array(this.particleCount * 3);
     
-    // 流体参数
-    this.attractionRadius = 8;
-    this.repulsionRadius = 3;
-    this.attractionStrength = 0.015;
-    this.repulsionStrength = 0.08;
-    this.damping = 0.99;
-    this.boundaryForce = 0.05;
-    this.flowForce = 0.02;
+    // 流体参数 - 更慢更柔和
+    this.attractionRadius = 6;
+    this.repulsionRadius = 2;
+    this.attractionStrength = 0.008;
+    this.repulsionStrength = 0.04;
+    this.damping = 0.995;
+    this.boundaryForce = 0.08;
+    this.flowForce = 0.008;
     
     console.log('WebGLBackground: 初始化开始');
     this.init();
@@ -222,41 +222,28 @@ class WebGLBackground {
   }
 
   initParticleSystem() {
-    // 初始化粒子位置 - 形成从右到左的水流形状
-    const streamCount = 5; // 5条水流
+    // 初始化粒子位置 - 形成从右到左的水流形状，限制在可视范围内
+    const streamCount = 5;
     const particlesPerStream = Math.floor(this.particleCount / streamCount);
-    
     for (let i = 0; i < this.particleCount; i++) {
       const streamIndex = Math.floor(i / particlesPerStream);
       const particleInStream = i % particlesPerStream;
-      
-      // 每条水流的位置
-      const streamY = (streamIndex - 2) * 15; // 垂直分布5条水流
-      
-      // 在每条水流中，粒子从右到左分布
+      const streamY = (streamIndex - 2) * 12; // 垂直分布
       const progress = particleInStream / particlesPerStream;
-      const x = 60 - progress * 120; // 从右(60)到左(-60)
-      const y = streamY + (Math.random() - 0.5) * 8; // 在流道内随机分布
-      const z = (Math.random() - 0.5) * 20; // 深度随机
-      
+      const x = 55 - progress * 110; // x: -55~55
+      const y = streamY + (Math.random() - 0.5) * 8; // y: -30~30
+      const z = (Math.random() - 0.5) * 16; // z: -8~8
       this.particlePositions[i * 3] = x;
       this.particlePositions[i * 3 + 1] = y;
       this.particlePositions[i * 3 + 2] = z;
-      
-      // 初始化速度 - 向左流动
-      this.particleVelocities[i * 3] = -0.5 - Math.random() * 0.5; // 向左的速度
-      this.particleVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.2; // 轻微的垂直运动
-      this.particleVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.1; // 轻微的深度运动
-      
-      // 初始化颜色 - 蓝色调，根据位置变化
-      const color = new THREE.Color();
-      const hue = 0.6 + (Math.random() - 0.5) * 0.1; // 蓝色范围
-      const saturation = 0.7 + Math.random() * 0.3;
-      const lightness = 0.4 + Math.random() * 0.4;
-      color.setHSL(hue, saturation, lightness);
-      this.particleColors[i * 3] = color.r;
-      this.particleColors[i * 3 + 1] = color.g;
-      this.particleColors[i * 3 + 2] = color.b;
+      // 慢速向左
+      this.particleVelocities[i * 3] = -0.18 - Math.random() * 0.12;
+      this.particleVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.08;
+      this.particleVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.04;
+      // 灰色
+      this.particleColors[i * 3] = 0.8;
+      this.particleColors[i * 3 + 1] = 0.8;
+      this.particleColors[i * 3 + 2] = 0.8;
     }
   }
 
@@ -265,16 +252,14 @@ class WebGLBackground {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(this.particlePositions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(this.particleColors, 3));
-    
     const material = new THREE.PointsMaterial({
-      size: 1.5, // 更小的粒子
+      size: 0.8, // 更小
       vertexColors: true,
       transparent: true,
       opacity: 0.7,
       blending: THREE.AdditiveBlending,
       sizeAttenuation: true
     });
-    
     this.particleSystem = new THREE.Points(geometry, material);
     this.scene.add(this.particleSystem);
   }
@@ -284,8 +269,6 @@ class WebGLBackground {
     for (let i = 0; i < this.particleCount * 3; i++) {
       this.particleForces[i] = 0;
     }
-    
-    // 计算粒子间的相互作用力
     for (let i = 0; i < this.particleCount; i++) {
       const i3 = i * 3;
       const posI = {
@@ -293,7 +276,6 @@ class WebGLBackground {
         y: this.particlePositions[i3 + 1],
         z: this.particlePositions[i3 + 2]
       };
-      
       for (let j = i + 1; j < this.particleCount; j++) {
         const j3 = j * 3;
         const posJ = {
@@ -301,77 +283,58 @@ class WebGLBackground {
           y: this.particlePositions[j3 + 1],
           z: this.particlePositions[j3 + 2]
         };
-        
         const dx = posJ.x - posI.x;
         const dy = posJ.y - posI.y;
         const dz = posJ.z - posI.z;
         const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        
         if (distance > 0 && distance < this.attractionRadius) {
           const force = distance < this.repulsionRadius ? 
             -this.repulsionStrength * (1 - distance / this.repulsionRadius) :
             this.attractionStrength * (distance - this.repulsionRadius) / (this.attractionRadius - this.repulsionRadius);
-          
           const fx = (dx / distance) * force;
           const fy = (dy / distance) * force;
           const fz = (dz / distance) * force;
-          
-          // 应用力到两个粒子
           this.particleForces[i3] -= fx;
           this.particleForces[i3 + 1] -= fy;
           this.particleForces[i3 + 2] -= fz;
-          
           this.particleForces[j3] += fx;
           this.particleForces[j3 + 1] += fy;
           this.particleForces[j3 + 2] += fz;
         }
       }
-      
-      // 添加从左到右的流动力
+      // 水流方向
       this.particleForces[i3] += this.flowForce;
-      
-      // 边界力 - 让粒子保持在可视范围内，并循环流动
-      const boundary = 70;
-      if (posI.x < -boundary) {
-        // 粒子到达左边界时，重置到右边界
-        this.particlePositions[i3] = boundary;
-        this.particleVelocities[i3] = -0.5 - Math.random() * 0.5; // 保持向左的速度
-        this.particlePositions[i3 + 1] = (Math.random() - 0.5) * 60; // 随机Y位置
-        this.particlePositions[i3 + 2] = (Math.random() - 0.5) * 20; // 随机Z位置
+      // 边界限制
+      // x: -60~60
+      if (posI.x < -60) {
+        this.particlePositions[i3] = 60;
+        this.particleVelocities[i3] = -0.18 - Math.random() * 0.12;
+        this.particlePositions[i3 + 1] = (Math.random() - 0.5) * 60;
+        this.particlePositions[i3 + 2] = (Math.random() - 0.5) * 16;
       }
-      
-      // Y轴边界
-      if (Math.abs(posI.y) > 40) {
-        this.particleForces[i3 + 1] -= Math.sign(posI.y) * this.boundaryForce;
-      }
-      
-      // Z轴边界
-      if (Math.abs(posI.z) > 30) {
-        this.particleForces[i3 + 2] -= Math.sign(posI.z) * this.boundaryForce;
-      }
+      // y: -30~30
+      if (posI.y < -30) this.particleForces[i3 + 1] += this.boundaryForce;
+      if (posI.y > 30) this.particleForces[i3 + 1] -= this.boundaryForce;
+      // z: -20~20
+      if (posI.z < -20) this.particleForces[i3 + 2] += this.boundaryForce;
+      if (posI.z > 20) this.particleForces[i3 + 2] -= this.boundaryForce;
     }
-    
-    // 更新速度和位置
     for (let i = 0; i < this.particleCount; i++) {
       const i3 = i * 3;
-      
-      // 更新速度
       this.particleVelocities[i3] += this.particleForces[i3];
       this.particleVelocities[i3 + 1] += this.particleForces[i3 + 1];
       this.particleVelocities[i3 + 2] += this.particleForces[i3 + 2];
-      
-      // 应用阻尼
       this.particleVelocities[i3] *= this.damping;
       this.particleVelocities[i3 + 1] *= this.damping;
       this.particleVelocities[i3 + 2] *= this.damping;
-      
-      // 更新位置
       this.particlePositions[i3] += this.particleVelocities[i3];
       this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1];
       this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2];
+      // 限制在可视范围内
+      this.particlePositions[i3] = Math.max(-60, Math.min(60, this.particlePositions[i3]));
+      this.particlePositions[i3 + 1] = Math.max(-30, Math.min(30, this.particlePositions[i3 + 1]));
+      this.particlePositions[i3 + 2] = Math.max(-20, Math.min(20, this.particlePositions[i3 + 2]));
     }
-    
-    // 更新几何体
     this.particleSystem.geometry.attributes.position.needsUpdate = true;
   }
 
