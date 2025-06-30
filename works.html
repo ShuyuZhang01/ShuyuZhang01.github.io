@@ -103,10 +103,10 @@
       opacity: 1;
     }
 
-    /* 视差效果 */
+    /* 视差效果 - 确保变量有默认值 */
     .work-card {
-      transform: translateY(var(--parallax-y, 0)) translateX(var(--parallax-x, 0));
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --parallax-x: 0px;
+      --parallax-y: 0px;
     }
 
     .work-card:nth-child(odd) {
@@ -245,7 +245,6 @@
     /* -------------- Loading Animation -------------- */
     .work-card {
       opacity: 0;
-      transform: translateY(30px);
       animation: cardFadeIn 0.8s ease forwards;
       animation-delay: calc(var(--card-index, 0) * 0.1s);
     }
@@ -253,7 +252,6 @@
     @keyframes cardFadeIn {
       to {
         opacity: 1;
-        transform: translateY(0);
       }
     }
 
@@ -549,12 +547,19 @@ Through an immersive VR experience, viewers descend from the surface's refracted
     /* enhanced parallax */
     function updateParallax(){
       const vh = innerHeight;
-      document.querySelectorAll('.work-card.in-view:not(.expanded)').forEach((card, index) => {
+      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+      
+      document.querySelectorAll('.work-card:not(.expanded)').forEach((card, index) => {
         const rect = card.getBoundingClientRect();
-        const percent = (rect.top + rect.height/2)/vh;
-        const sign = index % 2 === 0 ? 1 : -1; // 左右交错
-        const parallaxX = ((percent - 0.5) * 100 * sign).toFixed(1) + 'px';
-        const parallaxY = ((percent - 0.5) * 50).toFixed(1) + 'px';
+        const cardCenter = rect.top + rect.height / 2;
+        const viewportCenter = vh / 2;
+        const distanceFromCenter = cardCenter - viewportCenter;
+        
+        // 计算视差偏移 - 更明显的效果
+        const parallaxY = (distanceFromCenter * 0.15).toFixed(1) + 'px';
+        const parallaxX = ((index % 2 === 0 ? 1 : -1) * distanceFromCenter * 0.08).toFixed(1) + 'px';
+        
+        // 设置CSS变量
         card.style.setProperty('--parallax-x', parallaxX);
         card.style.setProperty('--parallax-y', parallaxY);
       });
@@ -562,6 +567,9 @@ Through an immersive VR experience, viewers descend from the surface's refracted
     addEventListener('scroll',updateParallax,{passive:true});
     addEventListener('resize',updateParallax);
     addEventListener('load', updateParallax);
+    
+    // 立即执行一次
+    updateParallax();
 
     /* click card */
     cards.forEach(card=>card.addEventListener('click',()=>{
