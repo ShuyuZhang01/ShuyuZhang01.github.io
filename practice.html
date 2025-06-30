@@ -32,13 +32,8 @@
     /* ───────── Waterfall Grid (FIXED) ───────── */
     .practice-page .work-grid {
       display: block !important; /* 强制覆盖全局样式 */
-      column-count: 1; /* 小屏幕默认1列 */
+      column-count: 2; /* 小屏幕默认2列 */
       column-gap: 1.5rem;
-    }
-    @media (min-width: 481px) {
-      .practice-page .work-grid {
-        column-count: 2; /* 中等屏幕显示2列 */
-      }
     }
     @media (min-width: 768px) {
       .practice-page .work-grid {
@@ -238,7 +233,7 @@
     }
     
     @media (max-width: 480px) {
-        .practice-page .work-grid { column-count: 1; } /* 小屏幕手机显示1列 */
+        .practice-page .work-grid { column-count: 2; } /* 小屏幕手机显示2列 */
         .lightbox-content { padding: 1rem; }
         .lightbox-text { font-size: 0.9rem; }
     }
