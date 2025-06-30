@@ -237,7 +237,7 @@ class WebGLBackground {
     
     // 创建场景
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(0x000000, 2, 15);
+    this.scene.fog = new THREE.Fog(0x000000, 3, 20);
     console.log('WebGLBackground: 场景创建成功');
     
     // 创建相机
@@ -247,7 +247,7 @@ class WebGLBackground {
       0.1, 
       1000
     );
-    this.camera.position.set(0, 0, 6);
+    this.camera.position.set(0, 0, 8);
     console.log('WebGLBackground: 相机创建成功');
     
     // 创建渲染器
@@ -288,16 +288,16 @@ class WebGLBackground {
     console.log('WebGLBackground: 开始创建网格');
     
     // 创建网格几何体
-    const gridGeometry = new THREE.GridHelper(12, 24, 0x9ca3af, 0x6b7280);
+    const gridGeometry = new THREE.GridHelper(15, 30, 0x9ca3af, 0x6b7280);
     const gridMaterial = new THREE.MeshBasicMaterial({
       color: 0x9ca3af,
       transparent: true,
-      opacity: 0.2,
+      opacity: 0.3,
       wireframe: true
     });
     
     this.grid = new THREE.Mesh(gridGeometry, gridMaterial);
-    this.grid.position.z = -4;
+    this.grid.position.z = -5;
     this.scene.add(this.grid);
     console.log('WebGLBackground: 网格创建成功');
   }
@@ -306,18 +306,18 @@ class WebGLBackground {
     console.log('WebGLBackground: 开始创建光圈');
     
     // 创建多个光圈
-    for (let i = 0; i < 6; i++) {
-      const ringGeometry = new THREE.RingGeometry(0.8 + i * 0.4, 1.0 + i * 0.4, 32);
+    for (let i = 0; i < 8; i++) {
+      const ringGeometry = new THREE.RingGeometry(1 + i * 0.5, 1.3 + i * 0.5, 32);
       const ringMaterial = new THREE.MeshBasicMaterial({
         color: 0x9ca3af,
         transparent: true,
-        opacity: 0.15 - i * 0.02,
+        opacity: 0.2 - i * 0.02,
         wireframe: true,
         side: THREE.DoubleSide
       });
       
       const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-      ring.position.z = -2 - i * 0.3;
+      ring.position.z = -3 - i * 0.5;
       ring.userData = { index: i };
       this.rings.push(ring);
       this.scene.add(ring);
@@ -329,15 +329,15 @@ class WebGLBackground {
     console.log('WebGLBackground: 开始创建粒子系统');
     
     // 创建粒子几何体
-    const particleCount = 50;
+    const particleCount = 80;
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
     
     for (let i = 0; i < particleCount; i++) {
       // 粒子从左侧开始，随机Y位置
-      positions[i * 3] = -10; // x - 从左侧开始
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // y - 随机高度
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 5; // z - 随机深度
+      positions[i * 3] = -15; // x - 从左侧开始
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 15; // y - 随机高度
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // z - 随机深度
       
       // 颜色
       colors[i * 3] = 0.6; // r
@@ -350,10 +350,10 @@ class WebGLBackground {
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     
     const particleMaterial = new THREE.PointsMaterial({
-      size: 0.08,
+      size: 0.1,
       vertexColors: true,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.9,
       blending: THREE.AdditiveBlending
     });
     
@@ -369,11 +369,13 @@ class WebGLBackground {
     
     // 创建一些简单的几何体形状
     const geometries = [
-      { type: 'box', size: 0.3, position: [2, 1, 0] },
-      { type: 'sphere', size: 0.2, position: [-2, -1, 0] },
-      { type: 'cylinder', size: 0.25, position: [1, -2, 0] },
-      { type: 'torus', size: 0.2, position: [-1, 2, 0] },
-      { type: 'octahedron', size: 0.3, position: [0, 0, 0] }
+      { type: 'box', size: 0.5, position: [3, 2, 0] },
+      { type: 'sphere', size: 0.4, position: [-3, -2, 0] },
+      { type: 'cylinder', size: 0.35, position: [2, -3, 0] },
+      { type: 'torus', size: 0.3, position: [-2, 3, 0] },
+      { type: 'octahedron', size: 0.4, position: [0, 0, 0] },
+      { type: 'tetrahedron', size: 0.3, position: [4, 1, 0] },
+      { type: 'icosahedron', size: 0.25, position: [-4, -1, 0] }
     ];
     
     geometries.forEach((geo, index) => {
@@ -395,12 +397,18 @@ class WebGLBackground {
         case 'octahedron':
           geometry = new THREE.OctahedronGeometry(geo.size);
           break;
+        case 'tetrahedron':
+          geometry = new THREE.TetrahedronGeometry(geo.size);
+          break;
+        case 'icosahedron':
+          geometry = new THREE.IcosahedronGeometry(geo.size);
+          break;
       }
       
       const material = new THREE.MeshBasicMaterial({
         color: 0x9ca3af,
         transparent: true,
-        opacity: 0.3,
+        opacity: 0.4,
         wireframe: true,
         side: THREE.DoubleSide
       });
@@ -411,9 +419,9 @@ class WebGLBackground {
         index: index,
         originalPosition: [...geo.position],
         rotationSpeed: {
-          x: (Math.random() - 0.5) * 0.01,
-          y: (Math.random() - 0.5) * 0.01,
-          z: (Math.random() - 0.5) * 0.01
+          x: (Math.random() - 0.5) * 0.015,
+          y: (Math.random() - 0.5) * 0.015,
+          z: (Math.random() - 0.5) * 0.015
         }
       };
       
@@ -428,12 +436,12 @@ class WebGLBackground {
     console.log('WebGLBackground: 开始创建灯光');
     
     // 环境光
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
     this.scene.add(ambientLight);
     
     // 点光源
-    const pointLight = new THREE.PointLight(0x9ca3af, 0.6, 15);
-    pointLight.position.set(0, 0, 8);
+    const pointLight = new THREE.PointLight(0x9ca3af, 0.8, 20);
+    pointLight.position.set(0, 0, 10);
     this.scene.add(pointLight);
     
     console.log('WebGLBackground: 灯光创建成功');
@@ -451,21 +459,21 @@ class WebGLBackground {
     console.log('WebGLBackground: 开始动画循环');
     
     this.animationId = requestAnimationFrame(() => this.animate());
-    this.time += 0.008;
+    this.time += 0.01;
     
     // 网格动画
     if (this.grid) {
-      this.grid.rotation.x += 0.0008;
-      this.grid.rotation.y += 0.0008;
-      this.grid.material.opacity = 0.15 + Math.sin(this.time) * 0.05;
+      this.grid.rotation.x += 0.001;
+      this.grid.rotation.y += 0.001;
+      this.grid.material.opacity = 0.2 + Math.sin(this.time) * 0.1;
     }
     
     // 光圈动画
     this.rings.forEach((ring, index) => {
-      ring.rotation.z += 0.003 + index * 0.0005;
-      ring.rotation.x += 0.001 + index * 0.0002;
-      ring.rotation.y += 0.0008 + index * 0.0001;
-      ring.material.opacity = (0.15 - index * 0.02) + Math.sin(this.time + index) * 0.03;
+      ring.rotation.z += 0.005 + index * 0.001;
+      ring.rotation.x += 0.002 + index * 0.0005;
+      ring.rotation.y += 0.003 + index * 0.0003;
+      ring.material.opacity = (0.2 - index * 0.02) + Math.sin(this.time + index) * 0.05;
     });
     
     // 粒子动画 - 从左往右移动
@@ -474,13 +482,13 @@ class WebGLBackground {
       
       for (let i = 0; i < positions.length; i += 3) {
         // 粒子从左往右移动
-        positions[i] += 0.05;
+        positions[i] += 0.08;
         
         // 当粒子到达右侧边界时，重置到左侧
-        if (positions[i] > 10) {
-          positions[i] = -10;
-          positions[i + 1] = (Math.random() - 0.5) * 10; // 随机Y位置
-          positions[i + 2] = (Math.random() - 0.5) * 5; // 随机Z位置
+        if (positions[i] > 15) {
+          positions[i] = -15;
+          positions[i + 1] = (Math.random() - 0.5) * 15; // 随机Y位置
+          positions[i + 2] = (Math.random() - 0.5) * 10; // 随机Z位置
         }
       }
       
@@ -495,16 +503,16 @@ class WebGLBackground {
       mesh.rotation.z += mesh.userData.rotationSpeed.z;
       
       // 轻微的浮动动画
-      const floatOffset = Math.sin(this.time + index) * 0.2;
+      const floatOffset = Math.sin(this.time + index) * 0.3;
       mesh.position.y = mesh.userData.originalPosition[1] + floatOffset;
       
       // 透明度动画
-      mesh.material.opacity = 0.2 + Math.sin(this.time * 1.5 + index) * 0.1;
+      mesh.material.opacity = 0.3 + Math.sin(this.time * 1.5 + index) * 0.15;
     });
     
     // 相机动画
-    this.camera.position.x = Math.sin(this.time * 0.4) * 0.3;
-    this.camera.position.y = Math.cos(this.time * 0.3) * 0.2;
+    this.camera.position.x = Math.sin(this.time * 0.3) * 0.5;
+    this.camera.position.y = Math.cos(this.time * 0.2) * 0.3;
     this.camera.lookAt(0, 0, 0);
     
     // 渲染场景
