@@ -5,495 +5,218 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Self Practice · Shuyu Zhang</title>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Savate:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Global styles -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Three.js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  
-  <!-- Simplex Noise for realistic water flow -->
   <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.js"></script>
-
-  <!-- Postprocessing scripts -->
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 
   <style>
-    /* ───────── Self‑Practice page tweaks ───────── */
-    .practice-page .container{
+    /* ───────── Base Page Styles ───────── */
+    .practice-page .container {
       padding-left: clamp(1.5rem, 6vw, 5rem);
     }
-    .practice-page .page-title{
+    .practice-page .page-title {
       font-family: "Open Sans", sans-serif;
       font-weight: 600;
       text-align: left;
       margin-bottom: 3rem;
     }
 
-    /* 1. 设置瀑布流的容器 - 使用更具体的选择器覆盖全局样式 */
+    /* ───────── Waterfall Grid ───────── */
     .practice-page .work-grid {
-      /* 重置全局样式 */
-      display: block !important;
-      grid-template-columns: unset !important;
-      gap: unset !important;
-      
-      /* 手机上默认是2列 */
-      column-count: 2; 
-      column-gap: 2rem; /* 定义列与列之间的间距 */
-      margin-top: 1rem;
+      column-count: 2;
+      column-gap: 1.5rem;
     }
-
-    /* 2. 中大屏幕（宽度大于等于 992px），变为3列 */
     @media (min-width: 992px) {
       .practice-page .work-grid {
         column-count: 3;
       }
     }
 
-    /* 4. 设置瀑布流中的卡片样式 */
+    /* ───────── Work Card ───────── */
     .practice-page .work-card {
-      /* 瀑布流核心属性 */
-      break-inside: avoid; 
-      margin-bottom: 2rem;
+      break-inside: avoid;
+      margin-bottom: 1.5rem;
       width: 100%;
-
-      /* 您其他的卡片视觉样式 */
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      border-radius: 16px;
       overflow: hidden;
-      position: relative;
       cursor: pointer;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
-
-      /* 入场动画 */
+      position: relative;
+      background: #1a1a1a;
       opacity: 0;
-      transform: translateY(30px);
-      animation: cardSlideIn 0.8s ease forwards;
-      animation-delay: calc(var(--card-index, 0) * 0.1s);
-      
-      /* 移动端触摸优化 */
-      -webkit-tap-highlight-color: transparent;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
+      transform: translateY(20px);
+      animation: cardSlideIn 0.6s ease-out forwards;
+      animation-delay: calc(var(--card-index, 0) * 0.08s);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-    /* 5. 修正动画冲突：只让JS控制transform */
+    @keyframes cardSlideIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
     .practice-page .work-card:hover {
-      /* CSS的hover只改变阴影，transform 完全交给 JS */
-      box-shadow: 0 0 25px rgba(156, 163, 175, 0.4);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 10px 35px rgba(156, 163, 175, 0.2);
     }
 
-    /* 6. 卡片内部图片的悬停效果（这个可以保留） */
-    .practice-page .work-card:hover .work-cover {
-      transform: scale(1.05);
-      opacity: 1;
-    }
-
-    /* Enhanced Card cover */
-    .practice-page .work-cover{
-      aspect-ratio: 4/3;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    .practice-page .work-cover {
       width: 100%;
       height: auto;
+      aspect-ratio: 4 / 3;
       object-fit: cover;
       display: block;
-      opacity: 0.85; /* 添加透明度 */
+      transition: transform 0.4s ease;
     }
-
     .practice-page .work-card:hover .work-cover {
       transform: scale(1.05);
-      opacity: 1; /* 悬停时恢复完全不透明 */
     }
 
-    /* Enhanced Overlay */
-    .practice-page .work-card .overlay {
+    .practice-page .overlay {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+      bottom: 0; left: 0; right: 0;
+      padding: 3rem 1.5rem 1.5rem;
       color: #fff;
-      padding: 2rem 1.5rem 1.5rem;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
       z-index: 2;
     }
-    
-    .practice-page .work-card:hover .overlay {
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
-    }
-
-    /* Enhanced Work Title */
     .practice-page .work-title {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
-      transition: all 0.3s ease;
+      margin: 0 0 0.25rem 0;
     }
-    
-    .practice-page .work-card:hover .work-title {
-      color: var(--primary-color);
-    }
-
-    /* Enhanced Work Description */
     .practice-page .work-desc {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       opacity: 0.8;
       line-height: 1.4;
-      transition: all 0.3s ease;
-    }
-    
-    .practice-page .work-card:hover .work-desc {
-      opacity: 1;
     }
 
-    /* ───────── Enhanced Expanded (lightbox) ───────── */
-    .practice-page .work-card.expanded{
+    /* ───────── Lightbox / Modal ───────── */
+    .lightbox-overlay {
       position: fixed;
-      z-index: 999;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .lightbox-overlay.is-visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .lightbox-content {
+      position: fixed;
       top: 50%;
       left: 50%;
       width: 90vw;
       height: 90vh;
-      transform: translate(-50%, -50%);
-      background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
-      box-shadow: 0 0 100px rgba(0, 0, 0, 0.7);
+      max-width: 1200px;
+      transform: translate(-50%, -50%) scale(0.95);
+      background: #1c1c1c;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      z-index: 1001;
       display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
-      color: #fff;
-      padding: 2.5rem;
-      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-      line-height: 1.6;
-      animation: cardExpand 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 24px;
-      backdrop-filter: blur(20px);
-    }
-    
-    @keyframes cardExpand {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-    }
-
-    /* hide thumbnail + overlay inside modal */
-    .practice-page .work-card.expanded .work-cover,
-    .practice-page .work-card.expanded .overlay {
-      display: none;
-    }
-
-    /* Enhanced iframe (video) styling */
-    .practice-page .work-card.expanded iframe{
-      width: 100%;
-      height: 100%;
-      flex: 1 1 auto;
-      border: none;
-      border-radius: 16px;
-      max-height: 65vh;
-      margin-bottom: 2rem;
-      animation: contentFadeIn 0.6s ease 0.2s both;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    /* ───────── Enhanced Image gallery ───────── */
-    .practice-page .gallery{
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-      max-height: 65vh;
-      overflow: auto;
-      animation: contentFadeIn 0.6s ease 0.2s both;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-    }
-    
-    @keyframes contentFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .practice-page .gallery img{
-      height: 20vh;
-      width: 100%;
-      object-fit: cover;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    
-    .practice-page .gallery img:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-    }
-
-    /* 图片放大模态框样式 */
-    .image-modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      padding: 1.5rem;
       opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
     }
-
-    .image-modal.show {
+    .lightbox-overlay.is-visible .lightbox-content {
       opacity: 1;
-      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: all;
     }
-
-    .image-modal-content {
-      position: relative;
-      max-width: 90%;
-      max-height: 90%;
+    
+    .lightbox-header {
+      flex-shrink: 0;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 1rem;
     }
-
-    .image-modal img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    }
-
-    .image-modal-close {
-      position: absolute;
-      top: -50px;
-      right: 0;
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: white;
-      font-size: 24px;
+    .lightbox-close-btn {
       width: 40px;
       height: 40px;
       border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 24px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
+      transition: background 0.2s, transform 0.2s;
     }
-
-    .image-modal-close:hover {
-      background: rgba(255, 255, 255, 0.3);
+    .lightbox-close-btn:hover {
+      background: rgba(255,255,255,0.2);
       transform: scale(1.1);
     }
 
-    /* 让卡片图片可点击 */
-    .practice-page .work-cover {
-      cursor: pointer;
-    }
-
-    /* Enhanced Close Button */
-    .practice-page .close-btn{
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      font-size: 2rem;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
+    .lightbox-body {
+      flex-grow: 1;
+      overflow-y: auto;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(10px);
+      flex-direction: column;
+      gap: 1.5rem;
     }
     
-    .practice-page .close-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: rotate(90deg) scale(1.1);
-      color: var(--primary-color);
+    .lightbox-media {
+      width: 100%;
+      flex-shrink: 0;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 8px;
+    }
+    .lightbox-media iframe, .lightbox-media .gallery {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+    }
+    
+    .lightbox-body .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      overflow-y: auto;
+    }
+    .lightbox-body .gallery img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
     }
 
-    /* Enhanced typing text */
-    .typing-text{
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.8s ease forwards;
-      margin-top: 1.5rem;
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      line-height: 1.7;
+    .lightbox-text {
+      line-height: 1.6;
       font-size: 1rem;
+      color: #ccc;
     }
     
-    @keyframes fadeInUp{
-      to{
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Enhanced skill tag animation */
-    .work-desc {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .work-desc::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transition: left 0.6s ease;
-    }
-    
-    .work-card:hover .work-desc::before {
-      left: 100%;
-    }
-    
-    /* Enhanced PDF iframe styling */
-    .practice-page .work-card.expanded iframe[type="application/pdf"] {
-      width: 100%;
-      height: 100%;
-      border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Responsive Design */
     @media (max-width: 768px) {
-      .practice-page .work-card.expanded {
-        width: 95vw;
-        height: 95vh;
-        padding: 1.5rem;
-        border-radius: 16px;
-        /* 确保在移动端正确显示 */
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 999;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-      
-      .practice-page .gallery {
-        grid-template-columns: 1fr;
-        gap: 0.8rem;
-        max-height: 50vh;
-      }
-      
-      .practice-page .gallery img {
-        height: 15vh;
-      }
-      
-      /* 移动端优化关闭按钮 */
-      .practice-page .close-btn {
-        top: 1rem;
-        right: 1rem;
-        width: 40px;
-        height: 40px;
-        font-size: 1.5rem;
-      }
-      
-      /* 移动端优化iframe */
-      .practice-page .work-card.expanded iframe {
-        max-height: 50vh;
-        margin-bottom: 1rem;
-      }
-      
-      /* 移动端优化文字 */
-      .practice-page .typing-text {
-        font-size: 0.9rem;
-        padding: 1rem;
-        margin-top: 1rem;
-      }
-    }
-    
-    /* Scrollbar Styling */
-    .practice-page .gallery::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .practice-page .gallery::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-    }
-
-    .practice-page .gallery::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
-    }
-
-    .practice-page .gallery::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.5);
-    }
-
-    /* 卡片滑入动画 */
-    @keyframes cardSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Enhanced title hover effect */
-    .work-title {
-      position: relative;
-      transition: all 0.3s ease;
-    }
-    
-    .work-title:hover {
-      color: var(--primary-color);
-      transform: translateX(5px);
+        .practice-page .work-grid { column-count: 1; }
+        .lightbox-content { padding: 1rem; }
+        .lightbox-text { font-size: 0.9rem; }
     }
   </style>
 </head>
 
 <body class="page-dark practice-page">
+
   <nav class="nav">
     <div class="nav-inner container">
-      <a href="index.html" class="brand">SHUYU&nbsp;ZHANG</a>
+      <a href="index.html" class="brand">SHUYU ZHANG</a>
       <ul class="nav-list">
         <li><a href="about.html">About</a></li>
         <li><a href="works.html">Works</a></li>
-        <li><a href="practice.html">Self&nbsp;Practice</a></li>
+        <li><a href="practice.html">Self Practice</a></li>
         <li><a href="cv.html">CV</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
@@ -501,378 +224,183 @@
   </nav>
 
   <main class="container">
-    <h1 class="page-title">Self&nbsp;Practice</h1>
-
+    <h1 class="page-title">Self Practice</h1>
     <div class="work-grid">
-      <!-- ▶ Practice 1 -->
-      <article class="work-card" data-text="VR experience with installation."
-      data-pdf="assets/pdf/mind-uploading.pdf" style="--card-index: 0;">
+
+      <article class="work-card" data-text="A VR experience paired with a physical installation, exploring concepts of consciousness and digital existence." data-pdf="assets/pdf/mind-uploading.pdf" style="--card-index: 0;">
         <img class="work-cover" src="assets/photo/eyes.png" alt="VR experience & installation">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">Mind uploading</h2>
-            <p class="work-desc">UE4 · Moving image · VR · Installation</p>
-          </div>
-        </div>
-      </article>
-      
-      <!-- ▶ Unity Mini‑Game (video) -->
-      <article class="work-card" data-text="A small‑scale game exploring Unity Visual Scripting and some basic Unity C#."
-               data-video="https://www.youtube.com/embed/Xo-ZtWO-TLs" style="--card-index: 1;">
-        <img class="work-cover" src="assets/photo/game.png" alt="Unity Mini‑Game Cover">
-        <div class="overlay">
-          <div>
-            <h2 class="work-title">Unity Mini‑Game</h2>
-            <p class="work-desc">Unity Visual Script &amp; C# basics</p>
-          </div>
+          <h2 class="work-title">Mind uploading</h2>
+          <p class="work-desc">UE4 · Moving image · VR · Installation</p>
         </div>
       </article>
 
-      <!-- ▶ JavaScript Pattern Study (PHOTO GALLERY) -->
-      <article class="work-card" data-text="new to JavaScript，made some patterns"
-               data-gallery="assets/photo/js1.jpg,assets/photo/js1 (2).jpg,assets/photo/js1 (3).jpg,assets/photo/js1 (4).jpg,assets/photo/js1 (5).jpg,assets/photo/js1 (6).jpg,assets/photo/js1 (7).jpg" style="--card-index: 2;">
+      <article class="work-card" data-text="A small-scale game exploring Unity Visual Scripting and some basic Unity C#." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 1;">
+        <img class="work-cover" src="assets/photo/game.png" alt="Unity Mini-Game Cover">
+        <div class="overlay">
+          <h2 class="work-title">Unity Mini-Game</h2>
+          <p class="work-desc">Unity Visual Script & C# basics</p>
+        </div>
+      </article>
+
+      <article class="work-card" data-text="As a beginner in JavaScript, I created a series of generative patterns to practice fundamental concepts." data-gallery="assets/photo/js1.jpg,assets/photo/js1 (2).jpg,assets/photo/js1 (3).jpg,assets/photo/js1 (4).jpg,assets/photo/js1 (5).jpg,assets/photo/js1 (6).jpg,assets/photo/js1 (7).jpg" style="--card-index: 2;">
         <img class="work-cover" src="assets/photo/js1 (5).jpg" alt="JavaScript Pattern practice">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">JavaScript Pattern Study</h2>
-            <p class="work-desc"> JavaScript ·  simple pattern</p>
-          </div>
+          <h2 class="work-title">JavaScript Pattern Study</h2>
+          <p class="work-desc">JavaScript · Simple Patterns</p>
         </div>
       </article>
 
-      <!-- ▶ Practice 4 -->
-     <article class="work-card" data-text="Unity Interactive Practice"
-       data-video="https://player.vimeo.com/video/1073393786" style="--card-index: 3;">
+      <article class="work-card" data-text="An interactive experiment connecting camera input via MediaPipe and TouchDesigner to drive particle effects in Unity." data-video="https://player.vimeo.com/video/1073393786" style="--card-index: 3;">
         <img class="work-cover" src="assets/photo/unity1.png" alt="Unity Interactive Practice Cover">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">Unity Interactive Practice</h2>
-            <p class="work-desc">Unity + TouchDesigner + MediaPipe · Camera‑driven particle FX</p>
-          </div>
+          <h2 class="work-title">Unity Interactive Practice</h2>
+          <p class="work-desc">Unity · TouchDesigner · MediaPipe</p>
         </div>
       </article>
 
-      <!-- ▶ Practice 5-->
-      <article class="work-card" data-text="using array, class addEventListener noise effect ."
-      data-video="https://www.youtube.com/embed/opP0ge4XanA" style="--card-index: 4;">
-          
+      <article class="work-card" data-text="A JavaScript project using arrays, classes, addEventListener, and Perlin noise to create an interactive flower clock." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 4;">
         <img class="work-cover" src="assets/photo/clock.jpg" alt="JavaScript practice">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">JavaScript Flower clock</h2>
-            <p class="work-desc">JavaScript · Arrays · Perlin Noise</p>
-          </div>
+          <h2 class="work-title">JavaScript Flower clock</h2>
+          <p class="work-desc">JavaScript · Arrays · Perlin Noise</p>
         </div>
       </article>
 
-       <!-- ▶ Discoball — Dance Move Visualization (video) -->
       <article class="work-card" data-text="Wearable garment interactive design using Arduino, soldered stretch sensors, and custom sewing; visualises dance moves as a discoball particle display." data-video="https://player.vimeo.com/video/1037119610" style="--card-index: 5;">
         <img class="work-cover" src="assets/photo/disco.jpg" alt="Discoball — Dance Move Visualization">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">Discoball — Dance Move Visualization</h2>
-            <p class="work-desc">Arduino · Stretch‑sensor wearable interactive project</p>
-          </div>
+          <h2 class="work-title">Discoball — Dance Move Visualization</h2>
+          <p class="work-desc">Arduino · Stretch‑sensor wearable interactive project</p>
         </div>
       </article>
 
-      <!-- ▶ Practice 7 -->
-      <article class="work-card" data-text="Interactive JavaScript project"
-      data-video="https://www.youtube.com/embed/P2B5vbREz3k" style="--card-index: 6;">
+      <article class="work-card" data-text="Interactive JavaScript project exploring classes, constructors, callbacks, and control structures through a humorous meme-inspired interface." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 6;">
         <img class="work-cover" src="assets/photo/soup.jpg" alt="Here comes chicken soup">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">Here comes chicken soup</h2>
-            <p class="work-desc">JavaScript · meme · class & constructor & callback & control structrures</p>
-          </div>
+          <h2 class="work-title">Here comes chicken soup</h2>
+          <p class="work-desc">JavaScript · meme · class & constructor & callback & control structrures</p>
         </div>
       </article>
       
-  <!-- ▶ Practice 8 -->
-      <article class="work-card" data-text="exploring individuality and the relationship with one's body through AI and dance."
-        data-video="https://www.youtube.com/embed/9PJuvTLFxG0" style="--card-index: 7;">
+      <article class="work-card" data-text="Exploring individuality and the relationship with one's body through AI and dance." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 7;">
         <img class="work-cover" src="assets/photo/aidance.png" alt="TogAIther">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">TogAIther</h2>
-            <p class="work-desc">Stable diffusion · OBS · Performance </p>
-          </div>
+          <h2 class="work-title">TogAIther</h2>
+          <p class="work-desc">Stable diffusion · OBS · Performance </p>
         </div>
       </article>
    
-  <!-- ▶ Practice 9 -->
-      <article class="work-card" data-text="Exploration of OBS ."
-      data-video="https://www.youtube.com/embed/_zDTDBreNEY" style="--card-index: 8;">
+      <article class="work-card" data-text="Exploration of OBS (Open Broadcaster Software) for live streaming and content creation." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 8;">
         <img class="work-cover" src="assets/photo/obs.png" alt="OBS exploration">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">OBS live exploration</h2>
-            <p class="work-desc"> OBS · live streaming </p>
-          </div>
+          <h2 class="work-title">OBS live exploration</h2>
+          <p class="work-desc"> OBS · live streaming </p>
         </div>
       </article>
     
-  <!-- ▶ Practice 10 -->
-      <article class="work-card" data-text="An app for kids who have depression disorder."
-      data-pdf="assets/pdf/help.pdf" style="--card-index: 9;">
+      <article class="work-card" data-text="An app designed for children with depression disorder, focusing on mental health support and emotional well-being." data-pdf="assets/pdf/help.pdf" style="--card-index: 9;">
         <img class="work-cover" src="assets/photo/help.jpg" alt="Help me">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">Help me</h2>
-            <p class="work-desc"> Figma· Keynote </p>
-          </div>
+          <h2 class="work-title">Help me</h2>
+          <p class="work-desc"> Figma· Keynote </p>
         </div>
       </article>
 
-  <!-- ▶ Practice 11 -->
-      <article class="work-card" data-text="My Flappy Bird project is a pure-code mini-game inspired by Flappy Bird."
-      data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 10;">
+      <article class="work-card" data-text="My Flappy Bird project is a pure-code mini-game inspired by Flappy Bird, created using JavaScript and MediaPipe for gesture control." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 10;">
         <img class="work-cover" src="assets/photo/bird.png" alt="My Flappy Bird">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">My Flappy Bird project</h2>
-            <p class="work-desc"> JavaScript · MediaPipe </p>
-          </div>
+          <h2 class="work-title">My Flappy Bird project</h2>
+          <p class="work-desc"> JavaScript · MediaPipe </p>
         </div>
       </article>
       
-       <!-- ▶ Practice 12 -->
-      <article class="work-card" data-text="A collaborative workshop with Chinese dancers where we explored both the differences and overlaps between Chinese classical dance and street dance, while also examining the current state of China's street-dance culture and its potential future development."
-      data-video="https://www.youtube.com/embed/QIeOg0z5iVs" style="--card-index: 11;">
+      <article class="work-card" data-text="A collaborative workshop with Chinese dancers where we explored both the differences and overlaps between Chinese classical dance and street dance, while also examining the current state of China's street-dance culture and its potential future development." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 11;">
         <img class="work-cover" src="assets/photo/workshop.png" alt="Hiphop dance workshop">
         <div class="overlay">
-          <div>
-            <h2 class="work-title">Hiphop dance workshop</h2>
-            <p class="work-desc"> Teaching · dance · workshop  </p>
-          </div>
+          <h2 class="work-title">Hiphop dance workshop</h2>
+          <p class="work-desc"> Teaching · dance · workshop  </p>
         </div>
       </article>
+      
     </div>
   </main>
-  
-  <!-- 图片放大模态框 -->
-  <div class="image-modal" id="imageModal">
-    <div class="image-modal-content">
-      <img id="modalImage" src="" alt="放大图片">
-      <button class="image-modal-close" id="imageModalClose">&times;</button>
+
+  <div class="lightbox-overlay" id="lightbox-overlay">
+    <div class="lightbox-content">
+      <div class="lightbox-header">
+        <button class="lightbox-close-btn" id="lightbox-close-btn">&times;</button>
+      </div>
+      <div class="lightbox-body" id="lightbox-body">
+        </div>
     </div>
   </div>
-
-  <script>
-  (function(){
-    const cards = document.querySelectorAll('.work-card');
-    const body = document.body;
-
-    // Fade-in on scroll
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      cards.forEach(c => io.observe(c));
-    } else {
-      cards.forEach(c => c.classList.add('in-view'));
-    }
-    
-    // Simplified 3D hover effect for desktop
-    if (!('ontouchstart' in window)) {
-      cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-          if (card.classList.contains('expanded')) return;
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = (y - centerY) / 20;
-          const rotateY = (x - centerX) / -20;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-          if (card.classList.contains('expanded')) return;
-          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-        });
-      });
-    }
-
-    // A single, reliable click handler for all devices
-    cards.forEach(card => {
-      card.addEventListener('click', function(e) {
-        // Prevent expanding if a link inside the card was clicked.
-        if (e.target.tagName === 'A') return;
-        
-        // If the card is already expanded, do nothing.
-        if (this.classList.contains('expanded')) return;
-        
-        expand(this);
-      });
-    });
-
-    function expand(card) {
-      // Create a close button
-      const closeBtn = document.createElement('button');
-      closeBtn.className = 'close-btn';
-      closeBtn.innerHTML = '×';
-
-      const collapseCard = (e) => {
-        if (e) e.stopPropagation();
-        collapse(card);
-      };
-      closeBtn.addEventListener('click', collapseCard);
-      
-      card.appendChild(closeBtn);
-
-      // Create and append the dynamic content
-      let contentContainer = null;
-
-      if (card.dataset.pdf) {
-        contentContainer = document.createElement('iframe');
-        contentContainer.src = card.dataset.pdf;
-        contentContainer.type = 'application/pdf';
-        contentContainer.allow = 'fullscreen';
-      } else if (card.dataset.video) {
-        contentContainer = document.createElement('iframe');
-        const videoUrl = card.dataset.video.includes('vimeo') 
-          ? card.dataset.video + '?autoplay=1'
-          : card.dataset.video + '&autoplay=1';
-        contentContainer.src = videoUrl;
-        contentContainer.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-        contentContainer.allowFullscreen = true;
-      } else if (card.dataset.gallery) {
-        contentContainer = document.createElement('div');
-        contentContainer.className = 'gallery';
-        card.dataset.gallery.split(',').forEach(p => {
-          const img = document.createElement('img');
-          img.src = p.trim();
-          contentContainer.appendChild(img);
-        });
-      }
-      
-      if (contentContainer) {
-        card.appendChild(contentContainer);
-      }
-
-      // Create and append the description text
-      const textElem = document.createElement('p');
-      textElem.className = 'typing-text';
-      
-      // 获取多语言描述
-      const currentLang = localStorage.getItem('language') || 'en';
-      const cardTitle = card.querySelector('.work-title').textContent;
-      const projectKeys = Object.keys(window.translations[currentLang].practice.projects);
-      const foundKey = projectKeys.find(key => window.translations[currentLang].practice.projects[key].title === cardTitle);
-      
-      if (foundKey) {
-        textElem.textContent = window.translations[currentLang].practice.projects[foundKey].intro;
-      } else {
-        textElem.textContent = card.dataset.text || 'No description available.';
-      }
-      
-      card.appendChild(textElem);
-
-      card.classList.add('expanded');
-      body.style.overflow = 'hidden';
-
-      // Handlers for closing the expanded card
-      const onKey = e => {
-        if (e.key === 'Escape') collapse(card);
-      };
-      
-      const clickOutsideHandler = e => {
-        if (!card.contains(e.target) && !e.target.closest('.image-modal')) {
-          collapse(card);
-        }
-      };
-
-      // Use setTimeout to ensure listeners are added after the current event cycle
-      setTimeout(() => {
-        document.addEventListener('keydown', onKey);
-        document.addEventListener('click', clickOutsideHandler);
-        card.dataset.keyHandler = onKey; // Store reference to remove later
-        card.dataset.clickOutsideHandler = clickOutsideHandler; // Store reference
-      }, 100);
-    }
-
-    function collapse(card) {
-      card.classList.remove('expanded');
-      body.style.overflow = '';
-      
-      // Remove all dynamically added children (close button, iframe, gallery, text)
-      while(card.firstChild) {
-          if(card.firstChild.classList && (
-             card.firstChild.classList.contains('close-btn') ||
-             card.firstChild.tagName === 'IFRAME' ||
-             card.firstChild.classList.contains('gallery') ||
-             card.firstChild.classList.contains('typing-text'))
-            ) {
-              card.removeChild(card.firstChild);
-          } else {
-             // This logic assumes we should only remove our dynamic content.
-             // If other children are present and should be removed, adjust this.
-             break; 
-          }
-      }
-      // Re-query and remove to be safe
-      const toRemove = card.querySelectorAll('.close-btn, iframe, .gallery, .typing-text');
-      toRemove.forEach(el => el.remove());
-
-      // Remove event listeners
-      document.removeEventListener('keydown', card.dataset.keyHandler);
-      document.removeEventListener('click', card.dataset.clickOutsideHandler);
-      
-      // Clean up dataset properties
-      delete card.dataset.keyHandler;
-      delete card.dataset.clickOutsideHandler;
-
-      // Reset card transform style
-      card.style.transform = '';
-    }
-
-    // Image gallery modal logic (remains the same)
-    document.addEventListener('click', function(e) {
-      var expandedCard = document.querySelector('.work-card.expanded');
-      if (expandedCard && e.target.tagName === 'IMG' && expandedCard.contains(e.target)) {
-        if (!e.target.classList.contains('work-cover') && !e.target.closest('.image-modal')) {
-          var imgSrc = e.target.src;
-          var imageModal = document.getElementById('imageModal');
-          var modalImg = document.getElementById('modalImage');
-          modalImg.src = imgSrc;
-          imageModal.classList.add('show');
-          document.body.style.overflow = 'hidden';
-        }
-      }
-      if (e.target.matches('#imageModalClose') || e.target.id === 'imageModal') {
-        document.getElementById('imageModal').classList.remove('show');
-        document.body.style.overflow = '';
-      }
-    });
-
-    window.addEventListener('keydown', function(e){
-      if(e.key==='Escape'){
-        document.getElementById('imageModal').classList.remove('show');
-        document.body.style.overflow = '';
-      }
-    });
-  })();
-  </script>
-  
-  <!-- 粒子特效脚本 -->
-  <script>
-    // 确保DOM完全加载后再执行粒子特效
-    document.addEventListener('DOMContentLoaded', function() {
-      const script = document.createElement('script');
-      script.src = 'cursorParticles.js';
-      document.body.appendChild(script);
-    });
-  </script>
   
   <script src="webgl-background.js"></script>
   <script src="translations.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const workCards = document.querySelectorAll('.work-card');
+      const lightboxOverlay = document.getElementById('lightbox-overlay');
+      const lightboxBody = document.getElementById('lightbox-body');
+      const closeBtn = document.getElementById('lightbox-close-btn');
+
+      function openLightbox(card) {
+        // Clear previous content
+        lightboxBody.innerHTML = '';
+        
+        let mediaHtml = '';
+        // Determine content type and build the HTML
+        if (card.dataset.pdf) {
+          mediaHtml = `<div class="lightbox-media"><iframe src="${card.dataset.pdf}" type="application/pdf"></iframe></div>`;
+        } else if (card.dataset.video) {
+          const videoUrl = `${card.dataset.video}${card.dataset.video.includes('?') ? '&' : '?'}autoplay=1&muted=1`;
+          mediaHtml = `<div class="lightbox-media"><iframe src="${videoUrl}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+        } else if (card.dataset.gallery) {
+          const images = card.dataset.gallery.split(',').map(img => `<img src="${img.trim()}" alt="Gallery image">`).join('');
+          mediaHtml = `<div class="lightbox-media"><div class="gallery">${images}</div></div>`;
+        }
+        
+        // Build the text description HTML
+        const textHtml = `<p class="lightbox-text">${card.dataset.text || 'No description provided.'}</p>`;
+        
+        // Inject the new content
+        lightboxBody.innerHTML = mediaHtml + textHtml;
+        
+        // Show the lightbox
+        lightboxOverlay.classList.add('is-visible');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      }
+
+      function closeLightbox() {
+        lightboxOverlay.classList.remove('is-visible');
+        document.body.style.overflow = ''; // Restore scrolling
+        // Clear the content to stop videos from playing in the background
+        setTimeout(() => {
+          lightboxBody.innerHTML = '';
+        }, 400); // Delay matches the CSS transition time
+      }
+
+      // Event listeners for cards
+      workCards.forEach(card => {
+        card.addEventListener('click', () => openLightbox(card));
+      });
+
+      // Event listeners for closing
+      closeBtn.addEventListener('click', closeLightbox);
+      lightboxOverlay.addEventListener('click', (e) => {
+        if (e.target === lightboxOverlay) {
+          closeLightbox();
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightboxOverlay.classList.contains('is-visible')) {
+          closeLightbox();
+        }
+      });
+    });
+  </script>
+  
   <script>
     // 语言管理
     class LanguageManager {
@@ -918,20 +446,6 @@
             }
           }
         });
-        
-        // 新增：如果弹窗已打开，也更新其中的介绍文本
-        const expandedCard = document.querySelector('.work-card.expanded');
-        if (expandedCard) {
-            const textElem = expandedCard.querySelector('.typing-text');
-            if (textElem) {
-                const cardTitle = expandedCard.querySelector('.work-title').textContent;
-                const projectKeys = Object.keys(translations.practice.projects);
-                const foundKey = projectKeys.find(key => translations.practice.projects[key].title === cardTitle);
-                if (foundKey) {
-                    textElem.textContent = translations.practice.projects[foundKey].intro;
-                }
-            }
-        }
       }
 
       addLanguageToggle() {
@@ -997,5 +511,6 @@
       new LanguageManager();
     });
   </script>
+
 </body>
-</html>
+</html> 
