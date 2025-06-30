@@ -29,9 +29,9 @@ class WebGLBackground {
     this.pathStrength = 0.005;         // **大幅减弱**路径引导力，避免剧烈上下运动
     this.pathAmplitude = 4.0;          // **大幅减小**路径弯曲幅度，让"河道"更平直
     this.pathFrequency = 0.02;         // 降低弯曲频率
-    this.waveStrength = 0;             // **禁用**Y轴的噪声波浪，这是之前上下浮动的主要原因
-    this.waveFrequency = 0.08;         // 
-    this.waveSpeed = 0.1;              // 减慢波浪速度
+    this.waveStrength = 0.3;           // **轻微启用**Y轴的噪声波浪，但强度很低
+    this.waveFrequency = 0.05;         // 降低波浪频率，让上下浮动更慢
+    this.waveSpeed = 0.05;             // 大幅减慢波浪速度，让上下浮动比左右流动慢很多
     this.grid = new Map();
     this.gridSize = 5;                 // 增大网格尺寸以适应更缓和的互动
     this.sceneDepth = 50;              // 场景深度，方便在多个函数中使用
@@ -226,14 +226,22 @@ class WebGLBackground {
   initThreeJS() {
     // 创建场景
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.Fog(0x0a0a0a, this.cameraDistance * 0.5, this.cameraDistance * 2.5);
+    this.scene.fog = new THREE.Fog(0x0a0a0a, this.cameraDistance * 0.6, this.cameraDistance * 2.0);
     
     // 创建相机
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     this.camera.position.z = this.cameraDistance;
     
-    // 【视觉调整】: 将相机Y轴下移，让水流出现在中下部
-    this.camera.position.y = -8;
+    // =================================================================
+    // 【核心修正】: 修正相机视角
+    // =================================================================
+    // 1. 将相机Y轴位置改为正值，即移动到场景上方
+    this.camera.position.y = 10; 
+    
+    // 2. **【关键】**让相机始终朝向场景的中心(0,0,0)看。
+    //    这样它就会从上方倾斜向下看，实现俯视效果。
+    this.camera.lookAt(this.scene.position); 
+    // =================================================================
     
     // 创建渲染器
     this.renderer = new THREE.WebGLRenderer({ 
@@ -266,12 +274,10 @@ class WebGLBackground {
         const x = (Math.random() - 0.5) * sceneWidth * 2;
         const z = (Math.random() - 0.5) * this.sceneDepth;
         
-        // 【核心修改】: 重新定义粒子生成区域，使其更像一条平直的"河"
-        // 1. pathAmplitude 已经大幅减小，所以 sin 波起伏很小。
-        // 2. 垂直随机范围也减小 (从 *10 变为 *8)，让粒子更集中。
-        // 3. 整体区域下移 5 个单位。
+        // 【配合修正】: 将粒子生成区域的Y轴中心移回 0
+        // 因为现在是靠相机俯视来调整视觉位置，所以粒子本身在Y=0附近即可。
         const pathY = this.pathAmplitude * Math.sin(x * this.pathFrequency);
-        const y = pathY - 5 + (Math.random() - 0.5) * 8; 
+        const y = pathY + (Math.random() - 0.5) * 8; 
         
         this.particlePositions[i3] = x;
         this.particlePositions[i3 + 1] = y;
@@ -404,9 +410,9 @@ class WebGLBackground {
         const pathY = this.pathAmplitude * Math.sin(pos.x * this.pathFrequency);
         force.y += (pathY - pos.y) * this.pathStrength; // 注意：去掉了 *0.3，因为pathStrength本身已经很小了
 
-        // 3. **禁用Y轴波浪**: 这是关键！注释掉下面这行代码，消除了主要的上下浮动来源。
-        // const waveY = this.noise.noise3D(pos.x * this.waveFrequency, pos.z * this.waveFrequency, this.time * this.waveSpeed) * this.waveStrength * 0.5;
-        // force.y += waveY;
+        // 3. **轻微启用Y轴波浪**: 添加缓慢的上下浮动，但强度很低
+        const waveY = this.noise.noise3D(pos.x * this.waveFrequency, pos.z * this.waveFrequency, this.time * this.waveSpeed) * this.waveStrength;
+        force.y += waveY;
         
         // 4. (可选) 添加微弱的X/Z轴湍流，增加细节
         const turbulenceX = this.noise.noise3D(pos.y * 0.1, pos.z * 0.1, this.time * 0.1) * 0.01;

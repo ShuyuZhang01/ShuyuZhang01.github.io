@@ -608,8 +608,8 @@ Through an immersive VR experience, viewers descend from the surface's refracted
     // 根据列数给每张卡写一个静态 offset
     function setFanLayout(){
       const cards = document.querySelectorAll('.work-card');
-      const angleStep = 8;          // 相邻两张牌之间夹角（度）
-      const radius    = 260;        // 圆弧半径：越大扇得越平
+      const angleStep = 6;          // 相邻两张牌之间夹角（度）- 从8减少到6，让扇得更紧凑
+      const radius    = 200;        // 圆弧半径：从260减少到200，让排列更紧凑
       const midIndex  = (cards.length - 1) / 2;
 
       cards.forEach((card, i) => {
@@ -619,13 +619,17 @@ Through an immersive VR experience, viewers descend from the surface's refracted
 
         // 极坐标 → 直角坐标，把圆心放在(0,0)
         const offsetX = Math.sin(rad) * radius;
-        const offsetY = Math.cos(rad) * radius * -0.35; // -0.35 让牌底部稍微抬起来
+        const offsetY = Math.cos(rad) * radius * -0.25; // 从-0.35减少到-0.25，减少垂直高度
+
+        // 添加随机旋转角度，但不超过左右40°
+        const randomRotation = (Math.random() - 0.5) * 80; // -40° 到 +40°
+        const finalRotation = angle + randomRotation;
 
         card.dataset.baseX  = offsetX.toFixed(1);
         card.dataset.baseY  = offsetY.toFixed(1);
-        card.dataset.rotate = angle.toFixed(1);
+        card.dataset.rotate = finalRotation.toFixed(1);
         // 给 :hover 用
-        card.style.setProperty('--rotate', `${angle.toFixed(1)}deg`);
+        card.style.setProperty('--rotate', `${finalRotation.toFixed(1)}deg`);
       });
     }
 
