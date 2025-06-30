@@ -24,9 +24,6 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 
-  <!-- Masonry.js for waterfall layout -->
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-
   <style>
     /* ───────── Self‑Practice page tweaks ───────── */
     .practice-page .container{
@@ -39,38 +36,56 @@
       margin-bottom: 3rem;
     }
 
-    /* Enhanced 3‑column grid on desktop */
-    .practice-page .work-grid{
-      display: block; /* 改为block，让Masonry接管布局 */
+    /* 1. 设置瀑布流的容器 */
+    .practice-page .work-grid {
+      /* 手机上默认是1列 */
+      column-count: 1; 
+      column-gap: 2rem; /* 定义列与列之间的间距 */
       margin-top: 1rem;
     }
 
-    /* 为Masonry设置基础样式 */
-    .practice-page .work-card{
-      width: calc(33.333% - 1.33rem); /* 三列布局，减去间距 */
+    /* 2. 在小屏幕上（宽度大于768px），变为3列 */
+    @media (min-width: 768px) {
+      .practice-page .work-grid {
+        column-count: 3;
+      }
+    }
+
+    /* 3. 在中大屏幕上（宽度大于992px），保持3列 */
+    @media (min-width: 992px) {
+      .practice-page .work-grid {
+        column-count: 3;
+      }
+    }
+
+    /* 4. 设置瀑布流中的卡片样式（非常重要！） */
+    .practice-page .work-card {
+      /* 这是关键！防止单个卡片在两列之间被切断 */
+      break-inside: avoid; 
+      
+      /* 给每个卡片下面增加一点间距 */
       margin-bottom: 2rem;
+      
+      /* 确保卡片的宽度是100%，以填满它所在的列 */
+      width: 100%;
+
+      /* 其他卡片样式 */
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
       overflow: hidden;
       position: relative;
       cursor: pointer;
       border-radius: 20px;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       background: #000;
       transform: translateY(0);
-    }
-
-    /* 响应式设计 - 小屏幕改为两列 */
-    @media (max-width: 768px) {
-      .practice-page .work-card {
-        width: calc(50% - 1rem); /* 两列布局 */
-      }
-    }
-
-    /* 超小屏幕改为单列 */
-    @media (max-width: 480px) {
-      .practice-page .work-card {
-        width: 100%; /* 单列布局 */
-      }
+      
+      /* 移除transition，由JS控制transform */
+      transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* 入场动画 */
+      opacity: 0;
+      transform: translateY(30px);
+      animation: cardSlideIn 0.8s ease forwards;
+      animation-delay: calc(var(--card-index, 0) * 0.1s);
     }
 
     /* Enhanced Card cover */
@@ -81,6 +96,7 @@
       height: auto;
       object-fit: cover;
       display: block;
+      opacity: 0.85; /* 添加透明度 */
     }
 
     .practice-page .work-card:hover {
@@ -90,6 +106,7 @@
     
     .practice-page .work-card:hover .work-cover {
       transform: scale(1.05);
+      opacity: 1; /* 悬停时恢复完全不透明 */
     }
 
     /* Enhanced Overlay */
@@ -362,36 +379,6 @@
       left: 100%;
     }
     
-    /* Enhanced card loading animation */
-    .work-card {
-      opacity: 0;
-      transform: translateY(30px);
-      animation: cardSlideIn 0.8s ease forwards;
-      animation-delay: calc(var(--card-index, 0) * 0.1s);
-    }
-    
-    @keyframes cardSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    /* Enhanced title hover effect */
-    .work-title {
-      position: relative;
-      transition: all 0.3s ease;
-    }
-    
-    .work-title:hover {
-      color: var(--primary-color);
-      transform: translateX(5px);
-    }
-    
     /* Enhanced PDF iframe styling */
     .practice-page .work-card.expanded iframe[type="application/pdf"] {
       width: 100%;
@@ -466,9 +453,32 @@
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s;
     }
+    /* 移除CSS中的hover transform，完全由JS控制 */
     .practice-page .work-card:hover {
-      /* 移除 translateY(-8px); 由JS控制3D效果 */
       box-shadow: 0 0 25px rgba(156, 163, 175, 0.4);
+    }
+
+    /* 卡片滑入动画 */
+    @keyframes cardSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Enhanced title hover effect */
+    .work-title {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .work-title:hover {
+      color: var(--primary-color);
+      transform: translateX(5px);
     }
   </style>
 </head>
@@ -658,6 +668,31 @@
 
     cards.forEach(card=>card.addEventListener('click',()=>expand(card)));
 
+    // 简单的3D悬停效果
+    cards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        if (card.classList.contains('expanded')) return;
+        
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (x - centerX) / -20;
+
+        card.style.transition = 'transform 0.1s';
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (card.classList.contains('expanded')) return;
+        
+        card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+      });
+    });
+
     function expand(card){
       if(card.classList.contains('expanded'))return;
 
@@ -719,14 +754,6 @@
 
       card.appendChild(textElem);
 
-      // 重新布局Masonry
-      const grid = document.querySelector('.practice-page .work-grid');
-      if (grid && grid.masonry) {
-        setTimeout(() => {
-          grid.masonry.layout();
-        }, 100);
-      }
-
       /* Esc key */
       const onKey=e=>{if(e.key==='Escape')collapse(card,closeBtn,onKey,textElem);};
       document.addEventListener('keydown',onKey);
@@ -745,95 +772,7 @@
       if(gallery)gallery.remove();
       if(textElem)textElem.remove();
       if(keyHandler)document.removeEventListener('keydown',keyHandler);
-
-      // 重新布局Masonry
-      const grid = document.querySelector('.practice-page .work-grid');
-      if (grid && grid.masonry) {
-        setTimeout(() => {
-          grid.masonry.layout();
-        }, 100);
-      }
     }
-
-    /* enhanced parallax */
-    window.addEventListener('scroll',()=>{
-      cards.forEach(card=>{
-        const rect=card.getBoundingClientRect();
-        const d=rect.top-innerHeight*0.9;
-        card.style.setProperty('--parallax',`${Math.max(d,0)}px`);
-      });
-    },{passive:true});
-
-    // 初始化Masonry瀑布流布局
-    function initMasonry() {
-      const grid = document.querySelector('.practice-page .work-grid');
-      if (grid) {
-        // 等待所有图片加载完成后再初始化Masonry
-        const images = grid.querySelectorAll('img');
-        let loadedImages = 0;
-        
-        if (images.length === 0) {
-          // 如果没有图片，直接初始化
-          initMasonryLayout();
-        } else {
-          images.forEach(img => {
-            if (img.complete) {
-              loadedImages++;
-              if (loadedImages === images.length) {
-                initMasonryLayout();
-              }
-            } else {
-              img.addEventListener('load', () => {
-                loadedImages++;
-                if (loadedImages === images.length) {
-                  initMasonryLayout();
-                }
-              });
-            }
-          });
-        }
-      }
-    }
-
-    function initMasonryLayout() {
-      const grid = document.querySelector('.practice-page .work-grid');
-      if (grid && typeof Masonry !== 'undefined') {
-        const masonry = new Masonry(grid, {
-          itemSelector: '.work-card',
-          columnWidth: '.work-card',
-          percentPosition: true,
-          gutter: 20, // 卡片间的间距
-          transitionDuration: '0.4s'
-        });
-
-        // 当卡片展开/收起时重新布局
-        const observer = new MutationObserver(() => {
-          masonry.layout();
-        });
-        
-        observer.observe(grid, {
-          childList: true,
-          subtree: true,
-          attributes: true,
-          attributeFilter: ['class']
-        });
-      }
-    }
-
-    // 页面加载完成后初始化Masonry
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initMasonry);
-    } else {
-      initMasonry();
-    }
-
-    // 窗口大小改变时重新布局
-    window.addEventListener('resize', () => {
-      const grid = document.querySelector('.practice-page .work-grid');
-      if (grid && grid.masonry) {
-        grid.masonry.layout();
-      }
-    });
 
     // 图片放大功能（事件委托）
     document.addEventListener('click', function(e) {
