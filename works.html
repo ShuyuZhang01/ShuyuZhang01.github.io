@@ -678,7 +678,7 @@
         const parallaxX = ((index % 2 === 0 ? 1 : -1) * distanceFromCenter * 0.03).toFixed(1);
 
         // 3. 【新增】计算上下悬浮效果
-        const floatSpeed = 0.001;
+        const floatSpeed = 0.003; // 从0.001增加到0.003，让悬浮更快
         const floatAmplitude = 5; // 悬浮幅度（像素）
         const floatOffset = Math.sin(time * floatSpeed + index * 0.5) * floatAmplitude;
 
