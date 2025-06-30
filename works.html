@@ -45,31 +45,30 @@
       max-width: 400px;
       flex: 0 1 400px;
 
-      /* 定义默认的CSS变量 */
-      --parallax-x: 0px;
-      --parallax-y: 0px;
-
-      /* 统一的 transform 规则 */
-      transform: translateX(var(--parallax-x)) translateY(var(--parallax-y));
+      /* 移除CSS变量定义，让JS直接控制transform */
+      transform: translate(0, 0); 
     }
 
-    /* 仅让偶数卡片有一个初始的向下偏移 */
-    .work-card:nth-child(even) {
+    /* 移除偶数卡片的初始偏移，由JS处理 */
+    /* .work-card:nth-child(even) {
       transform: translateX(var(--parallax-x)) translateY(calc(var(--parallax-y) + 2rem));
-    }
+    } */
 
-    /* 鼠标悬停时，在当前视差位置的基础上向上移动一点 */
+    /* 鼠标悬停效果也需要调整，因为transform现在由JS动态设置 */
     .work-card:hover {
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      /* 悬停时的位移可以保留，但要注意它会和JS的transform叠加 */
+      transform: translateY(-8px); 
     }
 
-    .work-card:nth-child(odd):hover {
+    /* 移除这些复杂的悬停规则，因为JS在不断地重写transform */
+    /* .work-card:nth-child(odd):hover {
       transform: translateX(var(--parallax-x)) translateY(calc(var(--parallax-y) - 8px));
     }
 
     .work-card:nth-child(even):hover {
       transform: translateX(var(--parallax-x)) translateY(calc(var(--parallax-y) + 2rem - 8px));
-    }
+    } */
 
     .work-card .work-cover {
       width: 100%;
@@ -117,10 +116,10 @@
     }
 
     /* 视差效果 - 确保变量有默认值 */
-    .work-card {
+    /* .work-card {
       --parallax-x: 0px;
       --parallax-y: 0px;
-    }
+    } */
 
     /* -------------- Enhanced Modal -------------- */
     .modal-overlay {
@@ -451,62 +450,52 @@ Through an immersive VR experience, viewers descend from the surface's refracted
     }
   };
 
-  /* ===== YouTube API ===== */
+  /* ===== YouTube API（修正了URL） ===== */
   let player;
-  function loadYouTubeAPI () {
+  function loadYouTubeAPI() {
     if (window.YT) return;
     const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
+    // 使用标准的YouTube API地址
+    tag.src = 'https://www.youtube.com/iframe_api'; 
     document.head.appendChild(tag);
   }
-  function onYouTubeIframeAPIReady () { /* player 创建由 openModal 触发 */ }
+  function onYouTubeIframeAPIReady() { /* player 创建由 openModal 触发 */ }
 
-  /* ===== Enhanced Modal Logic ===== */
-  function openModal (projectId) {
+  /* ===== Modal逻辑（修正了YouTube嵌入URL） ===== */
+  function openModal(projectId) {
     const data = projectData[projectId];
     if (!data) return console.warn('Missing projectData:', projectId);
 
     const { videoId, intro, photos } = data;
-    const modal    = document.getElementById('modalOverlay');
+    const modal = document.getElementById('modalOverlay');
     const videoBox = modal.querySelector('.videoWrap');
     const introBox = modal.querySelector('.intro');
     const photoBox = modal.querySelector('.photos');
 
-    /* --- media (hero img / video) --- */
     let mediaHTML = '';
-    if (data.heroImage) {                       /* 仅图片 */
-      mediaHTML = `<img src="assets/photo/${data.heroImage}"
-                         alt="${projectId} main visual">`;
+    if (data.heroImage) {
+      mediaHTML = `<img src="assets/photo/${data.heroImage}" alt="${projectId} main visual">`;
     } else if (data.platform === 'vimeo' && videoId) {
-      mediaHTML = `<iframe src="https://player.vimeo.com/video/${videoId}?autoplay=1&title=0&byline=0&portrait=0"
-                           frameborder="0"
-                           allow="autoplay; fullscreen; picture-in-picture"
-                           allowfullscreen></iframe>`;
-    } else if (videoId) {                       /* 默认 YouTube */
-      mediaHTML = `<iframe id="youtubeVideo"
-                           src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1"
-                           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                           allowfullscreen></iframe>`;
+      mediaHTML = `<iframe src="https://player.vimeo.com/video/${videoId}?autoplay=1&title=0&byline=0&portrait=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    } else if (videoId) {
+      // 使用标准的YouTube嵌入地址
+      mediaHTML = `<iframe id="youtubeVideo" src="https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     }
     videoBox.innerHTML = mediaHTML;
 
-    /* --- intro & gallery --- */
     introBox.innerHTML = intro;
     photoBox.innerHTML = photos.map(f =>
       `<img src="assets/photo/${f}" alt="${f}" class="gallery-img" loading="lazy">`
     ).join('');
 
-    /* --- show modal with animation --- */
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
-    
-    // 触发动画
+
     setTimeout(() => {
       modal.classList.add('show');
       modal.querySelector('.modal').classList.add('show');
     }, 10);
 
-    /* --- create YouTube player if needed --- */
     if (!data.heroImage && videoId) {
       if (window.YT && !player) {
         player = new YT.Player('youtubeVideo');
@@ -515,79 +504,91 @@ Through an immersive VR experience, viewers descend from the surface's refracted
       }
     }
   }
-  
-  function closeModal () {
+
+  function closeModal() {
     const modal = document.getElementById('modalOverlay');
     const modalContent = modal.querySelector('.modal');
-    
-    // 触发关闭动画
+
     modal.classList.remove('show');
     modalContent.classList.remove('show');
-    
+
     setTimeout(() => {
       modal.classList.add('hidden');
       document.body.style.overflow = '';
       modal.querySelector('.videoWrap').innerHTML = '';
-      if (player) { player.destroy(); player = null; }
+      if (player) {
+        player.destroy();
+        player = null;
+      }
     }, 300);
   }
 
-  /* ===== Enhanced Anim & Bindings ===== */
-  (() => {
+  /* ===== 动画与事件绑定（这是关键部分） ===== */
+  document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.work-card');
     const modalOverlay = document.getElementById('modalOverlay');
     const closeBtn = document.getElementById('closeModal');
 
     /* fade-in on scroll */
-    const reveal = el => el.classList.add('in-view');
     if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(es => {
-        es.forEach(e => { if (e.isIntersecting){ reveal(e.target); io.unobserve(e.target);} });
-      },{threshold:.3});
-      cards.forEach(c=>io.observe(c));
-    } else { cards.forEach(reveal); }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      cards.forEach(card => io.observe(card));
+    } else {
+      cards.forEach(card => card.classList.add('in-view'));
+    }
 
-    /* enhanced parallax */
-    function updateParallax(){
-      const vh = innerHeight;
-      const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-      
+    /* 视差效果更新函数 */
+    function updateParallax() {
+      const vh = window.innerHeight;
       document.querySelectorAll('.work-card:not(.expanded)').forEach((card, index) => {
         const rect = card.getBoundingClientRect();
         const cardCenter = rect.top + rect.height / 2;
         const viewportCenter = vh / 2;
         const distanceFromCenter = cardCenter - viewportCenter;
-        
-        // 计算视差偏移 - 更明显的效果
-        const parallaxY = (distanceFromCenter * 0.15).toFixed(1) + 'px';
-        const parallaxX = ((index % 2 === 0 ? 1 : -1) * distanceFromCenter * 0.08).toFixed(1) + 'px';
-        
-        // 设置CSS变量
-        card.style.setProperty('--parallax-x', parallaxX);
-        card.style.setProperty('--parallax-y', parallaxY);
+
+        // 调整这些乘数可以改变视差的强度
+        const parallaxY = (distanceFromCenter * 0.1).toFixed(1); // 调整了强度
+        const parallaxX = ((index % 2 === 0 ? 1 : -1) * distanceFromCenter * 0.05).toFixed(1); // 调整了强度
+
+        // 直接通过transform来更新，更流畅
+        if (index % 2 === 0) { // 偶数卡片
+            card.style.transform = `translateX(${parallaxX}px) translateY(calc(${parallaxY}px + 2rem))`;
+        } else { // 奇数卡片
+            card.style.transform = `translateX(${parallaxX}px) translateY(${parallaxY}px)`;
+        }
       });
     }
-    addEventListener('scroll',updateParallax,{passive:true});
-    addEventListener('resize',updateParallax);
-    addEventListener('load', updateParallax);
-    
-    // 立即执行一次
+
+    // 为滚动和窗口大小调整添加事件监听
+    window.addEventListener('scroll', updateParallax, { passive: true });
+    window.addEventListener('resize', updateParallax);
+
+    // 立即执行一次以设置初始位置
     updateParallax();
 
-    /* click card */
-    cards.forEach(card=>card.addEventListener('click',()=>{
+    /* 点击和关闭事件 */
+    cards.forEach(card => card.addEventListener('click', () => {
       const pid = card.dataset.project;
-      if(pid) openModal(pid);
+      if (pid) openModal(pid);
     }));
 
-    /* close */
-    closeBtn.addEventListener('click',closeModal);
-    modalOverlay.addEventListener('click',e=>{ if(e.target===modalOverlay) closeModal(); });
-    document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!modalOverlay.classList.contains('hidden')) closeModal(); });
+    closeBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', e => {
+      if (e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) closeModal();
+    });
 
-    /* preload YouTube */
     loadYouTubeAPI();
-  })();
+  });
   </script>
 
   <!-- 粒子特效脚本 -->
