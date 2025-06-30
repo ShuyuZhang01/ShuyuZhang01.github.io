@@ -268,14 +268,19 @@ class WebGLBackground {
     container.appendChild(this.renderer.domElement);
     document.body.appendChild(container);
 
-    // 新增：后处理composer
-    this.composer = new EffectComposer(this.renderer);
-    this.composer.addPass(new RenderPass(this.scene, this.camera));
-    this.bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
-      1.2, 0.35, 0.85
-    );
-    this.composer.addPass(this.bloomPass);
+    // 【修正】: 检查特效脚本是否已加载，如果加载了才使用
+    if (typeof EffectComposer !== 'undefined' && typeof RenderPass !== 'undefined' && typeof UnrealBloomPass !== 'undefined') {
+        this.composer = new EffectComposer(this.renderer);
+        this.composer.addPass(new RenderPass(this.scene, this.camera));
+        this.bloomPass = new UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            1.2, 0.35, 0.85
+        );
+        this.composer.addPass(this.bloomPass);
+    } else {
+        console.warn('WebGLBackground: Post-processing scripts not loaded. Bloom effect is disabled.');
+        this.composer = null; // 确保 composer 为空
+    }
 
     // 新增：添加低多边形线框体
     const wireGeo = new THREE.IcosahedronGeometry(32, 1);
@@ -453,7 +458,7 @@ class WebGLBackground {
 
         // 2. **微弱的垂直引导**: 让粒子大致保持在一个平缓的Y轴区域内，但不起主导作用
         const pathY = this.pathAmplitude * Math.sin(pos.x * this.pathFrequency);
-        force.y += (pathY - pos.y) * this.pathStrength; // 注意：去掉了 *0.3，因为pathStrength本身已经很小了
+        force.y += (pathY - pos.y) * this.pathStrength;
 
         // 3. **轻微启用Y轴波浪**: 添加缓慢的上下浮动，但强度很低
         const waveY = this.noise.noise3D(pos.x * this.waveFrequency, pos.z * this.waveFrequency, this.time * this.waveSpeed) * this.waveStrength;
@@ -495,11 +500,11 @@ class WebGLBackground {
                 }
             }
         }
-        // 更新速度（Verlet ➜ Euler 足够）
+        // 更新速度
         this.particleVelocities[i3] += force.x;
         this.particleVelocities[i3 + 1] += force.y;
         this.particleVelocities[i3 + 2] += force.z;
-        // 速度上限，防"飙车"
+        
         const vLen = Math.hypot(
             this.particleVelocities[i3],
             this.particleVelocities[i3 + 1],
@@ -514,7 +519,7 @@ class WebGLBackground {
         this.particleVelocities[i3] *= this.damping;
         this.particleVelocities[i3 + 1] *= this.damping;
         this.particleVelocities[i3 + 2] *= this.damping;
-        // 根据 dt 位移
+        
         this.particlePositions[i3] += this.particleVelocities[i3] * dt;
         this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1] * dt;
         this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2] * dt;
@@ -526,17 +531,16 @@ class WebGLBackground {
             this.particlePositions[i3] = boundaryWidth;
         }
         
-        // Z轴边界限制，防止粒子被雾效吞掉
+        // Z轴边界限制
         if (this.particlePositions[i3 + 2] > this.boundaryDepth) {
             this.particlePositions[i3 + 2] = -this.boundaryDepth;
         } else if (this.particlePositions[i3 + 2] < -this.boundaryDepth) {
             this.particlePositions[i3 + 2] = this.boundaryDepth;
         }
         
-        // 颜色随速度微调，限制亮度范围避免闪烁
-        const baseBrightness = this.particleColors[i3];     // 初始常量
-        const finalBrightness = Math.min(1.0,               // 限制 0-1
-            baseBrightness * (1.0 + vLen * 2.0));
+        // 颜色随速度微调
+        const baseBrightness = this.particleColors[i3];
+        const finalBrightness = Math.min(1.0, baseBrightness * (1.0 + vLen * 2.0));
         this.particleSystem.geometry.attributes.color.setX(i, finalBrightness);
         this.particleSystem.geometry.attributes.color.setY(i, finalBrightness);
         this.particleSystem.geometry.attributes.color.setZ(i, finalBrightness);
@@ -577,29 +581,36 @@ class WebGLBackground {
     const dt = (now - this.lastFrameTime) * 0.001;
     this.lastFrameTime = now;
     this.time += dt;
-    // 新增：更新shader的time和鼠标uniform
+    
     if (this.particleSystem && this.particleSystem.material.uniforms) {
       this.particleSystem.material.uniforms.time.value = this.time;
       this.particleSystem.material.uniforms.uMouse.value.set(this.mouseX, this.mouseY);
     }
-    // 线框体缓慢自转
+    
     if (this.wireframeMesh) {
       this.wireframeMesh.rotation.x += 0.01 * dt;
       this.wireframeMesh.rotation.y += 0.008 * dt;
     }
+    
     this.updateFluidDynamics(dt);
-    // 用composer渲染，带bloom
+    
+    // 【修正】: 根据 composer 是否存在来决定渲染方式
     if (this.composer) {
       this.composer.render();
-    } else {
+    } else if(this.renderer) {
       this.renderer.render(this.scene, this.camera);
     }
   }
 
   onWindowResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+      if(this.camera && this.renderer) {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        if(this.composer) {
+            this.composer.setSize(window.innerWidth, window.innerHeight);
+        }
+      }
   }
 
   destroy() {
