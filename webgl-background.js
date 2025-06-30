@@ -353,46 +353,50 @@ class WebGLBackground {
       // 添加流动方向力 - 使用全局sin流动
       this.particleForces[i3] += this.flowSpeed * globalFlow;
       
-      // 边界处理 - 软边界，让粒子在边界处减速并改变方向
-      if (posI.x > 55) {
-        this.particleForces[i3] -= this.boundaryForce * (posI.x - 55);
-        this.particleVelocities[i3] *= 0.8; // 在边界处减速
-      } else if (posI.x < -55) {
-        this.particleForces[i3] += this.boundaryForce * (-55 - posI.x);
-        this.particleVelocities[i3] *= 0.8; // 在边界处减速
-      }
-      
-      // Y轴边界 - 限制在下半部分
+      // Y轴和Z轴的软边界保持不变
       if (posI.y > -2.5) {
         this.particleForces[i3 + 1] -= this.boundaryForce * (posI.y + 2.5);
       } else if (posI.y < -17.5) {
         this.particleForces[i3 + 1] += this.boundaryForce * (-17.5 - posI.y);
       }
       
-      // Z轴边界
       if (Math.abs(posI.z) > 8) {
         this.particleForces[i3 + 2] -= Math.sign(posI.z) * this.boundaryForce;
       }
     }
     
+    // 定义边界宽度
+    const boundaryWidth = 60; // 与相机和粒子初始分布范围相匹配
+
     // 更新速度和位置
     for (let i = 0; i < this.particleCount; i++) {
       const i3 = i * 3;
       
+      // 更新速度
       this.particleVelocities[i3] += this.particleForces[i3];
       this.particleVelocities[i3 + 1] += this.particleForces[i3 + 1];
       this.particleVelocities[i3 + 2] += this.particleForces[i3 + 2];
       
+      // 应用阻尼
       this.particleVelocities[i3] *= this.damping;
       this.particleVelocities[i3 + 1] *= this.damping;
       this.particleVelocities[i3 + 2] *= this.damping;
       
+      // 更新位置
       this.particlePositions[i3] += this.particleVelocities[i3];
       this.particlePositions[i3 + 1] += this.particleVelocities[i3 + 1];
       this.particlePositions[i3 + 2] += this.particleVelocities[i3 + 2];
       
-      // 限制在可视范围内，但允许更宽的分布
-      this.particlePositions[i3] = Math.max(-70, Math.min(70, this.particlePositions[i3]));
+      // *** 核心修改：实现左右循环移动 ***
+      if (this.particlePositions[i3] > boundaryWidth) {
+        // 如果粒子从右边出界，让它从左边回来
+        this.particlePositions[i3] = -boundaryWidth;
+      } else if (this.particlePositions[i3] < -boundaryWidth) {
+        // 如果粒子从左边出界，让它从右边回来
+        this.particlePositions[i3] = boundaryWidth;
+      }
+      
+      // Y轴和Z轴的硬性限制可以保留，以防粒子漂移太远
       this.particlePositions[i3 + 1] = Math.max(-25, Math.min(-5, this.particlePositions[i3 + 1]));
       this.particlePositions[i3 + 2] = Math.max(-12, Math.min(12, this.particlePositions[i3 + 2]));
     }
