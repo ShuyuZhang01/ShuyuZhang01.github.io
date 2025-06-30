@@ -405,7 +405,7 @@
 
     <div class="work-grid">
       <!-- ▶ Practice 1 -->
-      <article class="work-card card-large" data-text="VR experience with installation."
+      <article class="work-card" data-text="VR experience with installation."
       data-pdf="assets/pdf/mind-uploading.pdf" style="--card-index: 0;">
         <img class="work-cover" src="assets/photo/eyes.png" alt="VR experience & installation">
         <div class="overlay">
@@ -417,7 +417,7 @@
       </article>
       
       <!-- ▶ Unity Mini‑Game (video) -->
-      <article class="work-card card-wide" data-text="A small‑scale game exploring Unity Visual Scripting and some basic Unity C#."
+      <article class="work-card" data-text="A small‑scale game exploring Unity Visual Scripting and some basic Unity C#."
                data-video="https://www.youtube.com/embed/Xo-ZtWO-TLs" style="--card-index: 1;">
         <img class="work-cover" src="assets/photo/game.png" alt="Unity Mini‑Game Cover">
         <div class="overlay">
@@ -441,7 +441,8 @@
       </article>
 
       <!-- ▶ Practice 4 -->
-     <article class="work-card card-tall" data-text="First exploration combining Unity, TouchDesigner, and MediaPipe; camera controls particle effect in Unity." data-video="https://player.vimeo.com/video/1073393786" style="--card-index: 3;">
+     <article class="work-card" data-text="Unity Interactive Practice"
+       data-video="" style="--card-index: 3;">
         <img class="work-cover" src="assets/photo/unity1.png" alt="Unity Interactive Practice Cover">
         <div class="overlay">
           <div>
@@ -652,25 +653,6 @@
         card.style.setProperty('--parallax',`${Math.max(d,0)}px`);
       });
     },{passive:true});
-
-    // 3D倾斜悬停效果
-    cards.forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -8;
-        const rotateY = ((x - centerX) / centerX) * 8;
-        card.style.transition = 'transform 0.1s';
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-      });
-    });
   })();
   </script>
   

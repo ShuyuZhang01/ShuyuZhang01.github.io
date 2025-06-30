@@ -1,4 +1,4 @@
-// WebGL Background Effect - 方案一：深空星云
+// WebGL Background Effect - 方案二：动态光绘
 class WebGLBackground {
   constructor() {
     this.scene = null;
@@ -7,31 +7,25 @@ class WebGLBackground {
     this.particleSystem = null;
     this.animationId = null;
     this.time = 0;
-    this.lastFrameTime = 0;
     this.mouseX = 0;
     this.mouseY = 0;
-    this.mouseTargetX = 0;
-    this.mouseTargetY = 0;
-    
-    // --- 星云效果参数 ---
-    this.particleCount = 10000;
-    this.particleSize = 1.5;
-    this.cameraDistance = 40;
-    this.damping = 0.96; // 阻尼稍大，让运动更"粘稠"
+
+    // --- 光绘效果参数 ---
+    this.particleCount = 15000;
+    this.particleSize = 1.0;
+    this.cameraDistance = 50;
     this.noise = new SimplexNoise();
     
     // 力学参数
-    this.noiseTimeScale = 0.0001;
-    this.noisePosScale = 0.05;
-    this.noiseForce = 0.01;
-    this.mouseRepulsion = 0.5; // 鼠标排斥力
-    this.mouseRadius = 4;     // 鼠标影响半径
-    this.centerPull = 0.0003; // 向中心轻微拉扯，防止粒子飘散
+    this.noiseScale = 0.02;
+    this.noiseSpeed = 0.0002;
+    this.maxSpeed = 0.1;
+    this.turnSpeed = 0.05;
+    this.mouseInfluence = 2;
 
     this.particlePositions = new Float32Array(this.particleCount * 3);
     this.particleVelocities = new Float32Array(this.particleCount * 3);
     this.particleColors = new Float32Array(this.particleCount * 3);
-    this.particleRandoms = new Float32Array(this.particleCount * 3); // x: 随机相位, y: 随机大小, z: 随机速度
 
     this.init();
   }
@@ -53,7 +47,7 @@ class WebGLBackground {
       this.createCSSFallback();
     }
   }
-
+  
   isHomePage() { return window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/'); }
   isWebGLAvailable() { try { const canvas = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))); } catch (e) { return false; } }
 
@@ -68,153 +62,108 @@ class WebGLBackground {
 
     const container = document.createElement('div');
     container.id = 'webgl-background';
-    container.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; pointer-events:none; background-color:#05020D;';
+    container.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; pointer-events:none; background-color:#020208;';
     container.appendChild(this.renderer.domElement);
     document.body.insertAdjacentElement('afterbegin', container);
   }
-  
+
   initParticles() {
-    const boxSize = this.cameraDistance * 1.5;
+    const w = this.cameraDistance * this.camera.aspect;
+    const h = this.cameraDistance;
     for (let i = 0; i < this.particleCount; i++) {
         const i3 = i * 3;
-        this.particlePositions[i3] = (Math.random() - 0.5) * boxSize;
-        this.particlePositions[i3 + 1] = (Math.random() - 0.5) * boxSize;
-        this.particlePositions[i3 + 2] = (Math.random() - 0.5) * boxSize;
+        this.particlePositions[i3] = (Math.random() - 0.5) * w * 2.5;
+        this.particlePositions[i3 + 1] = (Math.random() - 0.5) * h * 2.5;
+        this.particlePositions[i3 + 2] = (Math.random() - 0.5) * 20;
 
-        this.particleVelocities[i3] = 0;
-        this.particleVelocities[i3 + 1] = 0;
+        this.particleVelocities[i3] = (Math.random() - 0.5) * 0.1;
+        this.particleVelocities[i3 + 1] = (Math.random() - 0.5) * 0.1;
         this.particleVelocities[i3 + 2] = 0;
-
-        this.particleRandoms[i3] = Math.random() * 10;
-        this.particleRandoms[i3 + 1] = Math.random() * 0.5 + 0.5;
-        this.particleRandoms[i3 + 2] = Math.random() * 0.5 + 0.5;
     }
   }
 
   createParticleSystem() {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(this.particlePositions, 3));
-    geometry.setAttribute('aRandom', new THREE.BufferAttribute(this.particleRandoms, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(this.particleColors, 3));
 
-    const vertexShader = `
-      attribute vec3 aRandom;
-      varying float vSpeed;
-      uniform float time;
-      uniform float size;
-      void main() {
-        vec3 pos = position;
-        vSpeed = length(position); // 用离中心的距离来近似速度感
-        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-        gl_PointSize = size * aRandom.y * (300.0 / -mvPosition.z);
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `;
-
-    const fragmentShader = `
-      varying float vSpeed;
-      void main() {
-        float dist = length(gl_PointCoord - vec2(0.5));
-        if (dist > 0.5) discard;
-        
-        // 基于"速度感"的颜色混合
-        float speedFactor = smoothstep(0.0, 50.0, vSpeed);
-        vec3 color1 = vec3(0.1, 0.2, 0.7); // Deep Blue
-        vec3 color2 = vec3(0.8, 0.2, 0.9); // Magenta
-        vec3 color3 = vec3(0.2, 0.8, 0.8); // Cyan
-        
-        vec3 finalColor = mix(color1, color2, speedFactor);
-        finalColor = mix(finalColor, color3, dist * 0.8);
-        
-        float alpha = (1.0 - dist * 2.0) * (1.0 - speedFactor * 0.5);
-        gl_FragColor = vec4(finalColor, alpha);
-      }
-    `;
-
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        size: { value: this.particleSize },
-        time: { value: 0 },
-      },
-      vertexShader,
-      fragmentShader,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      transparent: true,
+    const material = new THREE.PointsMaterial({
+        size: this.particleSize,
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        depthWrite: false,
+        sizeAttenuation: true,
     });
-
+    
     this.particleSystem = new THREE.Points(geometry, material);
     this.scene.add(this.particleSystem);
   }
-  
-  updatePhysics(dt) {
-    const t = this.time * this.noiseTimeScale;
+
+  updatePhysics() {
     const positions = this.particleSystem.geometry.attributes.position.array;
+    const colors = this.particleSystem.geometry.attributes.color.array;
     const velocities = this.particleVelocities;
-    const boxSize = this.cameraDistance * 1.5;
+    const t = this.time * this.noiseSpeed;
+    const w = this.cameraDistance * this.camera.aspect;
+    const h = this.cameraDistance;
 
     for (let i = 0; i < this.particleCount; i++) {
         const i3 = i * 3;
-        
-        // 1. 噪声力
-        let p = positions[i3] * this.noisePosScale;
-        let q = positions[i3+1] * this.noisePosScale;
-        let r = positions[i3+2] * this.noisePosScale;
-        velocities[i3]   += this.noise.noise4D(p, q, r, t) * this.noiseForce;
-        velocities[i3+1] += this.noise.noise4D(q, r, p, t) * this.noiseForce;
-        velocities[i3+2] += this.noise.noise4D(r, p, q, t) * this.noiseForce;
+        const x = positions[i3];
+        const y = positions[i3 + 1];
 
-        // 2. 向心力
-        velocities[i3] -= positions[i3] * this.centerPull;
-        velocities[i3+1] -= positions[i3+1] * this.centerPull;
-        velocities[i3+2] -= positions[i3+2] * this.centerPull;
+        // 1. 获取流场角度
+        const angle = this.noise.noise3D(x * this.noiseScale, y * this.noiseScale, t) * Math.PI * 2;
+        const targetVelX = Math.cos(angle) * this.maxSpeed;
+        const targetVelY = Math.sin(angle) * this.maxSpeed;
 
-        // 3. 鼠标排斥力
-        const dx = positions[i3] - (this.mouseX * (window.innerWidth/window.innerHeight) * 20);
-        const dy = positions[i3+1] - (this.mouseY * 20);
-        const distSq = dx * dx + dy * dy;
-        if (distSq < this.mouseRadius * this.mouseRadius) {
-            const dist = Math.sqrt(distSq);
-            const force = (this.mouseRadius - dist) / dist * this.mouseRepulsion;
-            velocities[i3] += dx * force;
-            velocities[i3+1] += dy * force;
+        // 2. 粒子转向流场方向
+        velocities[i3] += (targetVelX - velocities[i3]) * this.turnSpeed;
+        velocities[i3 + 1] += (targetVelY - velocities[i3 + 1]) * this.turnSpeed;
+
+        // 3. 鼠标交互
+        const dx = x - this.mouseX;
+        const dy = y - this.mouseY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < this.mouseInfluence) {
+            const force = (this.mouseInfluence - dist) / this.mouseInfluence;
+            velocities[i3] += dy * force * 0.1; // 旋转力
+            velocities[i3 + 1] -= dx * force * 0.1;
         }
 
-        // 更新位置和阻尼
+        // 4. 更新位置
         positions[i3] += velocities[i3];
-        positions[i3+1] += velocities[i3+1];
-        positions[i3+2] += velocities[i3+2];
+        positions[i3 + 1] += velocities[i3 + 1];
 
-        velocities[i3] *= this.damping;
-        velocities[i3+1] *= this.damping;
-        velocities[i3+2] *= this.damping;
+        // 5. 边界处理（循环）
+        if (x > w) positions[i3] = -w; else if (x < -w) positions[i3] = w;
+        if (y > h) positions[i3 + 1] = -h; else if (y < -h) positions[i3 + 1] = h;
+
+        // 6. 更新颜色
+        const hue = (angle / (Math.PI * 2) + this.time * 0.00005) % 1;
+        const color = new THREE.Color().setHSL(hue, 0.8, 0.6);
+        colors[i3] = color.r;
+        colors[i3 + 1] = color.g;
+        colors[i3 + 2] = color.b;
     }
     this.particleSystem.geometry.attributes.position.needsUpdate = true;
+    this.particleSystem.geometry.attributes.color.needsUpdate = true;
   }
   
   addMouseInteraction() {
     window.addEventListener('mousemove', (e) => {
-      this.mouseTargetX = (e.clientX / window.innerWidth) * 2 - 1;
-      this.mouseTargetY = -(e.clientY / window.innerHeight) * 2 + 1;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        this.mouseX = (e.clientX - w / 2) * (this.cameraDistance * this.camera.aspect / (w / 2));
+        this.mouseY = -(e.clientY - h / 2) * (this.cameraDistance / (h / 2));
     });
   }
 
   animate() {
     this.animationId = requestAnimationFrame(() => this.animate());
-    const now = performance.now();
-    const dt = (now - (this.lastFrameTime || now));
-    this.lastFrameTime = now;
-    this.time += dt;
-
-    this.mouseX += (this.mouseTargetX - this.mouseX) * 0.05;
-    this.mouseY += (this.mouseTargetY - this.mouseY) * 0.05;
-
-    this.particleSystem.material.uniforms.time.value = this.time;
-    this.updatePhysics(dt * 0.01);
-    
-    this.camera.position.x += (this.mouseX * 2 - this.camera.position.x) * 0.03;
-    this.camera.position.y += (-this.mouseY * 2 - this.camera.position.y) * 0.03;
-    this.camera.lookAt(this.scene.position);
-
+    this.time = performance.now();
+    this.updatePhysics();
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -227,5 +176,4 @@ class WebGLBackground {
   createCSSFallback() { /* ... 保持原样或删除 ... */ }
 }
 
-// 初始化
 new WebGLBackground(); 
