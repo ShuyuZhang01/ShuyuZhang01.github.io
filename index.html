@@ -25,17 +25,22 @@
       z-index: 1000;
       background: radial-gradient(
         circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(255, 255, 255, 0.1) 0%,
+        transparent 0%,
         rgba(0, 0, 0, 0.98) 400px
       );
       transition: background 0.1s ease-out;
     }
     
     /* 确保导航栏和主要内容始终可见 */
-    .nav,
-    .hero-content {
-      position: relative;
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 1001;
+      padding: 1rem 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(6px);
     }
     
     /* 主页特定样式 */
@@ -50,7 +55,7 @@
     /* 恢复原始hero-content样式 */
     .hero-content {
       position: absolute;
-      z-index: 3;
+      z-index: 1001;
       left: 3vw;
       top: 50%;
       transform: translateY(-50%);
