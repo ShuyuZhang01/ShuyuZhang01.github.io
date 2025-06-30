@@ -76,6 +76,14 @@
       transform: translateY(30px);
       animation: cardSlideIn 0.8s ease forwards;
       animation-delay: calc(var(--card-index, 0) * 0.1s);
+      
+      /* 移动端触摸优化 */
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
     /* 5. 修正动画冲突：只让JS控制transform */
@@ -391,15 +399,46 @@
         height: 95vh;
         padding: 1.5rem;
         border-radius: 16px;
+        /* 确保在移动端正确显示 */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
       
       .practice-page .gallery {
         grid-template-columns: 1fr;
         gap: 0.8rem;
+        max-height: 50vh;
       }
       
       .practice-page .gallery img {
         height: 15vh;
+      }
+      
+      /* 移动端优化关闭按钮 */
+      .practice-page .close-btn {
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+      }
+      
+      /* 移动端优化iframe */
+      .practice-page .work-card.expanded iframe {
+        max-height: 50vh;
+        margin-bottom: 1rem;
+      }
+      
+      /* 移动端优化文字 */
+      .practice-page .typing-text {
+        font-size: 0.9rem;
+        padding: 1rem;
+        margin-top: 1rem;
       }
     }
     
@@ -623,6 +662,13 @@
   (function(){
     const cards=document.querySelectorAll('.work-card');
     const body=document.body;
+    
+    // 调试信息 - 检测移动端
+    console.log('设备检测:', {
+      isMobile: 'ontouchstart' in window,
+      userAgent: navigator.userAgent,
+      viewport: window.innerWidth + 'x' + window.innerHeight
+    });
 
     /* fade‑in on scroll */
     const io=new IntersectionObserver(entries=>{
@@ -630,32 +676,63 @@
     },{threshold:0.2});
     cards.forEach(c=>io.observe(c));
 
-    cards.forEach(card=>card.addEventListener('click',()=>expand(card)));
-
-    // 简单的3D悬停效果
-    cards.forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        if (card.classList.contains('expanded')) return;
-        
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = (y - centerY) / 20;
-        const rotateY = (x - centerX) / -20;
-
-        card.style.transition = 'transform 0.1s';
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-      });
-
-      card.addEventListener('mouseleave', () => {
-        if (card.classList.contains('expanded')) return;
-        
-        card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+    // 修复移动端点击问题 - 使用更可靠的事件处理
+    cards.forEach(card=>{
+      // 添加触摸事件支持
+      card.addEventListener('touchstart', function(e) {
+        e.preventDefault(); // 防止默认行为
+        this.touchStartTime = Date.now();
+      }, { passive: false });
+      
+      card.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        const touchDuration = Date.now() - this.touchStartTime;
+        // 只有短触摸才触发展开（避免长按）
+        if (touchDuration < 500) {
+          expand(this);
+        }
+      }, { passive: false });
+      
+      // 保留原有的点击事件
+      card.addEventListener('click', function(e) {
+        // 在移动端，如果已经有触摸事件处理，则阻止点击事件
+        if ('ontouchstart' in window && this.touchStartTime) {
+          const touchDuration = Date.now() - this.touchStartTime;
+          if (touchDuration < 500) {
+            e.preventDefault();
+            return;
+          }
+        }
+        expand(this);
       });
     });
+
+    // 简化的3D悬停效果 - 只在非移动端应用
+    if (!('ontouchstart' in window)) {
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          if (card.classList.contains('expanded')) return;
+          
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 20;
+          const rotateY = (x - centerX) / -20;
+
+          card.style.transition = 'transform 0.1s';
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          if (card.classList.contains('expanded')) return;
+          
+          card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+      });
+    }
 
     function expand(card){
       if(card.classList.contains('expanded'))return;
@@ -663,7 +740,10 @@
       const closeBtn=document.createElement('button');
       closeBtn.className='close-btn';
       closeBtn.innerHTML='&times;';
-      closeBtn.addEventListener('click',e=>{e.stopPropagation();collapse(card,closeBtn);});
+      closeBtn.addEventListener('click',e=>{
+        e.stopPropagation();
+        collapse(card,closeBtn);
+      });
 
       card.appendChild(closeBtn);
       card.classList.add('expanded');
@@ -722,23 +802,37 @@
       const onKey=e=>{if(e.key==='Escape')collapse(card,closeBtn,onKey,textElem);};
       document.addEventListener('keydown',onKey);
 
-      /* click outside */
-      setTimeout(()=>{document.addEventListener('click',function outside(ev){if(!card.contains(ev.target)){collapse(card,closeBtn,onKey,textElem);}},{once:true});});
+      /* click outside - 修复移动端点击外部关闭问题 */
+      setTimeout(()=>{
+        const outsideHandler = function(ev){
+          if(!card.contains(ev.target) && !ev.target.closest('.image-modal')){
+            collapse(card,closeBtn,onKey,textElem);
+            document.removeEventListener('click', outsideHandler);
+            document.removeEventListener('touchend', outsideHandler);
+          }
+        };
+        document.addEventListener('click', outsideHandler);
+        document.addEventListener('touchend', outsideHandler);
+      }, 100);
     }
 
     function collapse(card,btn,keyHandler,textElem){
       card.classList.remove('expanded');
       body.style.overflow='';
-      btn.remove();
+      if(btn) btn.remove();
       const iframe=card.querySelector('iframe');
       if(iframe)iframe.remove();
       const gallery=card.querySelector('.gallery');
       if(gallery)gallery.remove();
       if(textElem)textElem.remove();
       if(keyHandler)document.removeEventListener('keydown',keyHandler);
+      
+      // 重置卡片的transform样式
+      card.style.transform = '';
+      card.style.transition = '';
     }
 
-    // 图片放大功能（事件委托）
+    // 图片放大功能（事件委托）- 修复移动端支持
     document.addEventListener('click', function(e) {
       // 只处理expanded卡片里的图片点击，排除cover图片
       var expanded = document.querySelector('.work-card.expanded');
@@ -759,6 +853,16 @@
         document.body.style.overflow = '';
       }
     });
+    
+    // 添加触摸事件支持到图片模态框
+    document.addEventListener('touchend', function(e) {
+      // 关闭图片模态框
+      if (e.target.matches('#imageModalClose') || (e.target.matches('#imageModal') && e.target === document.getElementById('imageModal'))) {
+        document.getElementById('imageModal').classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    });
+    
     // ESC关闭
     window.addEventListener('keydown', function(e){
       if(e.key==='Escape'){
