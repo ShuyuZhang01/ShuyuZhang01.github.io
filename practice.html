@@ -66,12 +66,36 @@
       box-shadow: 0 10px 35px rgba(156, 163, 175, 0.2);
     }
     .practice-page .work-cover {
-      width: 100%;
-      height: auto;
+      width: 100% !important;
+      height: auto !important;
       aspect-ratio: 4 / 3;
       object-fit: cover;
-      display: block;
+      display: block !important;
+      opacity: 1 !important;
       transition: transform 0.4s ease;
+      background: #333; /* 添加背景色以便调试 */
+      min-height: 200px; /* 确保最小高度 */
+      visibility: visible !important;
+    }
+    
+    /* 图片加载失败时的样式 */
+    .practice-page .work-cover:not([src]), 
+    .practice-page .work-cover[src=""],
+    .practice-page .work-cover[src*="error"] {
+      background: linear-gradient(45deg, #333, #555);
+      position: relative;
+    }
+    
+    .practice-page .work-cover:not([src])::after, 
+    .practice-page .work-cover[src=""]::after,
+    .practice-page .work-cover[src*="error"]::after {
+      content: "图片加载失败";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 14px;
     }
     .practice-page .work-card:hover .work-cover {
       transform: scale(1.05);
@@ -236,7 +260,7 @@
       </article>
 
       <article class="work-card" data-text="A JavaScript project using arrays, classes, addEventListener, and Perlin noise to create an interactive flower clock." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 4;">
-        <img class="work-cover" src="assets/photo/clock.jpg" alt="JavaScript practice">
+        <img class="work-cover" src="assets/photo/clock.jpg" alt="JavaScript practice" onerror="this.style.background='red'; console.log('Failed to load clock.jpg')" onload="console.log('Successfully loaded clock.jpg')" style="display: block !important; opacity: 1 !important;">
         <div class="overlay"><h2 class="work-title">JavaScript Flower clock</h2><p class="work-desc">JavaScript · Arrays · Perlin Noise</p></div>
       </article>
 
@@ -256,7 +280,7 @@
       </article>
    
       <article class="work-card" data-text="Exploration of OBS (Open Broadcaster Software) for live streaming and content creation." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 8;">
-        <img class="work-cover" src="assets/photo/obs.png" alt="OBS exploration">
+        <img class="work-cover" src="assets/photo/obs.png" alt="OBS exploration" onerror="this.style.background='red'; console.log('Failed to load obs.png')" onload="console.log('Successfully loaded obs.png')" style="display: block !important; opacity: 1 !important;">
         <div class="overlay"><h2 class="work-title">OBS live exploration</h2><p class="work-desc"> OBS · live streaming </p></div>
       </article>
     
@@ -299,6 +323,22 @@
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // 确保图片正确显示
+      const images = document.querySelectorAll('.work-cover');
+      images.forEach(img => {
+        if (img.complete) {
+          console.log('Image already loaded:', img.src);
+        } else {
+          img.addEventListener('load', () => console.log('Image loaded:', img.src));
+          img.addEventListener('error', () => {
+            console.log('Image failed to load:', img.src);
+            img.style.background = 'linear-gradient(45deg, #333, #555)';
+            img.style.position = 'relative';
+            img.insertAdjacentHTML('afterend', '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 14px;">图片加载失败</div>');
+          });
+        }
+      });
+
       const workCards = document.querySelectorAll('.work-card');
       const lightboxOverlay = document.getElementById('lightbox-overlay');
       const lightboxBody = document.getElementById('lightbox-body');
