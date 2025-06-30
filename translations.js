@@ -38,27 +38,33 @@ window.translations = {
       projects: {
         "yu": {
           title: "嘻哈舞者Yu",
-          description: "装置表演与游戏 · 2024"
+          description: "装置表演与游戏 · 2024",
+          intro: `围绕艺术家最喜欢的游戏<strong>《饥荒联机版》</strong>，这部作品将她的成长故事与中国街舞圈的现实融合在一起。讲述了一位年轻女性（艺术家本人）住在大学宿舍里，在放弃舞蹈热情和日常生活压力之间挣扎的故事。当她再次被自己在舞蹈方面的平庸所折磨时，游戏的反派角色——麦克斯韦（Maxwell）出现了，承诺进入"永恒领域"（游戏世界）会让她成为舞蹈大师。受到诱惑，她满怀希望地进入永恒领域，却发现这全是骗局：在这个世界里，她是唯一能跳舞的人，因此默认成为舞蹈大师。实际上，她并没有真正成为大师，现在必须依靠有限的舞蹈技能在危险、阴暗的世界中生存。<br><br>该项目以两种交织的格式展开：装置和现场表演——现实世界，以及自定义游戏模组——虚拟世界。这个项目标志着艺术家首次尝试探索虚拟与现实之间的互动，尽管当时她并没有意识到这一点。她试图用游戏来连接她的现实生活和虚拟世界，而虚拟世界在当时对她来说只是一个逃避的地方。毕竟，至少在虚拟世界里，她可以成为舞蹈大师。文档链接：<a href="https://shuyuzhang.notion.site/FYP-sketchbook-184f5e5f047d47bbacfbf1fba52db0e2?source=copy_link" target="_blank">https://shuyuzhang.notion.site/FYP-sketchbook-184f5e5f047d47bbacfbf1fba52db0e2</a>`
         },
         "dream": {
           title: "救赎",
-          description: "动态影像 · 2023"
+          description: "动态影像 · 2023",
+          intro: `《救赎》是一部源于艺术家自身濒死体验的动态影像作品。植根于真实的复苏经历，作品围绕抑郁、自杀和重生的交织主题展开。它融合了学术研究、个人见证和数字世界构建，追溯了一条从医院病床和精神病院进入梦境——最终回到现实的心理旅程。<br><br>献给所有在黑暗边缘徘徊的人，这部电影邀请你发现脆弱中仍然燃烧的创造力，并相信你有能力为现实世界重新带来色彩。<br><br>使用<strong>MAYA</strong>、<strong>Substance Painter</strong>和<strong>虚幻引擎4</strong>创作。`
         },
         "mocap": {
           title: "在此处和彼处舞蹈",
-          description: "动作捕捉与Unity VR · 2025"
+          description: "动作捕捉与Unity VR · 2025",
+          intro: `你是否曾经尝试过在两个不同的世界中与你的过去自我和现在自我同时跳舞？为了探索这个想法，我们的团队将实时动作捕捉与Unity VR相结合，创造了一场沉浸式表演，舞者与他们的虚拟化身共享舞台。通过将每一个细微的动作实时映射到数字双胞胎上，表演者协商着肉体与代码、存在与缺席、此处与彼处之间的界限。`
         },
         "flower": {
           title: "昼夜钢琴曲",
-          description: "JavaScript · 2024"
+          description: "JavaScript · 2024",
+          intro: `《昼夜钢琴曲》是一个受时间和花朵启发的项目。太阳升起的地方，花朵绽放；太阳落下的地方，花朵凋零。太阳永不停止，但花朵绽放又凋零。<br><br>使用纯JavaScript，作品模拟了太阳-花朵的昼夜节律，探索时间、生命和数字自然之间的相互作用。`
         },
         "water": {
           title: "能给我一些水吗...",
-          description: "Arduino装置 · 2024"
+          description: "Arduino装置 · 2024",
+          intro: `这个项目通过审视人类与非人类实体（如植物和水）之间的关系来探索后人类主义的概念。它通过创建一个模拟人类与植物之间交流的互动装置来挑战人类中心主义的观点。<br><br>通过"共生植物"装置，项目允许植物使用光信号表达对水的需求，促使人类参与者回应并参与象征性的共生关系。<br><br>基于关键理论框架——包括万物有灵论、行动者网络理论（ANT）、后人类伦理和共生技术——作品强调非人类实体拥有能动性和有意义互动的能力。它设想了一个未来，植物和人类可以在传统人类中心范式之外进行相互、共情和互惠的互动。`
         },
         "ai": {
           title: "CXC不眠城",
-          description: "360度摄影 · 2021"
+          description: "360度摄影 · 2021",
+          intro: `从推测设计的视角出发，我们从一个近未来的前提开始：如果全球海平面继续上升直到整个城市被水吞没，它会呈现出什么新的形式？<br><br>为了突出这种极端情况下的紧张感，我们借鉴了赛博朋克美学——炽热的霓虹灯、超资本主义和社会混乱共存，技术辉煌与环境衰败形成对比。以我们的家乡为蓝图，团队使用360度全景摄影和高保真数字建模创建了一个被淹没的数字双胞胎。<br><br>在这个虚拟大都市中，高架公路已经变成了浮动码头，地铁隧道变成了潮汐能管道，金融区的玻璃幕墙现在覆盖着海藻和藤壶，唯一的亮光是通过浑浊水域闪烁的霓虹广告。我们叠加了稀缺和冲突的叙事——资源短缺、法律真空、垄断氧气的卡特尔和竞争的水下集团——因此城市演变成了一个充满犯罪的水下反乌托邦。<br><br>通过沉浸式VR体验，观众从表面的折射眩光下降到海底残骸，亲眼目睹社会阶层的破裂和生态危机的展开。通过这样做，我们希望引发公众对气候风险、城市治理和技术伦理的反思：当技术可以重塑环境但无法修复社会裂痕时，未来的城市会成为避难所——还是更深的深渊？`
         }
       }
     },
@@ -69,51 +75,63 @@ window.translations = {
       projects: {
         "mind-uploading": {
           title: "意识上传",
-          description: "UE4 · 动态影像 · VR · 装置艺术"
+          description: "UE4 · 动态影像 · VR · 装置艺术",
+          intro: "结合装置的VR体验。"
         },
         "unity-game": {
           title: "Unity小游戏",
-          description: "Unity可视化脚本和基础C#"
+          description: "Unity可视化脚本和基础C#",
+          intro: "一个探索Unity可视化脚本和C#基础的小型游戏。"
         },
         "js-pattern": {
           title: "JavaScript模式研究",
-          description: "JavaScript · 简单模式"
+          description: "JavaScript · 简单模式",
+          intro: "JavaScript新手，做了一些图案练习。"
         },
         "unity-interactive": {
           title: "Unity互动练习",
-          description: "Unity + TouchDesigner + MediaPipe · 摄像头驱动粒子特效"
+          description: "Unity + TouchDesigner + MediaPipe · 摄像头驱动粒子特效",
+          intro: "首次结合Unity、TouchDesigner和MediaPipe的探索；通过摄像头控制Unity中的粒子效果。"
         },
         "js-clock": {
           title: "JavaScript花朵时钟",
-          description: "JavaScript · 数组 · Perlin噪声"
+          description: "JavaScript · 数组 · Perlin噪声",
+          intro: "使用了数组、类、addEventListener和噪声效果。"
         },
         "discoball": {
           title: "迪斯科球 — 舞蹈动作可视化",
-          description: "Arduino · 拉伸传感器可穿戴互动项目"
+          description: "Arduino · 拉伸传感器可穿戴互动项目",
+          intro: "使用Arduino、焊接拉伸传感器和定制缝纫的可穿戴服装互动设计；将舞蹈动作可视化为迪斯科球粒子展示。"
         },
         "chicken-soup": {
           title: "鸡汤来了",
-          description: "JavaScript · 梗图 · 类和构造函数和回调和控制结构"
+          description: "JavaScript · 梗图 · 类和构造函数和回调和控制结构",
+          intro: "在TouchDesigner中进行的粒子系统实验。"
         },
         "togaither": {
           title: "一起AI",
-          description: "Stable diffusion · OBS · 表演"
+          description: "Stable diffusion · OBS · 表演",
+          intro: "通过人工智能和舞蹈探索个性以及与身体的关系。"
         },
         "obs-exploration": {
           title: "OBS直播探索",
-          description: "OBS · 直播"
+          description: "OBS · 直播",
+          intro: "对OBS（开放广播软件）的探索。"
         },
         "help-me": {
           title: "帮助我",
-          description: "Figma · Keynote"
+          description: "Figma · Keynote",
+          intro: "一个为患有抑郁症的儿童设计的应用程序。"
         },
         "flappy-bird": {
           title: "我的Flappy Bird项目",
-          description: "JavaScript · MediaPipe"
+          description: "JavaScript · MediaPipe",
+          intro: "我的Flappy Bird项目是一个受其启发的纯代码迷你游戏。"
         },
         "hiphop-workshop": {
           title: "嘻哈舞蹈工作坊",
-          description: "教学 · 舞蹈 · 工作坊"
+          description: "教学 · 舞蹈 · 工作坊",
+          intro: "与中国舞者合作的工作坊，我们共同探索了中国古典舞与街舞的异同，并审视了中国街舞文化的现状及其未来发展的可能性。"
         }
       }
     },
@@ -217,27 +235,33 @@ window.translations = {
       projects: {
         "yu": {
           title: "Hiphop Dancer Yu",
-          description: "Installation Performance & Game · 2024"
+          description: "Installation Performance & Game · 2024",
+          intro: `Centered around the author-artist's favorite game <strong>Don't Starve Together</strong>, this work blends her coming-of-age story with the realities of China's street-dance scene. It tells the story of a young woman (the artist herself) living in a university dorm, torn between abandoning her passion for dance and the pressures of everyday life. When she is once again tormented by her own mediocrity in dance, the game's antagonist—Maxwell—appears, promising that entering "the Constant" (the game world) will make her a dance master. Tempted, she enters the Constant full of hope, only to discover it was all a trick: in this world, she is the only one who can dance, making her the dance master by default. In reality, she hasn't truly become a master, and must now rely on her limited dance skills to survive in the perilous, shadowy world.<br><br>The project unfolds in two intertwined formats: an installation and live performance—the real world—and a custom game mod—the virtual world. This project marks the artist's first attempt at exploring the interaction between the virtual and the real, though she was not aware of it at the time. She tried to use the game to connect her real life and the virtual world, which, at that time, was simply a place for her to escape. After all, at least in the virtual world, she could become a dance master. Documentation link: <a href="https://shuyuzhang.notion.site/FYP-sketchbook-184f5e5f047d47bbacfbf1fba52db0e2?source=copy_link" target="_blank">https://shuyuzhang.notion.site/FYP-sketchbook-184f5e5f047d47bbacfbf1fba52db0e2</a>`
         },
         "dream": {
           title: "Redemption",
-          description: "Moving Image · 2023"
+          description: "Moving Image · 2023",
+          intro: `Redemption is a moving-image work born of the artist's own brush with death. Rooted in an authentic resuscitation experience, the piece revolves around the intertwined themes of depression, suicide, and rebirth. It blends academic research, personal testimony, and digital world-building to trace a psychological journey that moves from hospital bed and psychiatric ward into a dreamscape—only to return to reality.<br><br>Dedicated to everyone teetering on the edge of darkness, the film invites you to discover the still-blazing creativity within vulnerability and to believe in your power to bring color back into the real world.<br><br>Created with <strong>MAYA</strong>, <strong>Substance Painter</strong>, and <strong>Unreal Engine 4</strong>.`
         },
         "mocap": {
           title: "Dancing in Here and There",
-          description: "Motion Capture & Unity VR · 2025"
+          description: "Motion Capture & Unity VR · 2025",
+          intro: `Have you ever tried dancing at the same moment with both your past self and your present self in two distinct worlds? To explore this idea, our team combined real-time motion capture with Unity VR to create an immersive performance in which a dancer shares the stage with their virtual avatar. By mapping every subtle movement onto a digital twin in real time, the performer negotiates the boundaries between flesh and code, presence and absence, here and elsewhere.`
         },
         "flower": {
           title: "Piano Piece of Day and Night",
-          description: "JavaScript · 2024"
+          description: "JavaScript · 2024",
+          intro: `Piano Piece of Day and Night is a project inspired by time and flowers. Wherever the sun rises, flowers bloom; wherever the sun sets, flowers wither. The sun never stops, but flowers bloom and fade.<br><br>Using pure JavaScript, the piece simulates the sun-flower diurnal rhythm, exploring the interplay between time, life, and digital nature.`
         },
         "water": {
           title: "Can You Please Give Me Some Water...",
-          description: "Arduino Installation · 2024"
+          description: "Arduino Installation · 2024",
+          intro: `This project explores the concept of post-humanism by examining the relationships between humans and non-human entities such as plants and water. It challenges anthropocentric perspectives by creating an interactive installation that simulates communication between humans and plants.<br><br>Through the "Symbiotic Plant" installation, the project allows plants to express their need for water using light signals, prompting human participants to respond and engage in a symbolic symbiotic relationship.<br><br>Grounded in key theoretical frameworks—including Animism, Actor-Network Theory (ANT), post-human ethics, and symbiotic technology—the work emphasizes that non-human entities possess agency and the ability to interact meaningfully. It envisions a future where plants and humans can engage in mutual, empathetic, and reciprocal interactions beyond traditional human-centered paradigms.`
         },
         "ai": {
           title: "CXC Sleepless City",
-          description: "360-degree Photography · 2021"
+          description: "360-degree Photography · 2021",
+          intro: `From the lens of speculative design, we start with a near-future premise: if global sea levels keep climbing until an entire city is swallowed by water, what new form will it assume?<br><br>To highlight the tension in such an extreme scenario, we borrow from cyberpunk aesthetics—blazing neon, hyper-capitalism, and social disorder coexisting, with technological brilliance set against environmental decay. Using our hometown as a blueprint, the team employs 360-degree panoramic photography and high-fidelity digital modeling to create a submerged digital twin.<br><br>In this virtual metropolis, elevated highways have morphed into floating docks, subway tunnels into tidal-energy conduits, and the glass curtain walls of the financial district are now draped in seaweed and barnacles, their only glow the flicker of neon adverts through murky water. We layer in a narrative of scarcity and conflict—resource shortages, a legal vacuum, oxygen-monopolizing cartels, and competing underwater syndicates—so the city evolves into an underwater dystopia teeming with crime.<br><br>Through an immersive VR experience, viewers descend from the surface's refracted glare to sea-floor wreckage, witnessing firsthand the rupture of social strata and the unfolding ecological crisis. By doing so, we hope to spark public reflection on climate risk, urban governance, and tech ethics: when technology can reshape the environment yet fails to mend social fractures, will future cities become sanctuaries—or deeper abysses?`
         }
       }
     },
@@ -248,51 +272,63 @@ window.translations = {
       projects: {
         "mind-uploading": {
           title: "Mind uploading",
-          description: "UE4 · Moving image · VR · Installation"
+          description: "UE4 · Moving image · VR · Installation",
+          intro: "VR experience with installation."
         },
         "unity-game": {
           title: "Unity Mini-Game",
-          description: "Unity Visual Script & C# basics"
+          description: "Unity Visual Script & C# basics",
+          intro: "A small-scale game exploring Unity Visual Scripting and some basic Unity C#."
         },
         "js-pattern": {
           title: "JavaScript Pattern Study",
-          description: "JavaScript · simple pattern"
+          description: "JavaScript · simple pattern",
+          intro: "New to JavaScript, made some patterns."
         },
         "unity-interactive": {
           title: "Unity Interactive Practice",
-          description: "Unity + TouchDesigner + MediaPipe · Camera-driven particle FX"
+          description: "Unity + TouchDesigner + MediaPipe · Camera-driven particle FX",
+          intro: "First exploration combining Unity, TouchDesigner, and MediaPipe; camera controls particle effect in Unity."
         },
         "js-clock": {
           title: "JavaScript Flower clock",
-          description: "JavaScript · Arrays · Perlin Noise"
+          description: "JavaScript · Arrays · Perlin Noise",
+          intro: "Using array, class, addEventListener, and noise effect."
         },
         "discoball": {
           title: "Discoball — Dance Move Visualization",
-          description: "Arduino · Stretch-sensor wearable interactive project"
+          description: "Arduino · Stretch-sensor wearable interactive project",
+          intro: "Wearable garment interactive design using Arduino, soldered stretch sensors, and custom sewing; visualises dance moves as a discoball particle display."
         },
         "chicken-soup": {
           title: "Here comes chicken soup",
-          description: "JavaScript · meme · class & constructor & callback & control structrures"
+          description: "JavaScript · meme · class & constructor & callback & control structrures",
+          intro: "Play with particle systems in TouchDesigner."
         },
         "togaither": {
           title: "TogAIther",
-          description: "Stable diffusion · OBS · Performance"
+          description: "Stable diffusion · OBS · Performance",
+          intro: "Exploring individuality and the relationship with one's body through AI and dance."
         },
         "obs-exploration": {
           title: "OBS live exploration",
-          description: "OBS · live streaming"
+          description: "OBS · live streaming",
+          intro: "Exploration of OBS."
         },
         "help-me": {
           title: "Help me",
-          description: "Figma · Keynote"
+          description: "Figma · Keynote",
+          intro: "An app for kids who have depression disorder."
         },
         "flappy-bird": {
           title: "My Flappy Bird project",
-          description: "JavaScript · MediaPipe"
+          description: "JavaScript · MediaPipe",
+          intro: "My Flappy Bird project is a pure-code mini-game inspired by Flappy Bird."
         },
         "hiphop-workshop": {
           title: "Hiphop dance workshop",
-          description: "Teaching · dance · workshop"
+          description: "Teaching · dance · workshop",
+          intro: "A collaborative workshop with Chinese dancers where we explored both the differences and overlaps between Chinese classical dance and street dance, while also examining the current state of China's street-dance culture and its potential future development."
         }
       }
     },

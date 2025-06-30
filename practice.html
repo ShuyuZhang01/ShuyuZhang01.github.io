@@ -543,10 +543,23 @@
       body.style.overflow='hidden';
 
       /* build description */
-      const text=card.dataset.text||'';
+      const currentLang = localStorage.getItem('language') || 'en';
+      const projectKey = card.querySelector('.work-title').textContent.toLowerCase().replace(/\s+/g, '-');
+      
+      // 查找对应的项目数据
+      let projectIntro = 'Description not found.'; // 默认文本
+      const projectKeys = Object.keys(window.translations[currentLang].practice.projects);
+      const cardTitle = card.querySelector('.work-title').textContent;
+      
+      const foundKey = projectKeys.find(key => window.translations[currentLang].practice.projects[key].title === cardTitle);
+
+      if (foundKey) {
+          projectIntro = window.translations[currentLang].practice.projects[foundKey].intro;
+      }
+
       const textElem=document.createElement('p');
       textElem.className='typing-text';
-      textElem.textContent=text;
+      textElem.textContent=projectIntro;
       
       /* ① PDF 优先 */
      if (card.dataset.pdf){
@@ -666,6 +679,20 @@
             }
           }
         });
+        
+        // 新增：如果弹窗已打开，也更新其中的介绍文本
+        const expandedCard = document.querySelector('.work-card.expanded');
+        if (expandedCard) {
+            const textElem = expandedCard.querySelector('.typing-text');
+            if (textElem) {
+                const cardTitle = expandedCard.querySelector('.work-title').textContent;
+                const projectKeys = Object.keys(translations.practice.projects);
+                const foundKey = projectKeys.find(key => translations.practice.projects[key].title === cardTitle);
+                if (foundKey) {
+                    textElem.textContent = translations.practice.projects[foundKey].intro;
+                }
+            }
+        }
       }
 
       addLanguageToggle() {
