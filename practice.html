@@ -730,53 +730,28 @@
       });
     },{passive:true});
 
-    // 图片点击放大功能
-    const imageModal = document.getElementById('imageModal');
-    const modalImage = document.getElementById('modalImage');
-    const imageModalClose = document.getElementById('imageModalClose');
-
-    // 为所有卡片图片添加点击事件
-    cards.forEach(card => {
-      const coverImage = card.querySelector('.work-cover');
-      if (coverImage) {
-        coverImage.addEventListener('click', (e) => {
-          e.stopPropagation(); // 阻止事件冒泡到卡片
-          const imgSrc = coverImage.src;
-          modalImage.src = imgSrc;
-          imageModal.classList.add('show');
-          document.body.style.overflow = 'hidden'; // 防止背景滚动
-        });
-      }
-    });
-
-    // 为图集中的图片添加点击事件
-    document.addEventListener('click', (e) => {
-      if (e.target.matches('.gallery img')) {
-        e.stopPropagation(); // 阻止事件冒泡
-        const imgSrc = e.target.src;
-        modalImage.src = imgSrc;
-        imageModal.classList.add('show');
+    // 图片放大功能（事件委托）
+    document.addEventListener('click', function(e) {
+      // 只处理卡片图片和图集图片和模态框关闭
+      if (e.target.matches('.work-cover') || e.target.matches('.gallery img')) {
+        e.stopPropagation();
+        var imgSrc = e.target.src;
+        var modal = document.getElementById('imageModal');
+        var modalImg = document.getElementById('modalImage');
+        modalImg.src = imgSrc;
+        modal.classList.add('show');
         document.body.style.overflow = 'hidden';
       }
-    });
-
-    // 关闭图片模态框
-    function closeImageModal() {
-      imageModal.classList.remove('show');
-      document.body.style.overflow = ''; // 恢复滚动
-    }
-
-    imageModalClose.addEventListener('click', closeImageModal);
-    imageModal.addEventListener('click', (e) => {
-      if (e.target === imageModal) {
-        closeImageModal();
+      if (e.target.matches('#imageModalClose') || (e.target.matches('#imageModal') && e.target === document.getElementById('imageModal'))) {
+        document.getElementById('imageModal').classList.remove('show');
+        document.body.style.overflow = '';
       }
     });
-
-    // ESC键关闭图片模态框
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && imageModal.classList.contains('show')) {
-        closeImageModal();
+    // ESC关闭
+    window.addEventListener('keydown', function(e){
+      if(e.key==='Escape'){
+        document.getElementById('imageModal').classList.remove('show');
+        document.body.style.overflow = '';
       }
     });
   })();
