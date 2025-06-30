@@ -36,16 +36,21 @@
       margin-bottom: 3rem;
     }
 
-    /* 1. 设置瀑布流的容器 */
+    /* 1. 设置瀑布流的容器 - 使用更具体的选择器覆盖全局样式 */
     .practice-page .work-grid {
+      /* 重置全局样式 */
+      display: block !important;
+      grid-template-columns: unset !important;
+      gap: unset !important;
+      
       /* 手机上默认是2列 */
       column-count: 2; 
       column-gap: 2rem; /* 定义列与列之间的间距 */
       margin-top: 1rem;
     }
 
-    /* 2. 小屏幕及以上（宽度大于等于 576px），变为3列 */
-    @media (min-width: 576px) {
+    /* 2. 中大屏幕（宽度大于等于 992px），变为3列 */
+    @media (min-width: 992px) {
       .practice-page .work-grid {
         column-count: 3;
       }
