@@ -17,7 +17,7 @@
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
   <script src="https://unpkg.com/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 
-  <style>
+    <style>
     /* ───────── Base Page Styles ───────── */
     .practice-page .container {
       padding-left: clamp(1.5rem, 6vw, 5rem);
@@ -29,19 +29,24 @@
       margin-bottom: 3rem;
     }
 
-    /* ───────── Waterfall Grid (FIXED) ───────── */
+    /* ───────── Waterfall Grid ───────── */
     .practice-page .work-grid {
-      display: block !important; /* 强制覆盖全局样式 */
-      column-count: 2; /* 小屏幕默认2列 */
+      display: block !important;
+      column-count: 1; /* Mobile-first: 1 column */
       column-gap: 1.5rem;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 500px) {
       .practice-page .work-grid {
-        column-count: 3; /* 平板端及以上显示3列 */
+        column-count: 2; /* Small tablets / large phones */
+      }
+    }
+    @media (min-width: 992px) {
+      .practice-page .work-grid {
+        column-count: 3; /* Desktops and large tablets */
       }
     }
 
-    /* ───────── Work Card ───────── */
+    /* ───────── Work Card (CLEANED UP & FIXED) ───────── */
     .practice-page .work-card {
       break-inside: avoid;
       margin-bottom: 1.5rem;
@@ -52,59 +57,44 @@
       cursor: pointer;
       position: relative;
       background: #1a1a1a;
+      
+      /* Animation */
       opacity: 0;
       transform: translateY(20px);
       animation: cardSlideIn 0.6s ease-out forwards;
       animation-delay: calc(var(--card-index, 0) * 0.08s);
+      
+      /* Transitions */
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      
+      /* The key fix: create a new rendering layer for the card */
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
     @keyframes cardSlideIn {
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Card Hover State */
     .practice-page .work-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px); /* Move the whole card */
       box-shadow: 0 10px 35px rgba(156, 163, 175, 0.2);
     }
     
-    /* 确保hover时图片不会消失 */
-    .practice-page .work-card:hover .work-cover {
-      transform: scale(1.05) !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-      display: block !important;
-      z-index: 10 !important;
-    }
+    /* Cover Image */
     .practice-page .work-cover {
-      width: 100% !important;
-      height: auto !important;
+      width: 100%;
+      height: auto;
       aspect-ratio: 4 / 3;
       object-fit: cover;
-      display: block !important;
-      opacity: 1 !important;
-      transition: transform 0.4s ease;
-      background: #333; /* 添加背景色以便调试 */
-      min-height: 200px; /* 确保最小高度 */
-      visibility: visible !important;
+      display: block;
+      transition: transform 0.4s ease; /* Transition only the transform property */
     }
-    
-    /* 图片加载失败时的样式 */
-    .practice-page .work-cover:not([src]), 
-    .practice-page .work-cover[src=""],
-    .practice-page .work-cover[src*="error"] {
-      background: linear-gradient(45deg, #333, #555);
-      position: relative;
-    }
-    
-    .practice-page .work-cover:not([src])::after, 
-    .practice-page .work-cover[src=""]::after,
-    .practice-page .work-cover[src*="error"]::after {
-      content: "图片加载失败";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 14px;
+
+    /* Cover Image Hover State (child of card hover) */
+    .practice-page .work-card:hover .work-cover {
+      transform: scale(1.05); /* Scale the image */
     }
 
     .practice-page .overlay {
@@ -118,142 +108,23 @@
     .practice-page .work-title { font-size: 1.2rem; font-weight: 600; margin: 0 0 0.25rem 0; }
     .practice-page .work-desc { font-size: 0.85rem; opacity: 0.8; line-height: 1.4; }
 
-    /* ───────── Lightbox / Modal ───────── */
-    .lightbox-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-    }
-    .lightbox-overlay.is-visible {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .lightbox-content {
-      position: fixed; top: 50%; left: 50%;
-      width: 90vw; height: 90vh;
-      max-width: 1200px;
-      transform: translate(-50%, -50%) scale(0.95);
-      background: #1c1c1c;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      z-index: 1001;
-      display: flex;
-      flex-direction: column;
-      padding: 1.5rem;
-      opacity: 0;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      pointer-events: none;
-    }
-    .lightbox-overlay.is-visible .lightbox-content {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-      pointer-events: all;
-    }
-    .lightbox-header {
-      flex-shrink: 0;
-      display: flex;
-      justify-content: flex-end;
-      padding-bottom: 1rem;
-    }
-    .lightbox-close-btn {
-      width: 40px; height: 40px;
-      border-radius: 50%; border: none;
-      background: rgba(255,255,255,0.1);
-      color: #fff; font-size: 24px;
-      cursor: pointer; transition: background 0.2s, transform 0.2s;
-    }
-    .lightbox-close-btn:hover {
-      background: rgba(255,255,255,0.2);
-      transform: scale(1.1);
-    }
-    .lightbox-body {
-      flex-grow: 1;
-      overflow-y: auto;
-      display: flex; flex-direction: column;
-      gap: 1.5rem;
-    }
-    .lightbox-media {
-      width: 100%; flex-shrink: 0;
-      aspect-ratio: 16/9;
-      background: #000;
-      border-radius: 8px;
-    }
+    /* ───────── Lightbox & Other Styles (Remain the same) ───────── */
+    .lightbox-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 1000; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+    .lightbox-overlay.is-visible { opacity: 1; pointer-events: all; }
+    .lightbox-content { position: fixed; top: 50%; left: 50%; width: 90vw; height: 90vh; max-width: 1200px; transform: translate(-50%, -50%) scale(0.95); background: #1c1c1c; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); z-index: 1001; display: flex; flex-direction: column; padding: 1.5rem; opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; pointer-events: none; }
+    .lightbox-overlay.is-visible .lightbox-content { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: all; }
+    .lightbox-header { flex-shrink: 0; display: flex; justify-content: flex-end; padding-bottom: 1rem; }
+    .lightbox-close-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: #fff; font-size: 24px; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+    .lightbox-close-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
+    .lightbox-body { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem; }
+    .lightbox-media { width: 100%; flex-shrink: 0; aspect-ratio: 16/9; background: #000; border-radius: 8px; }
     .lightbox-media iframe { width: 100%; height: 100%; border: none; border-radius: 8px; }
-
-    /* PDF Container Styling */
-    .pdf-container {
-        display: flex; flex-direction: column;
-        align-items: center; justify-content: center;
-        text-align: center; background: #282828;
-        border-radius: 8px; padding: 2rem; min-height: 200px;
-    }
-    .pdf-link {
-        display: inline-block; padding: 0.75rem 1.5rem;
-        background: var(--primary-color); color: #000;
-        text-decoration: none; border-radius: 8px;
-        font-weight: 600; margin-top: 1rem;
-        transition: transform 0.2s;
-    }
+    .pdf-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #282828; border-radius: 8px; padding: 2rem; min-height: 200px; }
+    .pdf-link { display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary-color); color: #000; text-decoration: none; border-radius: 8px; font-weight: 600; margin-top: 1rem; transition: transform 0.2s; }
     .pdf-link:hover { transform: scale(1.05); }
-
-    /* Gallery Container Styling (FIXED) */
-    .gallery-container {
-      width: 100%;
-      height: 100%; /* Allow it to fill the available space */
-      overflow-y: auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-      padding-right: 10px; /* Space for scrollbar */
-    }
-    .gallery-container img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
+    .gallery-container { width: 100%; height: 100%; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; padding-right: 10px; }
+    .gallery-container img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; }
     .lightbox-text { line-height: 1.6; font-size: 1rem; color: #ccc; }
-    
-    /* iPad和中等屏幕的媒体查询 */
-    @media (min-width: 481px) and (max-width: 1024px) {
-        .practice-page .work-cover {
-            width: 100% !important;
-            height: auto !important;
-            display: block !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            background: #333 !important;
-            min-height: 200px !important;
-            position: relative !important;
-            z-index: 1 !important;
-        }
-        .practice-page .work-card {
-            position: relative !important;
-            z-index: 1 !important;
-        }
-        .lightbox-content { padding: 1.5rem; }
-    }
-    
-    @media (max-width: 480px) {
-        .practice-page .work-grid { column-count: 2; } /* 小屏幕手机显示2列 */
-        .lightbox-content { padding: 1rem; }
-        .lightbox-text { font-size: 0.9rem; }
-    }
-    
-    /* iPad Safari特殊处理 */
-    @supports (-webkit-touch-callout: none) {
-        .practice-page .work-cover {
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-        }
-    }
   </style>
 </head>
 
@@ -297,7 +168,7 @@
       </article>
 
       <article class="work-card" data-text="A JavaScript project using arrays, classes, addEventListener, and Perlin noise to create an interactive flower clock." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 4;">
-        <img class="work-cover" src="assets/photo/clock.jpg" alt="JavaScript practice" onerror="this.style.background='red'; console.log('Failed to load clock.jpg')" onload="console.log('Successfully loaded clock.jpg')" style="display: block !important; opacity: 1 !important;">
+        <img class="work-cover" src="assets/photo/clock.jpg" alt="JavaScript practice">
         <div class="overlay"><h2 class="work-title">JavaScript Flower clock</h2><p class="work-desc">JavaScript · Arrays · Perlin Noise</p></div>
       </article>
 
@@ -317,7 +188,7 @@
       </article>
    
       <article class="work-card" data-text="Exploration of OBS (Open Broadcaster Software) for live streaming and content creation." data-video="https://player.vimeo.com/video/1081948271" style="--card-index: 8;">
-        <img class="work-cover" src="assets/photo/obs.png" alt="OBS exploration" onerror="this.style.background='red'; console.log('Failed to load obs.png')" onload="console.log('Successfully loaded obs.png')" style="display: block !important; opacity: 1 !important;">
+        <img class="work-cover" src="assets/photo/obs.png" alt="OBS exploration">
         <div class="overlay"><h2 class="work-title">OBS live exploration</h2><p class="work-desc"> OBS · live streaming </p></div>
       </article>
     
@@ -374,25 +245,6 @@
           }, 100);
         });
       }
-
-      // 确保hover时图片不会消失
-      workCards.forEach(card => {
-        const cover = card.querySelector('.work-cover');
-        if (cover) {
-          card.addEventListener('mouseenter', () => {
-            cover.style.opacity = '1';
-            cover.style.visibility = 'visible';
-            cover.style.display = 'block';
-            cover.style.zIndex = '10';
-          });
-          card.addEventListener('mouseleave', () => {
-            cover.style.opacity = '1';
-            cover.style.visibility = 'visible';
-            cover.style.display = 'block';
-            cover.style.zIndex = '1';
-          });
-        }
-      });
 
       const workCards = document.querySelectorAll('.work-card');
       const lightboxOverlay = document.getElementById('lightbox-overlay');
