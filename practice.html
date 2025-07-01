@@ -133,9 +133,9 @@
     .lightbox-body { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1.5rem; }
     .lightbox-media { width: 100%; flex-shrink: 0; aspect-ratio: 16/9; background: #000; border-radius: 8px; position: relative; overflow: hidden; }
     .lightbox-media iframe { width: 100%; height: 100%; border: none; border-radius: 8px; position: absolute; top: 0; left: 0; }
-    .pdf-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #282828; border-radius: 8px; padding: 2rem; min-height: 200px; }
-    .pdf-viewer { width: 100%; max-width: 800px; margin: 0 auto; }
-    .pdf-viewer iframe { width: 100%; height: 500px; border: none; border-radius: 8px; background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .pdf-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #282828; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    .pdf-viewer { width: 100%; flex-shrink: 0; aspect-ratio: 16/9; background: #000; border-radius: 8px; position: relative; overflow: hidden; }
+    .pdf-viewer iframe { width: 100%; height: 100%; border: none; border-radius: 8px; position: absolute; top: 0; left: 0; background: #fff; }
     .pdf-link { display: inline-block; padding: 0.75rem 1.5rem; background: var(--primary-color); color: #000; text-decoration: none; border-radius: 8px; font-weight: 600; margin-top: 1rem; transition: transform 0.2s; }
     .pdf-link:hover { transform: scale(1.05); }
     .gallery-container { width: 100%; height: 100%; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; padding-right: 10px; }
@@ -154,9 +154,6 @@
     
     /* 响应式PDF和视频样式 */
     @media (max-width: 768px) {
-      .pdf-viewer iframe {
-        height: 400px;
-      }
       .lightbox-content {
         width: 95vw;
         height: 95vh;
@@ -165,11 +162,8 @@
     }
     
     @media (max-width: 480px) {
-      .pdf-viewer iframe {
-        height: 300px;
-      }
       .pdf-container {
-        padding: 1rem;
+        padding: 0.5rem;
       }
     }
   </style>
@@ -307,10 +301,10 @@
           mediaHtml = `
             <div class="pdf-container">
               <p>This project is best viewed as a PDF document.</p>
-              <div class="pdf-viewer">
-                <iframe src="${card.dataset.pdf}" width="100%" height="500px" style="border: none; border-radius: 8px; margin-bottom: 1rem;"></iframe>
-              </div>
               <a href="${card.dataset.pdf}" target="_blank" class="pdf-link">View PDF in New Tab</a>
+            </div>
+            <div class="pdf-viewer">
+              <iframe src="${card.dataset.pdf}" width="100%" height="100%" style="border: none; border-radius: 8px;"></iframe>
             </div>
           `;
         } else if (card.dataset.video) {
