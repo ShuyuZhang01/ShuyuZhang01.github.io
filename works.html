@@ -24,13 +24,23 @@
     /* -------------- Works grid (for JS Animation) -------------- */
     .works-page .work-grid {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      gap: 0; /* JS会处理间距，所以这里设为0 */
+      gap: 2.5rem;
       margin-top: 2rem;
-      padding: 4rem 0; /* 增加一些垂直空间，让动画更好看 */
-      min-height: 80vh; /* 确保容器有足够的高度 */
+      padding: 4rem 0;
+      min-height: 80vh;
+    }
+    .works-page .work-row {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    @media (max-width: 768px) {
+      .works-page .work-row {
+        flex-direction: column;
+        gap: 2rem;
+      }
     }
 
     /* -------------- Enhanced Card Styling (修正版) -------------- */
@@ -383,48 +393,46 @@
   <main class="container">
     <h1 class="page-title">Works</h1>
     <div class="work-grid">
-      <!-- Card: Mocap (2025) -->
-      <article id="mocap" class="work-card" data-sign="1" data-project="mocap" style="--card-index: 0;">
-        <img class="work-cover" src="assets/photo/mocap.jpg" alt="Dancing in here and there">
-        <div class="overlay">Dancing in here and there<small>MotionCapture & Unity VR · 2025</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
-      <!-- Card: Water (2024) -->
-      <article id="water" class="work-card" data-sign="-1" data-project="water" style="--card-index: 1;">
-        <img class="work-cover" src="assets/photo/water (7).jpg" alt="Can you please give me some water...">
-        <div class="overlay">Can you please give me some water...<small>Arduino Installation · 2024</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
-      <!-- Card: Flower (2024) -->
-      <article id="flower" class="work-card" data-sign="1" data-project="flower" style="--card-index: 2;">
-        <img class="work-cover" src="assets/photo/flower (5).jpg" alt="Piano Piece of Day and Night">
-        <div class="overlay">Piano Piece of Day and Night<small>JavaScript · 2024</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
-      <!-- Card: Yu (2024) -->
-      <article id="yu" class="work-card" data-sign="-1" data-project="yu" style="--card-index: 3;">
-        <img class="work-cover" src="assets/photo/dancer15.jpg" alt="Hiphop dancer Yu">
-        <div class="overlay">Hiphop dancer Yu<small>installation performance &amp; game · 2024</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
-      <!-- Card: Dream (2023) -->
-      <article id="Dream" class="work-card" data-sign="1" data-project="dream" style="--card-index: 4;">
-        <img class="work-cover" src="assets/photo/dream (4).png" alt="Redemption">
-        <div class="overlay">Redemption<small>Moving image · 2023</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
-      <!-- Card: City (2021) -->
-      <article id="city" class="work-card" data-sign="-1" data-project="ai" style="--card-index: 5;">
-        <img class="work-cover" src="assets/photo/city (8).jpg" alt="CXC sleepless city">
-        <div class="overlay">CXC sleepless city<small>360-degree photography · 2021</small></div>
-        <button class="close-btn" aria-label="Close">&times;</button>
-      </article>
-
+      <div class="work-row">
+        <!-- Card: Mocap (2025) -->
+        <article id="mocap" class="work-card" data-sign="1" data-project="mocap" style="--card-index: 0;">
+          <img class="work-cover" src="assets/photo/mocap.jpg" alt="Dancing in here and there">
+          <div class="overlay">Dancing in here and there<small>MotionCapture & Unity VR · 2025</small></div>
+          <button class="close-btn" aria-label="Close">&times;</button>
+        </article>
+        <!-- Card: Water (2024) -->
+        <article id="water" class="work-card" data-sign="-1" data-project="water" style="--card-index: 1;">
+          <img class="work-cover" src="assets/photo/water (7).jpg" alt="Can you please give me some water...">
+          <div class="overlay">Can you please give me some water...<small>Arduino Installation · 2024</small></div>
+          <button class="close-btn" aria-label="Close">&times;</button>
+        </article>
+        <!-- Card: Flower (2024) -->
+        <article id="flower" class="work-card" data-sign="1" data-project="flower" style="--card-index: 2;">
+          <img class="work-cover" src="assets/photo/flower (5).jpg" alt="Piano Piece of Day and Night">
+          <div class="overlay">Piano Piece of Day and Night<small>JavaScript · 2024</small></div>
+          <button class="close-btn" aria-label="Close">&times;</button>
+        </article>
+      </div>
+      <div class="work-row">
+        <!-- Card: Yu (2024) -->
+        <article id="yu" class="work-card" data-sign="-1" data-project="yu" style="--card-index: 3;">
+          <img class="work-cover" src="assets/photo/dancer15.jpg" alt="Hiphop dancer Yu">
+          <div class="overlay">Hiphop dancer Yu<small>installation performance &amp; game · 2024</small></div>
+          <button class="close-btn" aria-label="Close">&times;</button>
+        </article>
+        <!-- Card: Dream (2023) -->
+        <article id="Dream" class="work-card" data-sign="1" data-project="dream" style="--card-index: 4;">
+          <img class="work-cover" src="assets/photo/dream (4).png" alt="Redemption">
+          <div class="overlay">Redemption<small>Moving image · 2023</small></div>
+          <button class="close-btn" aria-label="Close">&times;</button>
+        </article>
+        <!-- Card: City (2021) -->
+        <article id="city" class="work-card" data-sign="-1" data-project="ai" style="--card-index: 5;">
+          <img class="work-cover" src="assets/photo/city (8).jpg" alt="CXC sleepless city">
+          <div class="overlay">CXC sleepless city<small>360-degree photography · 2021</small></div>
+          <button class="close-btn" aria-label="Close">&times;</button>
+        </article>
+      </div>
     </div>
   </main>
 
