@@ -21,16 +21,16 @@
 
   <!-- Inline tweaks for Works page -->
   <style>
-    /* -------------- Works grid -------------- */
-    .works-page .work-grid{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+    /* -------------- Works grid (for JS Animation) -------------- */
+    .works-page .work-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0; /* JS会处理间距，所以这里设为0 */
       margin-top: 2rem;
-      max-width: 1200px;
-      margin-left: auto;
-      margin-right: auto;
-      /* 网格布局：3列 */
+      padding: 4rem 0; /* 增加一些垂直空间，让动画更好看 */
+      min-height: 80vh; /* 确保容器有足够的高度 */
     }
 
     /* -------------- Enhanced Card Styling (修正版) -------------- */
@@ -48,17 +48,17 @@
       transition: transform .4s, box-shadow .4s;
       z-index: 1;                /* 让 hover 的卡片能盖在上面 */
 
-      /* 让JavaScript完全控制transform */
-      transform: translate(0, 0); 
+      /* 让CSS网格控制布局 */
+      transform: none;
       
-      /* 让旋转后的阴影不被裁掉 */
-      transform-origin: 50% 80%;   /* 以下边偏内一点为圆心旋转，更像摊开的牌 */
+      /* 悬停效果的原点 */
+      transform-origin: center center;
     }
 
     .work-card:hover{
       z-index: 2; 
       box-shadow: 0 0 25px rgba(156, 163, 175, 0.4); /* 发光效果 */
-      /* 移除 transform 属性，它将被 JS 控制 */
+      transform: translateY(-10px) scale(1.02); /* 简单的悬停效果 */
     }
 
     /* 移除固定的错位规则，改为由JavaScript动态计算 */
@@ -275,35 +275,6 @@
       }
     }
 
-    /* -------------- Responsive Design -------------- */
-    @media (max-width: 768px) {
-      .works-page .work-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 0 1rem;
-      }
-      
-      .work-card:nth-child(odd),
-      .work-card:nth-child(even) {
-        transform: translateY(0) translateX(var(--parallax-x, 0));
-      }
-      
-      .modal {
-        width: 98%;
-        max-height: 95vh;
-        border-radius: 16px;
-      }
-      
-      .modal-content {
-        padding: 2rem 1.5rem 1.5rem;
-      }
-      
-      .photos {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-    }
-
     /* -------------- Scrollbar Styling -------------- */
     .modal::-webkit-scrollbar {
       width: 8px;
@@ -321,21 +292,6 @@
 
     .modal::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
-    }
-
-    /* 移动端保持与桌面端一致的扇形排列 */
-    @media (max-width: 768px){
-      .works-page .work-grid{
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 0 1rem;
-      }
-      
-      .work-card{ 
-        width: 100%;
-        max-width: 100%;
-        /* 让JS动画完全控制transform */
-      }
     }
 
     /* 图片放大模态框样式 */
