@@ -590,7 +590,7 @@
       modal.querySelector('.modal').classList.add('show');
     }, 10);
 
-    if (!data.heroImage && videoId) {
+    if (!data.heroImage && videoId && data.platform !== 'vimeo') {
       if (window.YT && !player) {
         player = new YT.Player('youtubeVideo');
       } else if (!window.YT) {

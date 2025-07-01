@@ -36,6 +36,21 @@ window.translations = {
       title: "作品",
       close_modal: "关闭",
       projects: {
+        "mocap": {
+          title: "在此处和彼处舞蹈",
+          description: "动作捕捉与Unity VR · 2025",
+          intro: `你是否曾经尝试过在两个不同的世界中与你的过去自我和现在自我同时跳舞？为了探索这个想法，我们的团队将实时动作捕捉与Unity VR相结合，创造了一场沉浸式表演，舞者与他们的虚拟化身共享舞台。通过将每一个细微的动作实时映射到数字双胞胎上，表演者协商着肉体与代码、存在与缺席、此处与彼处之间的界限。`
+        },
+        "water": {
+          title: "能给我一些水吗...",
+          description: "Arduino装置 · 2024",
+          intro: `这个项目通过审视人类与非人类实体（如植物和水）之间的关系来探索后人类主义的概念。它通过创建一个模拟人类与植物之间交流的互动装置来挑战人类中心主义的观点。<br><br>通过"共生植物"装置，项目允许植物使用光信号表达对水的需求，促使人类参与者回应并参与象征性的共生关系。<br><br>基于关键理论框架——包括万物有灵论、行动者网络理论（ANT）、后人类伦理和共生技术——作品强调非人类实体拥有能动性和有意义互动的能力。它设想了一个未来，植物和人类可以在传统人类中心范式之外进行相互、共情和互惠的互动。`
+        },
+        "flower": {
+          title: "昼夜钢琴曲",
+          description: "JavaScript · 2024",
+          intro: `《昼夜钢琴曲》是一个受时间和花朵启发的项目。太阳升起的地方，花朵绽放；太阳落下的地方，花朵凋零。太阳永不停止，但花朵绽放又凋零。<br><br>使用纯JavaScript，作品模拟了太阳-花朵的昼夜节律，探索时间、生命和数字自然之间的相互作用。`
+        },
         "yu": {
           title: "嘻哈舞者Yu",
           description: "装置表演与游戏 · 2024",
@@ -45,21 +60,6 @@ window.translations = {
           title: "救赎",
           description: "动态影像 · 2023",
           intro: `《救赎》是一部源于艺术家自身濒死体验的动态影像作品。植根于真实的复苏经历，作品围绕抑郁、自杀和重生的交织主题展开。它融合了学术研究、个人见证和数字世界构建，追溯了一条从医院病床和精神病院进入梦境——最终回到现实的心理旅程。<br><br>献给所有在黑暗边缘徘徊的人，这部电影邀请你发现脆弱中仍然燃烧的创造力，并相信你有能力为现实世界重新带来色彩。<br><br>使用<strong>MAYA</strong>、<strong>Substance Painter</strong>和<strong>虚幻引擎4</strong>创作。`
-        },
-        "mocap": {
-          title: "在此处和彼处舞蹈",
-          description: "动作捕捉与Unity VR · 2025",
-          intro: `你是否曾经尝试过在两个不同的世界中与你的过去自我和现在自我同时跳舞？为了探索这个想法，我们的团队将实时动作捕捉与Unity VR相结合，创造了一场沉浸式表演，舞者与他们的虚拟化身共享舞台。通过将每一个细微的动作实时映射到数字双胞胎上，表演者协商着肉体与代码、存在与缺席、此处与彼处之间的界限。`
-        },
-        "flower": {
-          title: "昼夜钢琴曲",
-          description: "JavaScript · 2024",
-          intro: `《昼夜钢琴曲》是一个受时间和花朵启发的项目。太阳升起的地方，花朵绽放；太阳落下的地方，花朵凋零。太阳永不停止，但花朵绽放又凋零。<br><br>使用纯JavaScript，作品模拟了太阳-花朵的昼夜节律，探索时间、生命和数字自然之间的相互作用。`
-        },
-        "water": {
-          title: "能给我一些水吗...",
-          description: "Arduino装置 · 2024",
-          intro: `这个项目通过审视人类与非人类实体（如植物和水）之间的关系来探索后人类主义的概念。它通过创建一个模拟人类与植物之间交流的互动装置来挑战人类中心主义的观点。<br><br>通过"共生植物"装置，项目允许植物使用光信号表达对水的需求，促使人类参与者回应并参与象征性的共生关系。<br><br>基于关键理论框架——包括万物有灵论、行动者网络理论（ANT）、后人类伦理和共生技术——作品强调非人类实体拥有能动性和有意义互动的能力。它设想了一个未来，植物和人类可以在传统人类中心范式之外进行相互、共情和互惠的互动。`
         },
         "ai": {
           title: "CXC不眠城",
@@ -233,6 +233,21 @@ window.translations = {
       title: "Works",
       close_modal: "Close",
       projects: {
+        "mocap": {
+          title: "Dancing in Here and There",
+          description: "Motion Capture & Unity VR · 2025",
+          intro: `Have you ever tried dancing at the same moment with both your past self and your present self in two distinct worlds? To explore this idea, our team combined real-time motion capture with Unity VR to create an immersive performance in which a dancer shares the stage with their virtual avatar. By mapping every subtle movement onto a digital twin in real time, the performer negotiates the boundaries between flesh and code, presence and absence, here and elsewhere.`
+        },
+        "water": {
+          title: "Can You Please Give Me Some Water...",
+          description: "Arduino Installation · 2024",
+          intro: `This project explores the concept of post-humanism by examining the relationships between humans and non-human entities such as plants and water. It challenges anthropocentric perspectives by creating an interactive installation that simulates communication between humans and plants.<br><br>Through the "Symbiotic Plant" installation, the project allows plants to express their need for water using light signals, prompting human participants to respond and engage in a symbolic symbiotic relationship.<br><br>Grounded in key theoretical frameworks—including Animism, Actor-Network Theory (ANT), post-human ethics, and symbiotic technology—the work emphasizes that non-human entities possess agency and the ability to interact meaningfully. It envisions a future where plants and humans can engage in mutual, empathetic, and reciprocal interactions beyond traditional human-centered paradigms.`
+        },
+        "flower": {
+          title: "Piano Piece of Day and Night",
+          description: "JavaScript · 2024",
+          intro: `Piano Piece of Day and Night is a project inspired by time and flowers. Wherever the sun rises, flowers bloom; wherever the sun sets, flowers wither. The sun never stops, but flowers bloom and fade.<br><br>Using pure JavaScript, the piece simulates the sun-flower diurnal rhythm, exploring the interplay between time, life, and digital nature.`
+        },
         "yu": {
           title: "Hiphop Dancer Yu",
           description: "Installation Performance & Game · 2024",
@@ -242,21 +257,6 @@ window.translations = {
           title: "Redemption",
           description: "Moving Image · 2023",
           intro: `Redemption is a moving-image work born of the artist's own brush with death. Rooted in an authentic resuscitation experience, the piece revolves around the intertwined themes of depression, suicide, and rebirth. It blends academic research, personal testimony, and digital world-building to trace a psychological journey that moves from hospital bed and psychiatric ward into a dreamscape—only to return to reality.<br><br>Dedicated to everyone teetering on the edge of darkness, the film invites you to discover the still-blazing creativity within vulnerability and to believe in your power to bring color back into the real world.<br><br>Created with <strong>MAYA</strong>, <strong>Substance Painter</strong>, and <strong>Unreal Engine 4</strong>.`
-        },
-        "mocap": {
-          title: "Dancing in Here and There",
-          description: "Motion Capture & Unity VR · 2025",
-          intro: `Have you ever tried dancing at the same moment with both your past self and your present self in two distinct worlds? To explore this idea, our team combined real-time motion capture with Unity VR to create an immersive performance in which a dancer shares the stage with their virtual avatar. By mapping every subtle movement onto a digital twin in real time, the performer negotiates the boundaries between flesh and code, presence and absence, here and elsewhere.`
-        },
-        "flower": {
-          title: "Piano Piece of Day and Night",
-          description: "JavaScript · 2024",
-          intro: `Piano Piece of Day and Night is a project inspired by time and flowers. Wherever the sun rises, flowers bloom; wherever the sun sets, flowers wither. The sun never stops, but flowers bloom and fade.<br><br>Using pure JavaScript, the piece simulates the sun-flower diurnal rhythm, exploring the interplay between time, life, and digital nature.`
-        },
-        "water": {
-          title: "Can You Please Give Me Some Water...",
-          description: "Arduino Installation · 2024",
-          intro: `This project explores the concept of post-humanism by examining the relationships between humans and non-human entities such as plants and water. It challenges anthropocentric perspectives by creating an interactive installation that simulates communication between humans and plants.<br><br>Through the "Symbiotic Plant" installation, the project allows plants to express their need for water using light signals, prompting human participants to respond and engage in a symbolic symbiotic relationship.<br><br>Grounded in key theoretical frameworks—including Animism, Actor-Network Theory (ANT), post-human ethics, and symbiotic technology—the work emphasizes that non-human entities possess agency and the ability to interact meaningfully. It envisions a future where plants and humans can engage in mutual, empathetic, and reciprocal interactions beyond traditional human-centered paradigms.`
         },
         "ai": {
           title: "CXC Sleepless City",
