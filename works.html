@@ -23,15 +23,14 @@
   <style>
     /* -------------- Works grid -------------- */
     .works-page .work-grid{
-      display: flex;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 2rem;       /* 卡片之间的间距 */
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
       margin-top: 2rem;
-      overflow-x: auto; /* 允许横向滚动 */
-      padding: 1rem 0;
-      /* 横向排列布局 */
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+      /* 网格布局：3列 */
     }
 
     /* -------------- Enhanced Card Styling (修正版) -------------- */
@@ -43,9 +42,8 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       background: #000;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      width: 350px;
-      min-width: 350px;
-      flex: 0 0 350px;
+      width: 100%;
+      max-width: 100%;
       margin: 0;                 /* 先把多余 margin 清掉 */
       transition: transform .4s, box-shadow .4s;
       z-index: 1;                /* 让 hover 的卡片能盖在上面 */
@@ -280,14 +278,9 @@
     /* -------------- Responsive Design -------------- */
     @media (max-width: 768px) {
       .works-page .work-grid {
-        gap: 1rem;
-        padding: 0.5rem 0;
-      }
-      
-      .work-card {
-        width: 280px;
-        min-width: 280px;
-        flex: 0 0 280px;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem;
       }
       
       .work-card:nth-child(odd),
@@ -333,14 +326,14 @@
     /* 移动端保持与桌面端一致的扇形排列 */
     @media (max-width: 768px){
       .works-page .work-grid{
-        gap: 1rem;
-        padding: 0.5rem 0;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem;
       }
       
       .work-card{ 
-        width: 280px;
-        min-width: 280px;
-        flex: 0 0 280px;
+        width: 100%;
+        max-width: 100%;
         /* 让JS动画完全控制transform */
       }
     }
@@ -651,16 +644,16 @@
       const isMobile = window.innerWidth <= 768;
       
       // 移动端使用更小的参数，桌面端使用更明显的扇形效果
-      const angleStep = isMobile ? 3 : 8;
-      const radius = isMobile ? 80 : 200;
+      const angleStep = isMobile ? 3 : 6;
+      const radius = isMobile ? 60 : 150;
       const midIndex = (cards.length - 1) / 2;
 
       cards.forEach((card, i) => {
         const angle = (i - midIndex) * angleStep;
         const rad = angle * Math.PI / 180;
         const offsetX = Math.sin(rad) * radius;
-        const offsetY = Math.cos(rad) * radius * -0.15 + (isMobile ? 20 : 40);
-        const randomRotation = (Math.random() - 0.5) * (isMobile ? 5 : 15); // 桌面端增加旋转角度
+        const offsetY = Math.cos(rad) * radius * -0.1 + (isMobile ? 15 : 30);
+        const randomRotation = (Math.random() - 0.5) * (isMobile ? 3 : 10); // 减小旋转角度以适应网格
         const finalRotation = angle + randomRotation;
 
         // 将布局数据存储在 dataset 中
