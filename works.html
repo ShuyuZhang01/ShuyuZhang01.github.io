@@ -330,18 +330,15 @@
     /* 移动端保持与桌面端一致的扇形排列 */
     @media (max-width: 768px){
       .works-page .work-grid{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 1rem;
-        /* 让JavaScript完全控制卡片位置 */
+        justify-items: center;
       }
       
       .work-card{ 
         max-width: 100%;
         width: 100%;
-        flex: 0 0 100%;
         margin-bottom: 1rem;
         /* 让JS动画完全控制transform */
       }
