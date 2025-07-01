@@ -24,14 +24,12 @@
     /* -------------- Works grid -------------- */
     .works-page .work-grid{
       display: flex;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
-      gap: 2rem;       /* 卡片之间的间距 */
+      align-items: flex-start;
+      gap: 0;          /* 刻意取消行/列间距，之后用 transform 做位移 */
       margin-top: 2rem;
-      overflow-x: auto; /* 允许横向滚动 */
-      padding: 1rem 0;
-      /* 横向排列布局 */
+      /* 让JavaScript完全控制卡片位置 */
     }
 
     /* -------------- Enhanced Card Styling (修正版) -------------- */
@@ -43,9 +41,9 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       background: #000;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      width: 350px;
-      min-width: 350px;
-      flex: 0 0 350px;
+      width: 100%;
+      max-width: 400px;
+      flex: 0 0 400px;
       margin: 0;                 /* 先把多余 margin 清掉 */
       transition: transform .4s, box-shadow .4s;
       z-index: 1;                /* 让 hover 的卡片能盖在上面 */
@@ -280,14 +278,13 @@
     /* -------------- Responsive Design -------------- */
     @media (max-width: 768px) {
       .works-page .work-grid {
-        gap: 1rem;
-        padding: 0.5rem 0;
+        flex-direction: column;
+        gap: 2rem;
       }
       
       .work-card {
-        width: 280px;
-        min-width: 280px;
-        flex: 0 0 280px;
+        max-width: 100%;
+        flex: none;
       }
       
       .work-card:nth-child(odd),
@@ -333,14 +330,16 @@
     /* 移动端保持与桌面端一致的扇形排列 */
     @media (max-width: 768px){
       .works-page .work-grid{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 1rem;
-        padding: 0.5rem 0;
+        justify-items: center;
       }
       
       .work-card{ 
-        width: 280px;
-        min-width: 280px;
-        flex: 0 0 280px;
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 1rem;
         /* 让JS动画完全控制transform */
       }
     }
