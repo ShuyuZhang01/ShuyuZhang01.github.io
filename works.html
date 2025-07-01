@@ -23,12 +23,13 @@
   <style>
     /* -------------- Works grid -------------- */
     .works-page .work-grid{
-      display: grid;
-      /* 一行 3 列，列宽不够时自动换行 */
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
       gap: 0;          /* 刻意取消行/列间距，之后用 transform 做位移 */
       margin-top: 2rem;
-      justify-items: center;   /* 居中看起来更像拼贴 */
+      /* 让JavaScript完全控制卡片位置 */
     }
 
     /* -------------- Enhanced Card Styling (修正版) -------------- */
@@ -42,12 +43,12 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       width: 100%;
       max-width: 400px;
-      flex: 0 1 400px;
+      flex: 0 0 400px;
       margin: 0;                 /* 先把多余 margin 清掉 */
       transition: transform .4s, box-shadow .4s;
       z-index: 1;                /* 让 hover 的卡片能盖在上面 */
 
-      /* 移除CSS变量定义，让JS直接控制transform */
+      /* 让JavaScript完全控制transform */
       transform: translate(0, 0); 
       
       /* 让旋转后的阴影不被裁掉 */
@@ -648,9 +649,9 @@
     function setFanLayout() {
       const isMobile = window.innerWidth <= 768;
       
-      // 移动端使用更小的参数
-      const angleStep = isMobile ? 3 : 5;
-      const radius = isMobile ? 80 : 160;
+      // 移动端使用更小的参数，桌面端使用更明显的扇形效果
+      const angleStep = isMobile ? 3 : 8;
+      const radius = isMobile ? 80 : 200;
       const midIndex = (cards.length - 1) / 2;
 
       cards.forEach((card, i) => {
@@ -658,7 +659,7 @@
         const rad = angle * Math.PI / 180;
         const offsetX = Math.sin(rad) * radius;
         const offsetY = Math.cos(rad) * radius * -0.15 + (isMobile ? 20 : 40);
-        const randomRotation = (Math.random() - 0.5) * (isMobile ? 5 : 10); // 移动端减小旋转
+        const randomRotation = (Math.random() - 0.5) * (isMobile ? 5 : 15); // 桌面端增加旋转角度
         const finalRotation = angle + randomRotation;
 
         // 将布局数据存储在 dataset 中
