@@ -35,6 +35,11 @@
       display: flex;
       justify-content: center;
       gap: 2.5rem;
+      width: 100%;
+      max-width: 1200px;         /* 限制行宽，确保布局一致 */
+    }
+    .works-page .work-row:last-child {
+      justify-content: center;    /* 最后一行居中显示 */
     }
     @media (max-width: 768px) {
       .works-page .work-row {
@@ -53,7 +58,7 @@
       background: #000;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       width: 100%;
-      max-width: 100%;
+      max-width: 350px;          /* 限制最大宽度，确保卡片不会过大 */
       margin: 0;                 /* 先把多余 margin 清掉 */
       transition: transform .4s, box-shadow .4s;
       z-index: 1;                /* 让 hover 的卡片能盖在上面 */
@@ -394,50 +399,50 @@
     <h1 class="page-title">Works</h1>
     <div class="work-grid">
       <div class="work-row">
+        <!-- Card: Triggerverse (2025) -->
+        <article id="triggerverse" class="work-card" data-sign="1" data-project="triggerverse" style="--card-index: 0;">
+          <img class="work-cover" src="assets/photo/triggerverse.jpg" alt="Triggerverse">
+          <div class="overlay">Triggerverse<small>Physical Computing · Unity · Live Motion Capture · 2025</small></div>
+          <button class="close-btn" aria-label="Close">&times;</button>
+        </article>
         <!-- Card: Mocap (2025) -->
-        <article id="mocap" class="work-card" data-sign="1" data-project="mocap" style="--card-index: 0;">
+        <article id="mocap" class="work-card" data-sign="-1" data-project="mocap" style="--card-index: 1;">
           <img class="work-cover" src="assets/photo/mocap.jpg" alt="Dancing in here and there">
           <div class="overlay">Dancing in here and there<small>MotionCapture & Unity VR · 2025</small></div>
           <button class="close-btn" aria-label="Close">&times;</button>
         </article>
         <!-- Card: Water (2024) -->
-        <article id="water" class="work-card" data-sign="-1" data-project="water" style="--card-index: 1;">
+        <article id="water" class="work-card" data-sign="1" data-project="water" style="--card-index: 2;">
           <img class="work-cover" src="assets/photo/water (7).jpg" alt="Can you please give me some water...">
           <div class="overlay">Can you please give me some water...<small>Arduino Installation · 2024</small></div>
           <button class="close-btn" aria-label="Close">&times;</button>
         </article>
+      </div>
+      <div class="work-row">
         <!-- Card: Flower (2024) -->
-        <article id="flower" class="work-card" data-sign="1" data-project="flower" style="--card-index: 2;">
+        <article id="flower" class="work-card" data-sign="-1" data-project="flower" style="--card-index: 3;">
           <img class="work-cover" src="assets/photo/flower (5).jpg" alt="Piano Piece of Day and Night">
           <div class="overlay">Piano Piece of Day and Night<small>JavaScript · 2024</small></div>
           <button class="close-btn" aria-label="Close">&times;</button>
         </article>
-      </div>
-      <div class="work-row">
         <!-- Card: Yu (2024) -->
-        <article id="yu" class="work-card" data-sign="-1" data-project="yu" style="--card-index: 3;">
+        <article id="yu" class="work-card" data-sign="1" data-project="yu" style="--card-index: 4;">
           <img class="work-cover" src="assets/photo/dancer (9).png" alt="Hiphop dancer Yu">
           <div class="overlay">Hiphop dancer Yu<small>installation performance &amp; game · 2024</small></div>
           <button class="close-btn" aria-label="Close">&times;</button>
         </article>
         <!-- Card: Dream (2023) -->
-        <article id="Dream" class="work-card" data-sign="1" data-project="dream" style="--card-index: 4;">
+        <article id="Dream" class="work-card" data-sign="-1" data-project="dream" style="--card-index: 5;">
           <img class="work-cover" src="assets/photo/dream (4).png" alt="Redemption">
           <div class="overlay">Redemption<small>Unreal Engine 4 · Moving image · 2023</small></div>
           <button class="close-btn" aria-label="Close">&times;</button>
         </article>
-        <!-- Card: City (2021) -->
-        <article id="city" class="work-card" data-sign="-1" data-project="ai" style="--card-index: 5;">
-          <img class="work-cover" src="assets/photo/city (8).jpg" alt="CXC sleepless city">
-          <div class="overlay">CXC sleepless city<small>360-degree photography ·3D MAX · VR · 2021</small></div>
-          <button class="close-btn" aria-label="Close">&times;</button>
-        </article>
       </div>
       <div class="work-row">
-        <!-- Card: Triggerverse (2025) -->
-        <article id="triggerverse" class="work-card" data-sign="1" data-project="triggerverse" style="--card-index: 6;">
-          <img class="work-cover" src="assets/photo/triggerverse.jpg" alt="Triggerverse">
-          <div class="overlay">Triggerverse<small>Physical Computing · Unity · Live Motion Capture · 2025</small></div>
+        <!-- Card: City (2021) -->
+        <article id="city" class="work-card" data-sign="1" data-project="ai" style="--card-index: 6;">
+          <img class="work-cover" src="assets/photo/city (8).jpg" alt="CXC sleepless city">
+          <div class="overlay">CXC sleepless city<small>360-degree photography ·3D MAX · VR · 2021</small></div>
           <button class="close-btn" aria-label="Close">&times;</button>
         </article>
       </div>
