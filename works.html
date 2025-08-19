@@ -631,12 +631,15 @@
       const midIndex = (cards.length - 1) / 2;
 
       cards.forEach((card, i) => {
+        // 为每个卡片生成随机倾斜角度
+        const randomRotation = (Math.random() - 0.5) * (isMobile ? 20 : 30); // 移动端±10度，桌面端±15度
         const angle = (i - midIndex) * angleStep;
         const rad = angle * Math.PI / 180;
         const offsetX = Math.sin(rad) * radius;
         const offsetY = Math.cos(rad) * radius * -0.1 + (isMobile ? 15 : 30);
-        const randomRotation = (Math.random() - 0.5) * (isMobile ? 3 : 10); // 减小旋转角度以适应网格
-        const finalRotation = angle + randomRotation;
+        
+        // 使用随机旋转角度
+        const finalRotation = randomRotation;
 
         // 将布局数据存储在 dataset 中
         card.dataset.baseX = offsetX.toFixed(1);
