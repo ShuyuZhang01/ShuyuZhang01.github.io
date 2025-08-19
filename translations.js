@@ -65,6 +65,11 @@ window.translations = {
           title: "CXC不眠城",
           description: "360度摄影 · 2021",
           intro: `从推测设计的视角出发，我们从一个近未来的前提开始：如果全球海平面继续上升直到整个城市被水吞没，它会呈现出什么新的形式？<br><br>为了突出这种极端情况下的紧张感，我们借鉴了赛博朋克美学——炽热的霓虹灯、超资本主义和社会混乱共存，技术辉煌与环境衰败形成对比。以我们的家乡为蓝图，团队使用360度全景摄影和高保真数字建模创建了一个被淹没的数字双胞胎。<br><br>在这个虚拟大都市中，高架公路已经变成了浮动码头，地铁隧道变成了潮汐能管道，金融区的玻璃幕墙现在覆盖着海藻和藤壶，唯一的亮光是通过浑浊水域闪烁的霓虹广告。我们叠加了稀缺和冲突的叙事——资源短缺、法律真空、垄断氧气的卡特尔和竞争的水下集团——因此城市演变成了一个充满犯罪的水下反乌托邦。<br><br>通过沉浸式VR体验，观众从表面的折射眩光下降到海底残骸，亲眼目睹社会阶层的破裂和生态危机的展开。通过这样做，我们希望引发公众对气候风险、城市治理和技术伦理的反思：当技术可以重塑环境但无法修复社会裂痕时，未来的城市会成为避难所——还是更深的深渊？`
+        },
+        "triggerverse": {
+          title: "Triggerverse",
+          description: "Physical Computing · Unity · Live Motion Capture · 2025",
+          intro: `这件作品采用物理装置来探索现实世界如何塑造和重构虚拟环境。通过有形的动作，参与者可以直接影响数字领域，促使我们反思自身的能动性、创造力和虚拟空间的本质。通过有趣的互动，作品旨在消解物理与虚拟之间的界限，突出它们相互建构的关系。`
         }
       }
     },
@@ -262,6 +267,11 @@ window.translations = {
           title: "CXC Sleepless City",
           description: "360-degree Photography · 2021",
           intro: `From the lens of speculative design, we start with a near-future premise: if global sea levels keep climbing until an entire city is swallowed by water, what new form will it assume?<br><br>To highlight the tension in such an extreme scenario, we borrow from cyberpunk aesthetics—blazing neon, hyper-capitalism, and social disorder coexisting, with technological brilliance set against environmental decay. Using our hometown as a blueprint, the team employs 360-degree panoramic photography and high-fidelity digital modeling to create a submerged digital twin.<br><br>In this virtual metropolis, elevated highways have morphed into floating docks, subway tunnels into tidal-energy conduits, and the glass curtain walls of the financial district are now draped in seaweed and barnacles, their only glow the flicker of neon adverts through murky water. We layer in a narrative of scarcity and conflict—resource shortages, a legal vacuum, oxygen-monopolizing cartels, and competing underwater syndicates—so the city evolves into an underwater dystopia teeming with crime.<br><br>Through an immersive VR experience, viewers descend from the surface's refracted glare to sea-floor wreckage, witnessing firsthand the rupture of social strata and the unfolding ecological crisis. By doing so, we hope to spark public reflection on climate risk, urban governance, and tech ethics: when technology can reshape the environment yet fails to mend social fractures, will future cities become sanctuaries—or deeper abysses?`
+        },
+        "triggerverse": {
+          title: "Triggerverse",
+          description: "Physical Computing · Unity · Live Motion Capture · 2025",
+          intro: `This work employs a physical installation that explores how the real world can shape and reconstruct virtual environments. By using tangible actions, participants can directly influence the digital realm, prompting reflection on our agency, creativity, and the nature of virtual space itself. Through playful interaction, the piece aims to dissolve the boundary between the physical and the virtual, highlighting their mutually constructive relationship.`
         }
       }
     },
